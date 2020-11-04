@@ -1,0 +1,9 @@
+#pragma once
+#include "classes/c_base_combat_weapon.hpp"
+#include "classes/c_base_player.hpp"
+#include "classes/c_usercmd.hpp"
+#include "classes/i_collideablle.hpp"
+#include "classes/i_handle_entity.hpp"
+#include "math/vector.hpp"
+#include "math/matrix.hpp"
+#include "structs.hpp"

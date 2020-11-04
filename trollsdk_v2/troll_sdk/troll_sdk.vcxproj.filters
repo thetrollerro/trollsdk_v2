@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="hooks\hooks.cpp" />
+    <ClCompile Include="utilities\utilities.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="utilities\globals\globals.cpp" />
+    <ClCompile Include="hooks\vtables\dx9.cpp" />
+    <ClCompile Include="menu\imgui\imgui.cpp" />
+    <ClCompile Include="menu\imgui\imgui_draw.cpp" />
+    <ClCompile Include="menu\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="menu\imgui\impl\imgui_impl_dx9.cpp" />
+    <ClCompile Include="menu\imgui\impl\imgui_impl_win32.cpp" />
+    <ClCompile Include="menu\menu.cpp" />
+    <ClCompile Include="hooks\vtables\clientmode.cpp" />
+    <ClCompile Include="hooks\vtables\clientdll.cpp" />
+    <ClCompile Include="sdk\netvar\netvar.cpp" />
+    <ClCompile Include="sdk\interfaces\interfaces.cpp" />
+    <ClCompile Include="hooks\vtables\surface.cpp" />
+    <ClCompile Include="utilities\math\math.cpp" />
+    <ClCompile Include="menu\vars\vars.cpp" />
+    <ClCompile Include="hooks\vtables\players.cpp" />
+    <ClCompile Include="utilities\checksum_crc\checksum_crc.cpp" />
+    <ClCompile Include="features\engine_prediction\engine_prediction.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sdk\math\vector.hpp" />
+    <ClInclude Include="sdk\math\matrix.hpp" />
+    <ClInclude Include="sdk\sdk.hpp" />
+    <ClInclude Include="hooks\hooks.hpp" />
+    <ClInclude Include="main.hpp" />
+    <ClInclude Include="utilities\utilities.hpp" />
+    <ClInclude Include="utilities\globals\globals.hpp" />
+    <ClInclude Include="utilities\minhook\minhook.h" />
+    <ClInclude Include="menu\imgui\imconfig.h" />
+    <ClInclude Include="menu\imgui\imgui.h" />
+    <ClInclude Include="menu\imgui\imgui_internal.h" />
+    <ClInclude Include="menu\imgui\imstb_rectpack.h" />
+    <ClInclude Include="menu\imgui\imstb_textedit.h" />
+    <ClInclude Include="menu\imgui\imstb_truetype.h" />
+    <ClInclude Include="menu\imgui\impl\imgui_impl_dx9.h" />
+    <ClInclude Include="menu\imgui\impl\imgui_impl_win32.h" />
+    <ClInclude Include="menu\menu.hpp" />
+    <ClInclude Include="sdk\structs.hpp" />
+    <ClInclude Include="sdk\classes\i_client_entity.hpp" />
+    <ClInclude Include="sdk\classes\i_client_networkable.hpp" />
+    <ClInclude Include="sdk\classes\i_client_renderable.hpp" />
+    <ClInclude Include="sdk\classes\i_client_thinkable.hpp" />
+    <ClInclude Include="sdk\classes\i_client_unknown.hpp" />
+    <ClInclude Include="sdk\classes\i_handle_entity.hpp" />
+    <ClInclude Include="sdk\classes\i_collideablle.hpp" />
+    <ClInclude Include="sdk\client_class.hpp" />
+    <ClInclude Include="sdk\recv.hpp" />
+    <ClInclude Include="sdk\models.hpp" />
+    <ClInclude Include="sdk\classes\c_base_player.hpp" />
+    <ClInclude Include="sdk\classes\c_base_combat_weapon.hpp" />
+    <ClInclude Include="sdk\datamap.hpp" />
+    <ClInclude Include="sdk\classes\c_usercmd.hpp" />
+    <ClInclude Include="sdk\netvar\netvar.hpp" />
+    <ClInclude Include="sdk\interfaces\interfaces.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\c_entity_list.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\c_global_vars.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\c_input.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_app_system.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_client_dll.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_surface.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_client_mode.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\iv_engine_client.hpp" />
+    <ClInclude Include="features\features.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_trace.hpp" />
+    <ClInclude Include="utilities\math\math.hpp" />
+    <ClInclude Include="menu\vars\vars.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_cvar.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\c_input_system.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_material_system.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\iv_model_render.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\c_prediction.hpp" />
+    <ClInclude Include="utilities\checksum_crc\checksum_crc.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_client_state.hpp" />
+    <ClInclude Include="features\engine_prediction\engine_prediction.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\c_move_helper.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\iv_model_info.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="utilities\minhook\minhook.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sdk\interfaces\classes\c_game_movement.hpp" />
+  </ItemGroup>
+</Project>
