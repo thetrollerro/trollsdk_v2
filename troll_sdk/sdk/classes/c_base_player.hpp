@@ -615,7 +615,7 @@ public:
 	}
 
 	c_base_combat_weapon* get_active_weapon( ) {
-		auto active_weapon = ( uintptr_t ) netvars::get_offset( "DT_CSPlayer->m_hActiveWeapon" ) & 0xFFF;
+		auto active_weapon = *( int* ) ( uintptr_t( this ) + netvars::get_offset( "DT_CSPlayer->m_hActiveWeapon" ) ) & 0xFFF;
 		return reinterpret_cast< c_base_combat_weapon* >( i::entitylist->get_client_entity( active_weapon ) );
 	}
 

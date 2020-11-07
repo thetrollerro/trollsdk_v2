@@ -243,8 +243,8 @@ public:
 	// m_iWeaponOrigin         
 	// m_iWeaponModule         
 	// LocalActiveWeaponData       
-	NETVAR( "DT_BaseCombatWeapon->m_flNextPrimaryAttack", m_flNextPrimaryAttack, int );
-	NETVAR( "DT_BaseCombatWeapon->m_flNextSecondaryAttack", m_flNextSecondaryAttack, int );
+	NETVAR( "DT_BaseCombatWeapon->m_flNextPrimaryAttack", m_flNextPrimaryAttack, float );
+	NETVAR( "DT_BaseCombatWeapon->m_flNextSecondaryAttack", m_flNextSecondaryAttack, float );
 	// m_nNextThinkTick        
 	// m_flTimeWeaponIdle      
 

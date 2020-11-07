@@ -33,7 +33,8 @@ void hooks::init( ) {
 }
 
 void hooks::restore( ) {
-	MH_DisableHook( nullptr );
+	MH_RemoveHook( MH_ALL_HOOKS );
+	MH_Uninitialize( );
 
 	/* shutdown imgui */
 	ImGui_ImplDX9_Shutdown( );
@@ -41,8 +42,6 @@ void hooks::restore( ) {
 	ImGui::DestroyContext( );
 
 	/* restore wnd_proc */
-	SetWindowLongA( csgo_window, GWLP_WNDPROC, long( o_wndproc ) );
-
-	MH_Uninitialize( );
+	SetWindowLongA( FindWindowA( "Valve001", nullptr ), GWLP_WNDPROC, long( o_wndproc ) );
 }
 
