@@ -212,7 +212,6 @@
     <ClInclude Include="sdk\classes\c_base_combat_weapon.hpp" />
     <ClInclude Include="sdk\classes\c_base_entity.hpp" />
     <ClInclude Include="sdk\classes\c_base_player.hpp" />
-    <ClInclude Include="sdk\classes\c_cs_player.hpp" />
     <ClInclude Include="sdk\classes\c_usercmd.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_input_system.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_move_helper.hpp" />

@@ -1,5 +1,7 @@
 #pragma once
+#include "classes/c_base_attributable_item.hpp"
 #include "classes/c_base_combat_weapon.hpp"
+#include "classes/c_base_entity.hpp"
 #include "classes/c_base_player.hpp"
 #include "classes/c_usercmd.hpp"
 #include "classes/i_collideablle.hpp"
