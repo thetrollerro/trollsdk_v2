@@ -3,6 +3,8 @@
 #include "../interfaces/interfaces.hpp"
 #include "i_client_entity.hpp"
 #include "../../utilities/math/math.hpp"
+#include "c_base_entity.hpp"
+#include "c_cs_player.hpp"
 
 class c_base_player;
 
@@ -237,10 +239,236 @@ private:
 
 inline c_local_player g_local;
 
-class c_base_player : public i_client_entity {
+class c_base_player : public c_base_entity, public c_cs_player {
 public:
 	static __forceinline c_base_player* get_player_by_index( int index ) {
-		return ( c_base_player* ) i::entitylist->get_client_entity( index );
+		return static_cast< c_base_player* >( get_entity_by_index( index ) );
+	}
+
+	/* offsets / indexes */
+	float m_flSpawnTime( ) {
+		return *( float* ) ( ( uintptr_t ) this + 0xA370 );
+	}
+
+	int& m_iEFlags( ) {
+		return *( int* ) ( ( uintptr_t ) this + 0xE8 );
+	}
+
+	vec3_t& tp_angles( ) {
+		static int m_tp_angles = ( netvars::get_offset( "DT_BasePlayer->deadflag" ) + 0x4 ); // 0x31D4 + 0x4
+		return *( vec3_t* ) ( ( uintptr_t ) this + m_tp_angles );
+	}
+
+	vec3_t& m_vecAbsVelocity( ) {
+		return *( vec3_t* ) ( ( uintptr_t ) this + 0x94 );
+	}
+
+	c_bone_acessor* get_bone_acessor( ) {
+		return ( c_bone_acessor* ) ( ( uintptr_t ) this + 0x290C );
+	}
+
+	bool& m_JiggleBones( ) {
+		return *( bool* ) ( ( uintptr_t ) this + 0x292C );
+	}
+
+	c_usercmd& m_PlayerCommand( ) {
+		return *( c_usercmd* ) ( ( uintptr_t ) this + 0x326C );
+	}
+
+	c_usercmd*& m_pCurrentCommand( ) {
+		return *( c_usercmd** ) ( ( uintptr_t ) this + 0x3314 );
+	}
+
+	animlayer_t* get_animoverlays( ) {
+		return *( animlayer_t** ) ( ( uintptr_t ) this + 0x2980 );
+	}
+
+	animstate_t* get_animstate( ) {
+		return *( animstate_t** ) ( ( DWORD ) this + 0x3914 );
+	}
+
+	bool is_player( ) {
+		using o_fn = bool( __thiscall* )( c_base_player* );
+		return utils::call_virtual<o_fn>( this, 157 )( this );
+	}
+
+	bool is_weapon( ) {
+		using o_fn = bool( __thiscall* )( c_base_player* );
+		return utils::call_virtual<o_fn>( this, 166 )( this );
+	}
+
+	void set_model_index( int index ) {
+		using o_fn = void( __thiscall* )( void*, int );
+		return utils::call_virtual<o_fn>( this, 75 )( this, index );
+	}
+
+	vec3_t& get_abs_origin( ) {
+		using o_fn = vec3_t & ( __thiscall* )( void* );
+		return utils::call_virtual<o_fn>( this, 10 )( this );
+	}
+
+	vec3_t& get_abs_angles( ) {
+		using o_fn = vec3_t & ( __thiscall* )( void* );
+		return utils::call_virtual<o_fn>( this, 11 )( this );
+	}
+
+	void update_clientside_animation( ) {
+		typedef void( __thiscall* o_fn )( void* );
+		return utils::call_virtual<o_fn>( this, 223 )( this );
+	}
+
+	/* other */
+	c_base_combat_weapon* get_active_weapon( ) {
+		auto active_weapon = *( int* ) ( uintptr_t( this ) + netvars::get_offset( "DT_CSPlayer->m_hActiveWeapon" ) ) & 0xFFF;
+		return reinterpret_cast< c_base_combat_weapon* >( i::entitylist->get_client_entity( active_weapon ) );
+	}
+
+	void invalidate_bone_cache( ) {
+		*( uint32_t* ) ( ( uintptr_t ) ( this ) + 0x2924 ) = -FLT_MAX; // m_flLastBoneSetupTime = -FLT_MAX
+		*( uint32_t* ) ( ( uintptr_t ) ( this ) + 0x2690 ) = 0; // m_iMostRecentModelBoneCounter = 0;
+	}
+
+	bool is_alive( ) {
+		return m_iHealth( ) > 0;
+	}
+
+	matrix_t get_bone_matrix( int id ) {
+		matrix_t matrix;
+
+		auto offset = *reinterpret_cast< uintptr_t* >( uintptr_t( this ) + 0x26A8 );
+		if ( offset )
+			matrix = *reinterpret_cast< matrix_t* >( offset + 0x30 * id );
+
+		return matrix;
+	}
+
+	vec3_t get_bone_pos( int i ) {
+		matrix_t matrix[ 128 ];
+
+		if ( this->setup_bones( matrix, 128, 0x00000100, GetTickCount64( ) ) ) {
+			return vec3_t( matrix[ i ][ 0 ][ 3 ], matrix[ i ][ 1 ][ 3 ], matrix[ i ][ 2 ][ 3 ] );
+		}
+
+		return vec3_t( 0, 0, 0 );
+	}
+
+	void create_anim_state( animstate_t* state )
+	{
+		using create_anim_state_t = void( __thiscall* ) ( animstate_t*, c_base_player* );
+		static auto create_anim_state = reinterpret_cast< create_anim_state_t > ( utils::find_sig_ida( "client.dll", "55 8B EC 56 8B F1 B9 ? ? ? ? C7 46" ) );
+
+		if ( !create_anim_state )
+			return;
+
+		if ( !state )
+			return;
+
+		create_anim_state( state, this );
+	}
+
+	float max_desync_delta( ) {
+		auto animstate = uintptr_t( this->get_animstate( ) );
+
+		float duckammount = *( float* ) ( animstate + 0xA4 );
+		float speedfraction = std::fmax( 0, std::fmin( *reinterpret_cast< float* >( animstate + 0xF8 ), 1 ) );
+
+		float speedfactor = std::fmax( 0, std::fmin( 1, *reinterpret_cast< float* > ( animstate + 0xFC ) ) );
+
+		float unk1 = ( ( *reinterpret_cast< float* > ( animstate + 0x11C ) * -0.30000001 ) - 0.19999999 ) * speedfraction;
+		float unk2 = unk1 + 1.f;
+		float unk3;
+
+		if ( duckammount > 0 ) {
+
+			unk2 += ( ( duckammount * speedfactor ) * ( 0.5f - unk2 ) );
+
+		}
+
+		unk3 = *( float* ) ( animstate + 0x334 ) * unk2;
+
+		return unk3;
+	}
+
+	vec3_t get_hitbox_pos( int hitbox_id )
+	{
+		auto studio_model = i::modelinfo->get_studio_model( this->get_model( ) );
+		if ( studio_model ) {
+			auto hitbox = studio_model->hitbox_set( 0 )->hitbox( hitbox_id );
+			if ( hitbox ) {
+				vec3_t min, max;
+				math::vector_transform( hitbox->mins, this->get_bone_acessor( )->get_bone( hitbox->bone ), min );
+				math::vector_transform( hitbox->maxs, this->get_bone_acessor( )->get_bone( hitbox->bone ), max );
+
+				return ( min + max ) / 2.0f;
+			}
+		}
+		return vec3_t {};
+	}
+
+	vec3_t get_eye_pos( ) {
+		return m_vecOrigin( ) + m_vecViewOffset( );
+	}
+
+	bool can_see_player_pos( c_base_player* player, vec3_t& pos ) {
+		trace_t tr;
+		ray_t ray;
+		trace_filter filter;
+		filter.skip = this;
+
+		filter.skip = this;
+
+		ray.initialize( get_eye_pos( ), pos );
+		i::trace->trace_ray( ray, mask_shot | contents_grate, &filter, &tr );
+
+		return tr.player == player || tr.fraction > 0.97f;
+	}
+
+	int get_choked_packets( ) {
+		static int last_ticks[ 65 ];
+		auto ticks = time2ticks( this->m_flSimulationTime( ) - this->m_flOldSimulationTime( ) );
+		if ( ticks == 0 && last_ticks[ this->ent_index( ) ] > 0 ) {
+			return last_ticks[ this->ent_index( ) ] - 1;
+		}
+		else {
+			last_ticks[ this->ent_index( ) ] = ticks;
+			return ticks;
+		}
+	}
+
+	player_info_t get_player_info( )
+	{
+		player_info_t pinfo;
+		i::engine->get_player_info( ent_index( ), &pinfo );
+		return pinfo;
+	}
+
+	void set_abs_angles( vec3_t angles ) {
+		using o_fn = void( __thiscall* )( void*, const vec3_t& );
+		static o_fn set_angles_fn = ( o_fn ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1" );
+		set_angles_fn( this, angles );
+	}
+
+	void set_abs_origin( vec3_t position ) {
+		using o_fn = void( __thiscall* )( void*, const vec3_t& );
+		static o_fn set_position_fn = ( o_fn ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8" );
+		set_position_fn( this, position );
+	}
+
+	bool is_enemy( ) {
+		return ( this->m_iTeamNum( ) != g_local->m_iTeamNum( ) );
+	}
+
+	bool is_valid_target( ) {
+		if ( !this ) return false;
+		auto class_id = this->get_client_class( )->class_id;
+		if ( !this->is_enemy( ) ) return false;
+		if ( this->m_iHealth( ) <= 0 ) return false;
+		if ( class_id != class_id_cs_player ) return false;
+		if ( this->m_vecOrigin( ) == vec3_t( 0, 0, 0 ) ) return false;
+		if ( this->m_bGunGameImmunity( ) ) return false;
+		if ( this->is_dormant( ) ) return false;
+
+		return true;
 	}
 
 	/* DT_BasePlayer */
@@ -355,417 +583,13 @@ public:
 	// deadflag                           
 	// m_iAmmo                                
 
-
-	/* DT_BaseEntity */
-	// m_cellbits
-	// m_cellX
-	// m_cellY
-	// m_cellZ
-	NETVAR( "DT_BaseEntity->m_angRotation", m_angRotation, vec3_t );
-	NETVAR( "DT_BaseEntity->m_nModelIndex", m_nModelIndex, int );
-	// m_fEffects
-	// m_nRenderMode
-	// m_nRenderFX
-	// m_clrRender
-	NETVAR( "DT_BaseEntity->m_iTeamNum", m_iTeamNum, int );
-	// m_iPendingTeamNum
-	// m_CollisionGroup
-	// m_flElasticity
-	NETVAR( "DT_BaseEntity->m_flShadowCastDistance", m_flShadowCastDistance, float );
-	NETVAR( "DT_BaseEntity->m_hOwnerEntity", m_hOwnerEntity, unsigned long );
-	// m_hEffectEntity
-	// moveparent
-	// m_iParentAttachment
-	// m_iName
-	NETVAR_OFFSET( "DT_BaseEntity->m_nRenderMode", 0x1, m_nMoveType, int );
-	// movecollide
-	// m_iTextureFrameIndex
-	// m_bSimulatedEveryTick
-	// m_bAnimatedEveryTick
-	// m_bAlternateSorting
-	NETVAR( "DT_BaseEntity->m_bSpotted", m_bSpotted, bool );
-	// m_bIsAutoaimTarget
-	// m_fadeMinDist
-	// m_fadeMaxDist
-	// m_flFadeScale
-	// m_nMinCPULevel
-	// m_nMaxCPULevel
-	// m_nMinGPULevel
-	// m_nMaxGPULevel
-	// m_flUseLookAtAngle
-	// m_flLastMadeNoiseTime
-	// m_flMaxFallVelocity
-	NETVAR( "DT_BaseEntity->m_flVelocityModifier", m_flVelocityModifier, float );
-	// m_bEligibleForScreenHighlight
-	// m_Collision->m_vecMins
-	// m_Collision->m_vecMaxs
-	// m_Collision->m_nSolidType
-	// m_Collision->m_usSolidFlags
-	// m_Collision->m_nSurroundType
-	// m_Collision->m_triggerBloat
-	// m_Collision->m_vecSpecifiedSurroundingMins
-	// m_Collision->m_vecSpecifiedSurroundingMaxs
-	// m_bSpottedBy
-	// m_bSpottedByMask
-
-
-	/* DT_CSPlayer */
-	NETVAR( "DT_CSPlayer->m_flSimulationTime", m_flSimulationTime, float );
-	NETVAR_OFFSET( "DT_CSPlayer->m_flSimulationTime", 0x4, m_flOldSimulationTime, float );
-	NETVAR( "DT_CSPlayer->m_angEyeAngles[0]", m_angEyeAngles, vec3_t );
-	// m_angEyeAngles[1]                             
-	// m_iAddonBits                                
-	// m_iPrimaryAddon                             
-	// m_iSecondaryAddon                           
-	// m_iThrowGrenadeCounter                      
-	// m_bWaitForNoAttack                          
-	// m_bIsRespawningForDMBonus                   
-	// m_iPlayerState     
-	NETVAR( "DT_CSPlayer->m_iAccount", m_iAccount, int );
-	// m_iStartAccount                             
-	// m_totalHitsOnServer                         
-	// m_bInBombZone                               
-	// m_bInBuyZone                                
-	// m_bInNoDefuseArea                           
-	// m_bKilledByTaser                            
-	// m_iMoveState                                
-	// m_iClass                           
-	NETVAR( "DT_CSPlayer->m_ArmorValue", m_ArmorValue, int );
-	// m_angEyeAngles                     
-	NETVAR( "DT_CSPlayer->m_bHasDefuser", m_bHasDefuser, bool );
-	NETVAR( "DT_CSPlayer->m_bHasNightVision", m_bHasNightVision, float );
-	NETVAR( "DT_CSPlayer->m_bNightVisionOn", m_bNightVisionOn, float );
-	// m_bInHostageRescueZone                      
-	NETVAR( "DT_CSPlayer->m_bIsDefusing", m_bIsDefusing, bool );
-	// m_bIsGrabbingHostage                        
-	// m_iBlockingUseActionInProgress 
-	NETVAR( "DT_CSPlayer->m_bIsScoped", m_bIsScoped, bool );
-	// m_bIsWalking                                
-	// m_nIsAutoMounting                           
-	// m_bResumeZoom                               
-	// m_fImmuneToGunGameDamageTime                
-	NETVAR( "DT_CSPlayer->m_bGunGameImmunity", m_bGunGameImmunity, bool );
-	// m_bHasMovedSinceSpawn                       
-	// m_bMadeFinalGunGameProgressiveKill          
-	// m_iGunGameProgressiveWeaponIndex            
-	// m_iNumGunGameTRKillPoints                   
-	// m_iNumGunGameKillsWithCurrentWeapon         
-	// m_iNumRoundKills                            
-	// m_fMolotovUseTime                           
-	// m_fMolotovDamageTime                        
-	// m_szArmsModel                               
-	// m_hCarriedHostage                           
-	// m_hCarriedHostageProp                       
-	// m_bIsRescuing                               
-	// m_flGroundAccelLinearFracLastTime           
-	// m_bCanMoveDuringFreezePeriod                
-	// m_isCurrentGunGameLeader                    
-	// m_isCurrentGunGameTeamLeader                
-	// m_flGuardianTooFarDistFrac                  
-	// m_flDetectedByEnemySensorTime               
-	// m_bIsPlayerGhost                            
-	// m_bHasParachute                             
-	// m_unMusicID      
-	NETVAR( "DT_CSPlayer->m_bHasHelmet", m_bHasHelmet, bool );
-	NETVAR( "DT_CSPlayer->m_bHasHeavyArmor", m_bHasHeavyArmor, bool );
-	// m_nHeavyAssaultSuitCooldownRemaining        
-	NETVAR( "DT_CSPlayer->m_flFlashDuration", m_flFlashDuration, float );
-	NETVAR( "DT_CSPlayer->m_flFlashMaxAlpha", m_flFlashMaxAlpha, float );
-	// m_iProgressBarDuration                      
-	// m_flProgressBarStartTime                    
-	// m_hRagdoll                                  
-	// m_hPlayerPing                               
-	// m_cycleLatch                                
-	// m_unCurrentEquipmentValue                   
-	// m_unRoundStartEquipmentValue                
-	// m_unFreezetimeEndEquipmentValue             
-	// m_bIsControllingBot                         
-	// m_bHasControlledBotThisRound                
-	// m_bCanControlObservedBot                    
-	// m_iControlledBotEntIndex                    
-	// m_vecAutomoveTargetEnd                      
-	// m_flAutoMoveStartTime                       
-	// m_flAutoMoveTargetTime                      
-	// m_bIsAssassinationTarget                    
-	// m_bHud_MiniScoreHidden                      
-	// m_bHud_RadarHidden                          
-	// m_nLastKillerIndex                          
-	// m_nLastConcurrentKilled                     
-	// m_nDeathCamMusic                            
-	// m_bIsHoldingLookAtWeapon                    
-	// m_bIsLookingAtWeapon                        
-	// m_iNumRoundKillsHeadshots                   
-	// m_unTotalRoundDamageDealt    
-	NETVAR( "DT_CSPlayer->m_flLowerBodyYawTarget", m_flLowerBodyYawTarget, float );
-	// m_bStrafing                                 
-	// m_flThirdpersonRecoil                       
-	// m_bHideTargetID                             
-	// m_bIsSpawnRappelling                        
-	// m_vecSpawnRappellingRopeOrigin              
-	NETVAR( "DT_CSPlayer->m_nSurvivalTeam", m_nSurvivalTeam, int );
-	// m_hSurvivalAssassinationTarget              
-	NETVAR( "DT_CSPlayer->m_flHealthShotBoostExpirationTime", m_flHealthShotBoostExpirationTime, float );
-	// m_flLastExoJumpTime                         
-	// cslocaldata                                 
-	NETVAR( "DT_CSPlayer->m_vecOrigin", m_vecOrigin, vec3_t );
-	// m_vecOrigin[2]                          
-	// m_flStamina                             
-	// m_iDirection      
-	NETVAR( "DT_CSPlayer->m_iShotsFired", m_iShotsFired, int );
-	NETVAR( "DT_CSPlayer->m_flNextAttack", m_flNextAttack, float );
-	// m_nNumFastDucks                         
-	// m_bDuckOverride                         
-	// m_flVelocityModifier                    
-	// m_unActiveQuestId                       
-	// m_nQuestProgressReason                  
-	// m_bPlayerDominated                      
-	// m_bPlayerDominatingMe                   
-	// m_iWeaponPurchasesThisRound             
-	// csnonlocaldata                                                       
-	// csteamdata                                  
-	// m_iWeaponPurchasesThisMatch             
-	// m_EquippedLoadoutItemDefIndices         
-	// m_iMatchStats_Kills                         
-	// m_iMatchStats_Damage                        
-	// m_iMatchStats_EquipmentValue                
-	// m_iMatchStats_MoneySaved                    
-	// m_iMatchStats_KillReward                    
-	// m_iMatchStats_LiveTime                      
-	// m_iMatchStats_Deaths                        
-	// m_iMatchStats_Assists            
-	NETVAR( "DT_CSPlayer->m_flAnimTime", m_flAnimTime, float );
-	NETVAR( "DT_CSPlayer->m_flCycle", m_flCycle, float );
-	// m_iMatchStats_HeadShotKills                 
-	// m_iMatchStats_Objective                     
-	// m_iMatchStats_CashEarned                    
-	// m_iMatchStats_UtilityDamage                 
-	// m_iMatchStats_EnemiesFlashed                
-	// m_rank                                      
-	// m_passiveItems    
-	NETVAR_PTR( "DT_CSPlayer->m_hMyWeapons", m_hMyWeapons, UINT );
-	NETVAR_PTR( "DT_CSPlayer->m_hMyWearables", m_hMyWearables, UINT );
-
-
 	/* DT_SmokeGrenadeProjectile */
 	NETVAR( "DT_SmokeGrenadeProjectile->m_nSmokeEffectTickBegin", m_nSmokeEffectTickBegin, int );
 
 	/* DT_BaseAnimating */
 	NETVAR( "DT_BaseAnimating->m_bClientSideAnimation", m_bClientSideAnimation, bool );
-
-	/* offsets */
-	OFFSET( int, m_iEFlags, 0xE8 );
-	OFFSET( float, m_flSpawnTime, 0xA370 );
-	OFFSET( uint32_t, get_most_recent_model_bone_counter, 0x2690 );
-	OFFSET( float, get_last_bone_setup_time, 0x2924 );
-	OFFSET( vec3_t, tp_angles, 0x31D8 );
-	OFFSET( vec3_t, m_vecAbsVelocity, 0x94 );
-	OFFSET( c_bone_acessor, get_bone_accessor, 0x290C );
-	OFFSET( bool, m_JiggleBones, 0x292C );
-	OFFSET( c_usercmd, m_PlayerCommand, 0x326C );
-	OFFSET_PTR( c_usercmd, m_pCurrentCommand, 0x3314 );
-	OFFSET_PTR( animlayer_t, get_animoverlays, 0x2980 );
-
-	/* other */
-	datamap_t* get_data_desc_map( ) {
-		typedef datamap_t* ( __thiscall* o_fn )( void* );
-		return utils::call_virtual<o_fn>( this, 15 )( this );
-	}
-
-	datamap_t* get_pred_desc_map( ) {
-		typedef datamap_t* ( __thiscall* o_fn )( void* );
-		return utils::call_virtual<o_fn>( this, 17 )( this );
-	}
-
-	animstate_t* get_animstate( ) {
-		return *( animstate_t** ) ( ( DWORD ) this + 0x3914 );
-	}
-
-	void invalidate_bone_cache( ) {
-		this->get_most_recent_model_bone_counter( ) = 0;
-		this->get_last_bone_setup_time( ) = -FLT_MAX;
-	}
-
-	bool is_alive( ) {
-		return m_iHealth( ) > 0;
-	}
-
-	bool is_player( ) {
-		using o_fn = bool( __thiscall* )( c_base_player* );
-		return utils::call_virtual<o_fn>( this, 157 )( this );
-	}
-
-	bool is_weapon( ) {
-		using o_fn = bool( __thiscall* )( c_base_player* );
-		return utils::call_virtual<o_fn>( this, 166 )( this );
-	}
-
-	void set_model_index( int index ) {
-		using o_fn = void( __thiscall* )( void*, int );
-		return utils::call_virtual<o_fn>( this, 75 )( this, index );
-	}
-
-	vec3_t& get_abs_origin( ) {
-		using o_fn = vec3_t & ( __thiscall* )( void* );
-		return utils::call_virtual<o_fn>( this, 10 )( this );
-	}
-
-	vec3_t& get_abs_angles( ) {
-		using o_fn = vec3_t & ( __thiscall* )( void* );
-		return utils::call_virtual<o_fn>( this, 11 )( this );
-	}
-
-	c_base_combat_weapon* get_active_weapon( ) {
-		auto active_weapon = *( int* ) ( uintptr_t( this ) + netvars::get_offset( "DT_CSPlayer->m_hActiveWeapon" ) ) & 0xFFF;
-		return reinterpret_cast< c_base_combat_weapon* >( i::entitylist->get_client_entity( active_weapon ) );
-	}
-
-	void update_clientside_animation( ) {
-		if ( !this ) return;
-		typedef void( __thiscall* o_fn )( void* );
-		return utils::call_virtual<o_fn>( this, 223 )( this );
-	}
-
 	std::array<float, 24>& m_flPoseParameter( ) {
 		static int _m_flPoseParameter = netvars::get_offset( "DT_BaseAnimating->m_flPoseParameter" );
 		return *( std::array<float, 24>* )( uintptr_t( this ) + _m_flPoseParameter );
-	}
-
-	matrix_t get_bone_matrix( int id ) {
-		matrix_t matrix;
-
-		auto offset = *reinterpret_cast< uintptr_t* >( uintptr_t( this ) + 0x26A8 );
-		if ( offset )
-			matrix = *reinterpret_cast< matrix_t* >( offset + 0x30 * id );
-
-		return matrix;
-	}
-
-	vec3_t get_bone_pos( int i ) {
-		matrix_t matrix[ 128 ];
-
-		if ( this->setup_bones( matrix, 128, 0x00000100, GetTickCount64( ) ) ) {
-			return vec3_t( matrix[ i ][ 0 ][ 3 ], matrix[ i ][ 1 ][ 3 ], matrix[ i ][ 2 ][ 3 ] );
-		}
-
-		return vec3_t( 0, 0, 0 );
-	}
-
-	void create_anim_state( animstate_t* state )
-	{
-		using create_anim_state_t = void( __thiscall* ) ( animstate_t*, c_base_player* );
-		static auto create_anim_state = reinterpret_cast< create_anim_state_t > ( utils::find_sig_ida( "client.dll", "55 8B EC 56 8B F1 B9 ? ? ? ? C7 46" ) );
-
-		if ( !create_anim_state )
-			return;
-
-		if ( !state )
-			return;
-
-		create_anim_state( state, this );
-	}
-
-	float max_desync_delta( ) {
-		auto animstate = uintptr_t( this->get_animstate( ) );
-
-		float duckammount = *( float* ) ( animstate + 0xA4 );
-		float speedfraction = std::fmax( 0, std::fmin( *reinterpret_cast< float* >( animstate + 0xF8 ), 1 ) );
-
-		float speedfactor = std::fmax( 0, std::fmin( 1, *reinterpret_cast< float* > ( animstate + 0xFC ) ) );
-
-		float unk1 = ( ( *reinterpret_cast< float* > ( animstate + 0x11C ) * -0.30000001 ) - 0.19999999 ) * speedfraction;
-		float unk2 = unk1 + 1.f;
-		float unk3;
-
-		if ( duckammount > 0 ) {
-
-			unk2 += ( ( duckammount * speedfactor ) * ( 0.5f - unk2 ) );
-
-		}
-
-		unk3 = *( float* ) ( animstate + 0x334 ) * unk2;
-
-		return unk3;
-	}
-
-	vec3_t get_hitbox_pos( int hitbox_id )
-	{
-		auto studio_model = i::modelinfo->get_studio_model( this->get_model( ) );
-		if ( studio_model ) {
-			auto hitbox = studio_model->hitbox_set( 0 )->hitbox( hitbox_id );
-			if ( hitbox ) {
-				vec3_t min, max;
-				math::vector_transform( hitbox->mins, this->get_bone_accessor( ).get_bone( hitbox->bone ), min );
-				math::vector_transform( hitbox->maxs, this->get_bone_accessor( ).get_bone( hitbox->bone ), max );
-
-				return ( min + max ) / 2.0f;
-			}
-		}
-		return vec3_t {};
-	}
-
-	vec3_t get_eye_pos( ) {
-		return m_vecOrigin( ) + m_vecViewOffset( );
-	}
-
-	bool can_see_player_pos( c_base_player* player, vec3_t& pos ) {
-		trace_t tr;
-		ray_t ray;
-		trace_filter filter;
-		filter.skip = this;
-
-		filter.skip = this;
-
-		ray.initialize( get_eye_pos( ), pos );
-		i::trace->trace_ray( ray, mask_shot | contents_grate, &filter, &tr );
-
-		return tr.player == player || tr.fraction > 0.97f;
-	}
-
-	int get_choked_packets( ) {
-		static int last_ticks[ 65 ];
-		auto ticks = time2ticks( this->m_flSimulationTime( ) - this->m_flOldSimulationTime( ) );
-		if ( ticks == 0 && last_ticks[ this->ent_index( ) ] > 0 ) {
-			return last_ticks[ this->ent_index( ) ] - 1;
-		}
-		else {
-			last_ticks[ this->ent_index( ) ] = ticks;
-			return ticks;
-		}
-	}
-
-	player_info_t get_player_info( )
-	{
-		player_info_t pinfo;
-		i::engine->get_player_info( ent_index( ), &pinfo );
-		return pinfo;
-	}
-
-	void set_abs_angles( vec3_t angles ) {
-		using o_fn = void( __thiscall* )( void*, const vec3_t& );
-		static o_fn set_angles_fn = ( o_fn ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1" );
-		set_angles_fn( this, angles );
-	}
-
-	void set_abs_origin( vec3_t position ) {
-		using o_fn = void( __thiscall* )( void*, const vec3_t& );
-		static o_fn set_position_fn = ( o_fn ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8" );
-		set_position_fn( this, position );
-	}
-
-	bool is_enemy( ) {
-		return ( this->m_iTeamNum( ) != g_local->m_iTeamNum( ) );
-	}
-
-	bool is_valid_target( ) {
-		if ( !this ) return false;
-		auto class_id = this->get_client_class( )->class_id;
-		if ( !this->is_enemy( ) ) return false;
-		if ( this->m_iHealth( ) <= 0 ) return false;
-		if ( class_id != class_id_cs_player ) return false;
-		if ( this->m_vecOrigin( ) == vec3_t( 0, 0, 0 ) ) return false;
-		if ( this->m_bGunGameImmunity( ) ) return false;
-		if ( this->is_dormant( ) ) return false;
-
-		return true;
 	}
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "../../utilities/utilities.hpp"
 #include "../netvar/netvar.hpp"
+#include "c_base_attributable_item.hpp"
 
 enum cs_c_base_combat_weaponype {
 	weapontype_knife = 0,
@@ -143,7 +144,7 @@ public:
 	uint8_t pad12[ 0x20 ];
 };
 
-class c_base_combat_weapon {
+class c_base_combat_weapon : public c_base_attributable_item {
 public:
 
 	/* other */
@@ -203,25 +204,6 @@ public:
 		return std::string( this->get_cs_weapon_data( )->weapon_name );
 	}
 
-	/* DT_WeaponCSBase */
-	// m_weaponMode
-	NETVAR( "DT_WeaponCSBase->m_fAccuracyPenalty", m_fAccuracyPenalty, float );
-	NETVAR( "DT_WeaponCSBase->m_fLastShotTime", m_fLastShotTime, float );
-	// m_flRecoilIndex
-	// m_flRecoilIndex
-	// m_hPrevOwner
-	// m_bBurstMode
-	NETVAR( "DT_BaseCombatWeapon->m_flPostponeFireReadyTime", m_flPostponeFireReadyTime, float );
-	// m_bReloadVisuallyComplete
-	// m_bSilencerOn
-	// m_flDoneSwitchingSilencer
-	// m_iOriginalTeamNumber
-	// m_iIronSightMode
-
-	/* DT_WeaponCSBaseGun */
-	NETVAR( "DT_WeaponCSBaseGun->m_zoomLevel", m_zoomLevel, int );
-	NETVAR( "DT_WeaponCSBaseGun->m_iBurstShotsRemaining", m_iBurstShotsRemaining, int );
-
 	/* DT_BaseCombatWeapon */
 	// m_iViewModelIndex    
 	// m_iWorldModelIndex          
@@ -248,29 +230,24 @@ public:
 	// m_nNextThinkTick        
 	// m_flTimeWeaponIdle      
 
-	/* DT_BaseAttributableItem */
-	// m_OriginalOwnerXuidLow                      
-	// m_OriginalOwnerXuidHigh                     
-	// m_nFallbackPaintKit                         
-	// m_nFallbackSeed                             
-	// m_flFallbackWear                            
-	// m_nFallbackStatTrak                         
-	// m_AttributeManager                          
-	// m_hOuter                                
-	// m_ProviderType                          
-	// m_iReapplyProvisionParity               
-	// m_Item                                  
-	NETVAR( "DT_BaseAttributableItem->m_iItemDefinitionIndex", m_iItemDefinitionIndex, short );
-	// m_iEntityLevel                      
-	// m_iItemIDHigh                       
-	// m_iItemIDLow                        
-	// m_iAccountID                        
-	// m_iEntityQuality                    
-	// m_bInitialized                      
-	// m_szCustomName                      
-	// m_NetworkedDynamicAttributesForDemos
-	// m_Attributes                    
-	// lengthproxy                 
-	// lengthprop32            
+	/* DT_WeaponCSBase */
+	// m_weaponMode
+	NETVAR( "DT_WeaponCSBase->m_fAccuracyPenalty", m_fAccuracyPenalty, float );
+	NETVAR( "DT_WeaponCSBase->m_fLastShotTime", m_fLastShotTime, float );
+	// m_flRecoilIndex
+	// m_flRecoilIndex
+	// m_hPrevOwner
+	// m_bBurstMode
+	NETVAR( "DT_BaseCombatWeapon->m_flPostponeFireReadyTime", m_flPostponeFireReadyTime, float );
+	// m_bReloadVisuallyComplete
+	// m_bSilencerOn
+	// m_flDoneSwitchingSilencer
+	// m_iOriginalTeamNumber
+	// m_iIronSightMode
+
+	/* DT_WeaponCSBaseGun */
+	NETVAR( "DT_WeaponCSBaseGun->m_zoomLevel", m_zoomLevel, int );
+	NETVAR( "DT_WeaponCSBaseGun->m_iBurstShotsRemaining", m_iBurstShotsRemaining, int );
+
 
 };

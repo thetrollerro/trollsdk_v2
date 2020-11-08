@@ -4,8 +4,8 @@
 void __fastcall hooks::clientdll::create_move::call( void* ecx, void* edx, int sequence_number, float sample_frametime, bool active, bool& send_packet ) {
 	o_create_move( i::clientdll, 0, sequence_number, sample_frametime, active, send_packet );
 
-	auto cmd = i::input->get_user_cmd( 0, sequence_number );
-	auto verified = &i::input->verified_commands[ sequence_number % 150 ];
+	auto cmd = i::input->get_user_cmd( sequence_number );
+	auto verified = i::input->get_verified_user_cmd( sequence_number );
 
 	if ( !cmd || !cmd->command_number || !i::engine->is_in_game( ) || !g_local || !g_local->is_alive( ) ) {
 		return;
@@ -13,7 +13,7 @@ void __fastcall hooks::clientdll::create_move::call( void* ecx, void* edx, int s
 
 	/* globals */
 	g::cmd = cmd;
-	g::send_packet = send_packet;
+	g::send_packet = send_packet = true;
 	vec3_t o_ang = cmd->viewangles;
 
 	/* fix attack stuff */ {
@@ -34,10 +34,6 @@ void __fastcall hooks::clientdll::create_move::call( void* ecx, void* edx, int s
 		engine_prediction::restore( );
 	}
 
-	/* anti-untrsted */ {
-		cmd->viewangles.clamp( );
-	}
-
 	/* get global angles */ {
 		if ( g::send_packet ) {
 			g::fake_angle = cmd->viewangles;
@@ -45,6 +41,10 @@ void __fastcall hooks::clientdll::create_move::call( void* ecx, void* edx, int s
 		else {
 			g::real_angle = cmd->viewangles;
 		}
+	}
+
+	/* anti-untrsted */ {
+		cmd->viewangles.clamp( );
 	}
 
 	send_packet = g::send_packet;

@@ -37,8 +37,14 @@ public:
 	int clear_input_state {};
 	c_usercmd* commands {};
 	c_verified_usercmd* verified_commands {};
+	c_usercmd* get_user_cmd( int sequence_number ) {
+		return &commands[ sequence_number % 150 ];
+	}
 	c_usercmd* get_user_cmd( int slot, int sequence_number ) {
 		typedef c_usercmd* ( __thiscall* o_getusercmd )( void*, int, int );
 		return utils::call_virtual <o_getusercmd>( this, 8 )( this, slot, sequence_number );
+	}
+	c_verified_usercmd* get_verified_user_cmd( int sequence_number ) {
+		return &verified_commands[ sequence_number % 150 ];
 	}
 };

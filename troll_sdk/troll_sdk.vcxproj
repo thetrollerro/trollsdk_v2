@@ -31,6 +31,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -71,7 +72,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
     <OutDir>..\dll\</OutDir>
     <IntDir>..\dll\other\</IntDir>
     <TargetName>troll_sdk</TargetName>
@@ -97,20 +98,23 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;MY_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <FunctionLevelLinking>
-      </FunctionLevelLinking>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <MultiProcessorCompilation>
-      </MultiProcessorCompilation>
-      <EnableModules>true</EnableModules>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableModules>false</EnableModules>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>utilities/minhook/minhook.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -204,8 +208,11 @@
     <ClInclude Include="features\features.hpp" />
     <ClInclude Include="hooks\hooks.hpp" />
     <ClInclude Include="menu\vars\vars.hpp" />
+    <ClInclude Include="sdk\classes\c_base_attributable_item.hpp" />
     <ClInclude Include="sdk\classes\c_base_combat_weapon.hpp" />
+    <ClInclude Include="sdk\classes\c_base_entity.hpp" />
     <ClInclude Include="sdk\classes\c_base_player.hpp" />
+    <ClInclude Include="sdk\classes\c_cs_player.hpp" />
     <ClInclude Include="sdk\classes\c_usercmd.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_input_system.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_move_helper.hpp" />
