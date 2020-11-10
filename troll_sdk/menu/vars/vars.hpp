@@ -41,22 +41,6 @@ public:
 class vars {
 public:
 	struct misc {
-		bool bhop;
-		int strafer;
-		bool clantag;
-		struct fakelag {
-			bool enable;
-			bool troll_peek;
-
-			int lag_stand;
-			int lag_move;
-			int lag_air;
-		}fakelag;
-
-		bool thirdperson;
-		int thirdperson_key;
-		int thirdperson_keymode = 2;
-
 		char config_name[ 52 ];
 		bool unload = false;
 		float menu_color[ 3 ] = { 0.01f, 0.53f , 0.98f };

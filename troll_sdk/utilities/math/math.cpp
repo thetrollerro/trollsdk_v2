@@ -303,3 +303,18 @@ vec3_t math::calc_angle_vec( const vec3_t& src, const vec3_t& dst )
 	vector_angles( dst - src, ret );
 	return ret;
 }
+
+vec3_t math::vector_approach( vec3_t target, vec3_t value, float speed )
+{
+	vec3_t diff = ( target - value );
+	float delta = diff.length( );
+
+	if ( delta > speed )
+		value += diff.normalized( ) * speed;
+	else if ( delta < -speed )
+		value -= diff.normalized( ) * speed;
+	else
+		value = target;
+
+	return value;
+}

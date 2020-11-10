@@ -11,3 +11,4 @@ namespace menu {
 
 	void misc_tab( );
 }
+

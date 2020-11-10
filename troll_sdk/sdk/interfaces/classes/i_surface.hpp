@@ -37,19 +37,19 @@ enum font_flags {
 
 };
 
-class color {
+class colo1r {
 
 public:
 
 	float r, g, b, a;
 
-	color ( float red, float green, float blue, float alpha ) {
+	colo1r( float red, float green, float blue, float alpha ) {
 
 		r = red, g = green, b = blue, a = alpha;
 
 	}
 
-	color ( float red, float green, float blue ) {
+	colo1r( float red, float green, float blue ) {
 
 		r = red, g = green, b = blue, a = 255.f;
 
@@ -74,7 +74,7 @@ public:
 	virtual void          push_make_current ( vgui::vpanel panel, bool use_insets ) = 0;
 	virtual void          pop_make_current ( vgui::vpanel panel ) = 0;
 	virtual void          draw_set_color ( int r, int g, int b, int a ) = 0;
-	virtual void          draw_set_color ( color col ) = 0;
+	virtual void          draw_set_color ( colo1r col ) = 0;
 	virtual void          draw_filled_rect ( int x0, int y0, int x1, int y1 ) = 0;
 	virtual void          draw_filled_rect_int_array ( int_rect *p_rects, int num_rects ) = 0;
 	virtual void          draw_outline ( int x0, int y0, int x1, int y1 ) = 0;
@@ -84,7 +84,7 @@ public:
 	virtual void          draw_clear_depth ( void ) = 0;
 	virtual void          draw_set_text_font ( vgui::h_font font ) = 0;
 	virtual void          draw_set_text_color ( int r, int g, int b, int a ) = 0;
-	virtual void          draw_set_text_color ( color col ) = 0;
+	virtual void          draw_set_text_color ( colo1r col ) = 0;
 	virtual void          draw_set_text_pos ( int x, int y ) = 0;
 	virtual void          draw_get_text_pos ( int& x, int& y ) = 0;
 	virtual void          draw_print_text ( const wchar_t *text, int text_len, font_draw_type draw_type = font_draw_type::FONT_DRAW_DEFAULT ) = 0;

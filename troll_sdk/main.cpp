@@ -15,7 +15,7 @@ void dll_on_attach( HINSTANCE mod ) {
 	hooks::init( );
 	 
 	/* wait for unload key */
-	while ( !GetAsyncKeyState( VK_END ) )
+	while ( !g_vars.misc.unload )
 		std::this_thread::sleep_for( std::chrono::milliseconds( 500 ) );
 
 	/* unload */

@@ -213,7 +213,7 @@ public:
 	// m_iClip1   
 	NETVAR( "DT_BaseCombatWeapon->m_iClip1", m_iClip1, int );
 	// m_iClip2                    
-	// m_iPrimaryReserveAmmoCount  
+	NETVAR( "DT_BaseCombatWeapon->m_iPrimaryReserveAmmoCount", m_iPrimaryReserveAmmoCount, int );
 	// m_iSecondaryReserveAmmoCount
 	// m_hWeaponWorldModel         
 	// m_iNumEmptyAttacks          
@@ -249,5 +249,6 @@ public:
 	NETVAR( "DT_WeaponCSBaseGun->m_zoomLevel", m_zoomLevel, int );
 	NETVAR( "DT_WeaponCSBaseGun->m_iBurstShotsRemaining", m_iBurstShotsRemaining, int );
 
-
+	/* DT_BaseCSGrenade */
+	NETVAR( "DT_BaseCSGrenade->m_fThrowTime", m_fThrowTime, float );
 };

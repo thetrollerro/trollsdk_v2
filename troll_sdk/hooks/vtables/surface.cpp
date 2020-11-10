@@ -7,5 +7,5 @@ void __fastcall hooks::surface::lock_cursor::hook( void* ecx, void* edx ) {
 		return;
 	}
 
-	o_lock_cursor( i::surface, 0 );
+	o_lock_cursor( i::clientdll, 0 );
 }

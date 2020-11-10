@@ -71,4 +71,8 @@ public:
 	vec3_t viewangles;
 	char pad010[ 0xCC ];
 	c_event_info* events;
+
+	std::uint32_t& choked( ) {
+		return *reinterpret_cast< std::uint32_t* >( reinterpret_cast< std::uintptr_t >( this ) + 0x4D30 );
+	}
 };

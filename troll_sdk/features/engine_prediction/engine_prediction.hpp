@@ -1,5 +1,5 @@
 #pragma once
-#include "../../sdk/math/vector.hpp"
+#include "../../main.hpp"
 
 namespace engine_prediction {
 	inline struct stored_vars {
@@ -12,8 +12,10 @@ namespace engine_prediction {
 		float m_viewmodel_anim_time;
 	}stored_viewmodel;
 
-	void predict( );
+	void predict( c_usercmd* cmd );
 	void restore( );
+
+	void update( );
 
 	void update_viewmodel_data( );
 	void correct_viewmodel_data( );

@@ -2,25 +2,30 @@
 #include "../../menu/menu.hpp"
 
 long __stdcall hooks::dx9::endscene::hook( IDirect3DDevice9* dev ) {
+	/* endscene gets called twice so we call it once */
 	static auto ret = _ReturnAddress( );
 	if ( ret != _ReturnAddress( ) ) {
 		return o_endscene( dev );
 	}
 
+	/* init d3d */
 	if ( !menu::d3d_init ) {
 		menu::style( dev );
 		menu::d3d_init = true;
 	}
 
+	/* backup */
 	IDirect3DStateBlock9* stateBlock = nullptr;
 	IDirect3DVertexDeclaration9* vertDec = nullptr;
 	dev->GetVertexDeclaration( &vertDec );
 	dev->CreateStateBlock( D3DSBT_PIXELSTATE, &stateBlock );
 
-	/* esp here */
-	
+	/* esp */
+
+	/* menu */
 	menu::init( );
 
+	/* restore */
 	stateBlock->Apply( );
 	stateBlock->Release( );
 	dev->SetVertexDeclaration( vertDec );
@@ -30,18 +35,21 @@ long __stdcall hooks::dx9::endscene::hook( IDirect3DDevice9* dev ) {
 
 long __stdcall hooks::dx9::reset::hook( IDirect3DDevice9* dev, D3DPRESENT_PARAMETERS* params ) {
 	/* destroy fonts */
+	render::destroy_fonts( );
 
 	if ( !menu::d3d_init )
 		return o_reset( dev, params );
 
+	/* invalidate dev objects */
 	ImGui_ImplDX9_InvalidateDeviceObjects( );
 
 	auto hr = o_reset( dev, params );
-
 	if ( SUCCEEDED( hr ) ) {
+		/* recreate imgui */
 		ImGui_ImplDX9_CreateDeviceObjects( );
 
 		/* recreate fonts */
+		render::create_fonts( );
 	}
 
 	return hr;

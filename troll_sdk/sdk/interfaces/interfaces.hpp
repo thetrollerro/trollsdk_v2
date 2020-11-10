@@ -9,6 +9,7 @@
 #include "classes/c_global_vars.hpp"
 #include "classes/c_input.hpp"
 #include "classes/c_input_system.hpp"
+#include "classes/c_memalloc.hpp"
 #include "classes/c_move_helper.hpp"
 #include "classes/c_prediction.hpp"
 #include "classes/i_app_system.hpp"
@@ -16,8 +17,10 @@
 #include "classes/i_client_mode.hpp"
 #include "classes/i_client_state.hpp"
 #include "classes/i_cvar.hpp"
+#include "classes/i_game_event_manager.hpp"
 #include "classes/i_material_system.hpp"
 #include "classes/i_surface.hpp"
+#include "classes/i_surface_props.hpp"
 #include "classes/i_trace.hpp"
 #include "classes/iv_engine_client.hpp"
 #include "classes/iv_model_info.hpp"
@@ -75,14 +78,17 @@ namespace i {
 	inline c_global_vars* globalvars;
 	inline c_input* input;
 	inline c_input_system* input_system;
+	inline c_memalloc* memalloc;
 	inline c_move_helper* movehelper;
 	inline c_prediction* prediction;
 	inline i_client_dll* clientdll;
 	inline i_client_mode* clientmode;
 	inline i_client_state* clientstate;
 	inline i_cvar* cvar;
+	inline i_game_event_manager* event_manager;
 	inline i_material_system* material_system;
 	inline i_surface* surface;
+	inline i_surface_props* surface_props;
 	inline i_trace* trace;
 	inline iv_engine_client* engine;
 	inline iv_model_info* modelinfo;

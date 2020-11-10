@@ -4,6 +4,7 @@
 #include "classes/c_base_entity.hpp"
 #include "classes/c_base_player.hpp"
 #include "classes/c_usercmd.hpp"
+#include "classes/color.hpp"
 #include "classes/i_collideablle.hpp"
 #include "classes/i_handle_entity.hpp"
 #include "math/vector.hpp"

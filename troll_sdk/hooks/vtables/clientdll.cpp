@@ -14,25 +14,26 @@ void __fastcall hooks::clientdll::create_move::call( void* ecx, void* edx, int s
 	/* globals */
 	g::cmd = cmd;
 	g::send_packet = send_packet = true;
-	vec3_t o_ang = cmd->viewangles;
 
 	/* fix attack stuff */ {
 		auto weapon = g_local->get_active_weapon( );
 		if ( weapon ) {
-			bool can_shoot = ( weapon->m_flNextPrimaryAttack( ) <= g_local->m_nTickBase( ) * i::globalvars->m_interval_per_tick );
+			float flServerTime = g_local->m_nTickBase( ) * i::globalvars->m_interval_per_tick;
+			bool can_shoot = ( weapon->m_flNextPrimaryAttack( ) <= flServerTime );
 			if ( ( !can_shoot && !weapon->is_nade( ) ) || menu::opened ) {
 				cmd->buttons &= ~in_attack;
 			}
 		}
 	}
 
-	/* do prediction */ {
-		engine_prediction::predict( );
+	vec3_t o_ang = cmd->viewangles;
 
+	/* update old commands so they get predicted */
+	engine_prediction::update( );
 
+	engine_prediction::predict( cmd ); 
 
-		engine_prediction::restore( );
-	}
+	engine_prediction::restore( );
 
 	/* get global angles */ {
 		if ( g::send_packet ) {
@@ -68,6 +69,35 @@ __declspec( naked ) void __fastcall hooks::clientdll::create_move::hook( void* e
 	}
 }
 
+std::vector<const char*> smoke_materials =
+{
+	"particle/beam_smoke_01",
+	"particle/particle_smokegrenade",
+	"particle/particle_smokegrenade1",
+	"particle/particle_smokegrenade2",
+	"particle/particle_smokegrenade3",
+	"particle/particle_smokegrenade_sc",
+	"particle/smoke1/smoke1",
+	"particle/smoke1/smoke1_ash",
+	"particle/smoke1/smoke1_nearcull",
+	"particle/smoke1/smoke1_nearcull2",
+	"particle/smoke1/smoke1_snow",
+	"particle/smokesprites_0001",
+	"particle/smokestack",
+	"particle/vistasmokev1/vistasmokev1",
+	"particle/vistasmokev1/vistasmokev1_emods",
+	"particle/vistasmokev1/vistasmokev1_emods_impactdust",
+	"particle/vistasmokev1/vistasmokev1_fire",
+	"particle/vistasmokev1/vistasmokev1_nearcull",
+	"particle/vistasmokev1/vistasmokev1_nearcull_fog",
+	"particle/vistasmokev1/vistasmokev1_nearcull_nodepth",
+	"particle/vistasmokev1/vistasmokev1_smokegrenade",
+	"particle/vistasmokev1/vistasmokev4_emods_nocull",
+	"particle/vistasmokev1/vistasmokev4_nearcull",
+	"particle/vistasmokev1/vistasmokev4_nocull"
+};
+
+
 void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx, int stage ) {
 	if ( !i::engine->is_in_game( ) || !g_local || !g_local->is_alive( ) ) {
 		o_frame_stage_notify( i::clientdll, 0, stage );
@@ -98,16 +128,7 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 		break;
 
 	case frame_render_start:
-	
-		/* pvs fix */
-		for ( int i = 1; i < 65; i++ ) {
-			auto pl = c_base_player::get_player_by_index( i );
-			if ( !pl || !pl->is_player( ) || pl == g_local ) continue;
-
-			*( int* ) ( ( uintptr_t ) pl + 0xA30 ) = i::globalvars->m_frame_count;
-			*( int* ) ( ( uintptr_t ) pl + 0xA28 ) = 0;
-		}
-
+		
 		break;
 
 	case frame_render_end:

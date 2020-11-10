@@ -107,9 +107,10 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableModules>false</EnableModules>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SupportJustMyCode>false</SupportJustMyCode>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
@@ -182,9 +183,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="features\engine_prediction\engine_prediction.cpp" />
+    <ClCompile Include="features\events\events.cpp" />
     <ClCompile Include="hooks\vtables\clientdll.cpp" />
     <ClCompile Include="hooks\vtables\clientmode.cpp" />
     <ClCompile Include="hooks\vtables\dx9.cpp" />
+    <ClCompile Include="hooks\vtables\engine.cpp" />
+    <ClCompile Include="hooks\vtables\modelrender.cpp" />
     <ClCompile Include="hooks\vtables\players.cpp" />
     <ClCompile Include="hooks\vtables\surface.cpp" />
     <ClCompile Include="main.cpp" />
@@ -201,19 +205,24 @@
     <ClCompile Include="utilities\checksum_crc\checksum_crc.cpp" />
     <ClCompile Include="utilities\globals\globals.cpp" />
     <ClCompile Include="utilities\math\math.cpp" />
+    <ClCompile Include="utilities\render\render.cpp" />
     <ClCompile Include="utilities\utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="features\engine_prediction\engine_prediction.hpp" />
+    <ClInclude Include="features\events\events.hpp" />
     <ClInclude Include="features\features.hpp" />
     <ClInclude Include="hooks\hooks.hpp" />
     <ClInclude Include="menu\vars\vars.hpp" />
+    <ClInclude Include="sdk\classes\color.hpp" />
     <ClInclude Include="sdk\classes\c_base_attributable_item.hpp" />
     <ClInclude Include="sdk\classes\c_base_combat_weapon.hpp" />
     <ClInclude Include="sdk\classes\c_base_entity.hpp" />
     <ClInclude Include="sdk\classes\c_base_player.hpp" />
     <ClInclude Include="sdk\classes\c_usercmd.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_game_event_manager.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_input_system.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\c_memalloc.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_move_helper.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_prediction.hpp" />
     <ClInclude Include="sdk\interfaces\classes\iv_model_render.hpp" />
@@ -221,6 +230,7 @@
     <ClInclude Include="sdk\interfaces\classes\i_cvar.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_material_system.hpp" />
     <ClInclude Include="sdk\interfaces\classes\iv_model_info.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_surface_props.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_trace.hpp" />
     <ClInclude Include="sdk\datamap.hpp" />
     <ClInclude Include="main.hpp" />
@@ -259,6 +269,7 @@
     <ClInclude Include="utilities\globals\globals.hpp" />
     <ClInclude Include="utilities\math\math.hpp" />
     <ClInclude Include="utilities\minhook\minhook.h" />
+    <ClInclude Include="utilities\render\render.hpp" />
     <ClInclude Include="utilities\utilities.hpp" />
     <ClInclude Include="sdk\math\vector.hpp" />
     <ClInclude Include="sdk\math\matrix.hpp" />

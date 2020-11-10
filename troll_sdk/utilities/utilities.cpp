@@ -6,6 +6,21 @@
 #include <Psapi.h>
 #include "utilities.hpp"
 
+typedef void( __cdecl* MsgFn )( char const* pMsg, va_list );
+MsgFn oMsg;
+void __cdecl utils::dbg_print( char const* msg, ... )
+{
+	if ( !oMsg )
+		oMsg = ( MsgFn ) GetProcAddress( GetModuleHandleA( ( "tier0.dll" ) ), ( "Msg" ) );
+
+	char buffer[ 989 ];
+	va_list list;
+	va_start( list, msg );
+	vsprintf_s( buffer, msg, list );
+	va_end( list );
+	oMsg( buffer, list );
+}
+
 uintptr_t utils::find_sig_ida( const char* module, const char* signature )
 {
 	/* antario? */

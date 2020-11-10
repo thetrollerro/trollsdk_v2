@@ -25,29 +25,22 @@ void vars::setup_config( ) {
 }
 
 void vars::save_ragebot( ) {
+	
 }
 
-void vars::save_antiaim( ) {
+void vars::save_antiaim( ){
+
 }
 
 void vars::save_legitbot( ) {
 }
 
 void vars::save_esp( ) {
+
 }
 
 void vars::save_misc( ) {
-	/* movement */ {
-		setup_value( g_vars.misc.bhop, false, "misc", "bunny_hop" );
-		setup_value( g_vars.misc.strafer, 0, "misc", "strafer_type" );
-	}
 
-	/* miscellaneous */ {
-		setup_value( g_vars.misc.clantag, false, "misc", "clantag" );
-		setup_value( g_vars.misc.thirdperson, false, "misc", "thirdperson" );
-		setup_value( g_vars.misc.thirdperson_key, 0, "misc", "thirdperson_key" );
-		setup_value( g_vars.misc.thirdperson_keymode, 2, "misc", "thirdperson_keymode" );
-	}
 }
 
 void vars::save_skins( ) {

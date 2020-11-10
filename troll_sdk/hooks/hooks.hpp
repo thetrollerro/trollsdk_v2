@@ -47,10 +47,49 @@ namespace hooks {
 		}
 	}
 
+	namespace engine {
+		namespace fire_game_event {
+			void __fastcall hook( void* ecx, void* edx );
+			using fn = void( __fastcall* )( void*, void* );
+		}
+
+		namespace is_hltv {
+			bool __fastcall hook( void* ecx, void* edx );
+			using fn = bool( __fastcall* )( void*, void* );
+		}
+	}
+
+	namespace modelrender {
+		namespace draw_model_exec {
+			void __fastcall hook( void* ecx, void* edx, void* ctx, const draw_model_state_t& state, const model_render_info_t& info, matrix_t* custom_bone_to_world = nullptr );
+			using fn = void( __fastcall* )( void*, void*, void*, const draw_model_state_t&, const model_render_info_t&, matrix_t* );
+		}
+	}
+
 	namespace players {
+		namespace build_transformations {
+			void __fastcall hook( void* ecx, void* edx, int a2, int a3, int a4, int a5, int a6, int a7 );
+			using fn = void( __fastcall* )( void*, void*, int, int, int, int, int, int );
+		}
+
+		namespace do_extra_bones_processing {
+			void __fastcall hook( void* ecx, void* edx, int a2, int a3, int a4, int a5, int a6, int a7 );
+			using fn = void( __fastcall* )( void*, void*, int, int, int, int, int, int );
+		}
+
 		namespace get_eye_ang {
 			vec3_t* __fastcall hook( void* ecx, void* edx );
 			using fn = vec3_t * ( __fastcall* )( void*, void* );
+		}
+
+		namespace setup_bones {
+			bool __fastcall hook( void* ecx, void* edx, matrix_t* bone_to_world_out, int max_bones, int bone_mask, float curtime );
+			using fn = bool( __fastcall* )( void*, void*, matrix_t*, int, int, float );
+		}
+
+		namespace standard_blending_rules {
+			void __fastcall hook( void* ecx, void* edx, studio_hdr_t* hdr, vec3_t* pos, quaternion* q, float curtime, int mask );
+			using fn = void( __fastcall* )( void*, void*, studio_hdr_t*, vec3_t*, quaternion*, float, int );
 		}
 	}
 
@@ -69,9 +108,15 @@ namespace hooks {
 
 inline hooks::clientdll::create_move::fn o_create_move = nullptr;
 inline hooks::clientdll::frame_stage_notify::fn o_frame_stage_notify = nullptr;
-//inline hooks::clientmode::create_move::fn o_create_move = nullptr;
 inline hooks::clientmode::override_view::fn o_override_view = nullptr;
 inline hooks::dx9::endscene::fn o_endscene = nullptr;
 inline hooks::dx9::reset::fn o_reset = nullptr;
+inline hooks::engine::fire_game_event::fn o_fire_game_event = nullptr;
+inline hooks::engine::is_hltv::fn o_is_hltv = nullptr;
+inline hooks::modelrender::draw_model_exec::fn o_draw_model_exec = nullptr;
+inline hooks::players::build_transformations::fn o_build_transformations = nullptr;
+inline hooks::players::do_extra_bones_processing::fn o_do_extra_bones_processing = nullptr;
 inline hooks::players::get_eye_ang::fn o_get_eye_ang = nullptr;
+inline hooks::players::setup_bones::fn o_setup_bones = nullptr;
+inline hooks::players::standard_blending_rules::fn o_standard_blending_rules = nullptr;
 inline hooks::surface::lock_cursor::fn o_lock_cursor = nullptr;
