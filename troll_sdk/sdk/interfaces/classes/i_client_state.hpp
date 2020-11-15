@@ -28,7 +28,7 @@ class i_net_channel;
 class i_client_state {
 public:
 	void force_full_update( ) {
-		*reinterpret_cast< int* >( std::uintptr_t( this ) + 0x174 ) = -1;
+		delta_tick = -1;
 	}
 
 	char pad000[ 0x9C ];
