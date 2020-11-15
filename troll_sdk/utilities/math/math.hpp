@@ -21,7 +21,7 @@ namespace math {
 	float rad2deg( float rad );
 	float deg2rad( float deg );
 	float grd_to_bog( float grd );
-	vec3_t ang_vectors( vec3_t& angles );
+	vec3_t angle_vector( vec3_t angles );
 	void angle_vectors( const vec3_t& angles, vec3_t& forward );
 	float random_float( float min, float max );
 	int random_int( int min, int max );
@@ -39,4 +39,9 @@ namespace math {
 	float vector_normalize( vec3_t& v );
 	vec3_t calc_angle_vec( const vec3_t& src, const vec3_t& dst );
 	vec3_t vector_approach( vec3_t target, vec3_t value, float speed );
+
+	template <class t>
+	__forceinline t lerp( float flPercent, t const& A, t const& B ) {
+		return A + ( B - A ) * flPercent;
+	}
 };

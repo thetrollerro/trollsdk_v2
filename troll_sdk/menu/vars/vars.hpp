@@ -43,7 +43,6 @@ public:
 	struct misc {
 		char config_name[ 52 ];
 		bool unload = false;
-		float menu_color[ 3 ] = { 0.01f, 0.53f , 0.98f };
 	}misc;
 protected:
 	std::vector<config_value<int>*> ints;

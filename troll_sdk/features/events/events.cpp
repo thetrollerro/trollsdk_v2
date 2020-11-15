@@ -1,4 +1,6 @@
 #include "events.hpp"
+#include <playsoundapi.h>
+#pragma comment(lib, "winmm.lib")
 
 template<class t>
 static t* find_hud_element( const char* name )
@@ -20,15 +22,14 @@ void events::fire_game_event( i_game_event* event ) {
 
 	auto name = event->get_name( );
 	if ( !strcmp( name, "player_hurt" ) ) {
-		if ( attacker != g_local ) return;
-
+	
 	}
 	if ( !strcmp( name, "player_death" ) ) {
 		if ( attacker != g_local ) {
 
 		}
 		else {
-	
+			
 		}
 	}
 	if ( !strcmp( name, "weapon_fire" ) ) {
@@ -36,7 +37,7 @@ void events::fire_game_event( i_game_event* event ) {
 
 	}
 	if ( strstr( name, "round_start" ) ) {
-	
+		
 	}
 	if ( strstr( name, "item_purchase" ) ) {
 

@@ -21,6 +21,7 @@ void i::init( ) {
 
 	/* custom */
 	globalvars = **( c_global_vars*** ) ( ( *( DWORD** ) clientdll )[ 11 ] + 10 );
+	glow_manager = *( c_glow_object_manager** ) ( utils::find_sig_ida( "client.dll", "0F 11 05 ? ? ? ? 83 C8 01" ) + 3 );
 	input = *( c_input** ) ( utils::find_sig_ida( "client.dll", "B9 ? ? ? ? C7 05 ? ? ? ? ? ? ? ? E8 ? ? ? ? C7 05 ? ? ? ? ? ? ? ? B8 ? ? ? ?" ) + 7 );
 	movehelper = **( c_move_helper*** ) ( utils::find_sig_ida( "client.dll", "8B 0D ? ? ? ? 8B 46 08 68" ) + 2 );
 	clientmode = **( i_client_mode*** ) ( ( *( DWORD** ) clientdll )[ 10 ] + 5 );

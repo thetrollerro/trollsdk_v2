@@ -22,9 +22,19 @@ namespace hooks {
 			void __fastcall hook( void* ecx, void* edx, int stage );
 			using fn = void( __fastcall* )( void*, void*, int );
 		}
+
+		namespace write_usercmd_delta_to_buffer {
+			bool __fastcall hook( void* ecx, void* edx, int slot, bf_write* buf, int from, int to, bool is_new_cmd );
+			using fn = bool( __fastcall* )( void*, void*, int, bf_write*, int, int, bool );
+		}
 	}
 
 	namespace clientmode {
+		namespace do_post_screen_effects {
+			int __fastcall hook( void* ecx, void* edx, int a );
+			using fn = int( __fastcall* )( void*, void*, int );
+		}
+
 		namespace override_view {
 			void __fastcall hook( void* ecx, void* edx, view_setup_t* view );
 			using fn = void( __fastcall* )( void*, void*, view_setup_t* );
@@ -33,13 +43,13 @@ namespace hooks {
 
 	namespace dx9 {
 		namespace endscene {
-			long __stdcall hook( IDirect3DDevice9* dev );
-			using fn = long( __stdcall* )( IDirect3DDevice9* );
+			long __fastcall hook( void* ecx, void* edx, IDirect3DDevice9* dev );
+			using fn = long( __fastcall* )( void*, void*, IDirect3DDevice9* );
 		}
 
 		namespace reset {
-			long __stdcall hook( IDirect3DDevice9* dev, D3DPRESENT_PARAMETERS* params );
-			using fn = long( __stdcall* )( IDirect3DDevice9*, D3DPRESENT_PARAMETERS* );
+			long __fastcall hook( void* ecx, void* edx, IDirect3DDevice9* dev, D3DPRESENT_PARAMETERS* params );
+			using fn = long( __fastcall* )( void*, void*, IDirect3DDevice9*, D3DPRESENT_PARAMETERS* );
 		}
 
 		namespace wndproc {
@@ -108,6 +118,8 @@ namespace hooks {
 
 inline hooks::clientdll::create_move::fn o_create_move = nullptr;
 inline hooks::clientdll::frame_stage_notify::fn o_frame_stage_notify = nullptr;
+inline hooks::clientdll::write_usercmd_delta_to_buffer::fn o_write_usercmd_delta_to_buffer = nullptr;
+inline hooks::clientmode::do_post_screen_effects::fn o_do_post_screen_effects = nullptr;
 inline hooks::clientmode::override_view::fn o_override_view = nullptr;
 inline hooks::dx9::endscene::fn o_endscene = nullptr;
 inline hooks::dx9::reset::fn o_reset = nullptr;

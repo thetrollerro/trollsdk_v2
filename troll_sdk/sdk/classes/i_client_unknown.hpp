@@ -1,10 +1,11 @@
 #pragma once
-
+#include "i_handle_entity.hpp"
 class c_base_entity;
 class i_client_entity;
 class i_client_thinkable;
 class i_client_renderable;
 class i_client_networkable;
+class collideable_t;
 
 class i_client_unknown : public i_handle_entity
 {

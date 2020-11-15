@@ -119,19 +119,14 @@ float math::grd_to_bog( float grd ) {
 	return ( M_PI / 180 ) * grd;
 }
 
-vec3_t math::ang_vectors( vec3_t& angles ) {
-	float sp, sy, cp, cy;
+vec3_t math::angle_vector( vec3_t angles ) {
+	auto sy = sin( angles.y / 180.f * static_cast< float >( M_PI ) );
+	auto cy = cos( angles.y / 180.f * static_cast< float >( M_PI ) );
 
-	sin_cos( angles.x * ( M_PI / 180.0f ), &sp, &cp );
-	sin_cos( angles.y * ( M_PI / 180.0f ), &sy, &cy );
+	auto sp = sin( angles.x / 180.f * static_cast< float >( M_PI ) );
+	auto cp = cos( angles.x / 180.f * static_cast< float >( M_PI ) );
 
-	auto forward = vec3_t( );
-
-	forward.x = cp * cy;
-	forward.y = cp * sy;
-	forward.z = -sp;
-
-	return forward;
+	return vec3_t( cp * cy, cp * sy, -sp );
 }
 
 

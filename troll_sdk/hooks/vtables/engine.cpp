@@ -24,7 +24,10 @@ bool __fastcall hooks::engine::is_hltv::hook( void* ecx, void* edx ) {
 	static auto return_to_setup_vel = ( void* ) utils::find_sig_ida( "client.dll", "84 C0 75 38 8B 0D ? ? ? ? 8B 01 8B 80" );
 	static auto return_to_accumulate_layers = ( void* ) utils::find_sig_ida( "client.dll", "84 C0 75 0D F6 87" );
 
-	if ( _ReturnAddress( ) == return_to_setup_vel || _ReturnAddress( ) == return_to_accumulate_layers )
+	if ( _ReturnAddress( ) == return_to_setup_vel )
+		return true;
+
+	if ( _ReturnAddress( ) == return_to_accumulate_layers )
 		return true;
 
 	return o_is_hltv( i::engine, 0 );

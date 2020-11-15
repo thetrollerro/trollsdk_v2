@@ -3,6 +3,8 @@
 
 namespace engine_prediction {
 	inline struct stored_vars {
+		bool m_in_prediction;
+		bool m_is_first_time_predicted;
 		float m_frame_time;
 		float m_cur_time;
 	}stored_vars;
@@ -11,6 +13,9 @@ namespace engine_prediction {
 		float m_viewmodel_cycle;
 		float m_viewmodel_anim_time;
 	}stored_viewmodel;
+
+	inline c_movedata data;
+	inline float m_spread, m_inaccuracy;
 
 	void predict( c_usercmd* cmd );
 	void restore( );

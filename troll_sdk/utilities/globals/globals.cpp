@@ -6,3 +6,8 @@ namespace g {
 	vec3_t real_angle = vec3_t( 0, 0, 0 );
 	vec3_t fake_angle = vec3_t( 0, 0, 0 );
 }
+
+namespace exploit {
+	int shift_rate;
+	int tick_base_shift;
+}

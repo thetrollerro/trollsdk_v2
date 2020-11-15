@@ -28,14 +28,13 @@ void __fastcall hooks::players::do_extra_bones_processing::hook( void* ecx, void
 	}
 
 	auto animstate = e->get_animstate( );
-
 	if ( !animstate || !animstate->m_entity ) {
 		o_do_extra_bones_processing( ecx, edx, a2, a3, a4, a5, a6, a7 );
 		return;
 	}
 
 	/* prevent call to do_procedural_foot_plant */
-	const auto o_on_ground = animstate->m_on_ground;
+	auto o_on_ground = animstate->m_on_ground;
 
 	animstate->m_on_ground = false;
 
@@ -46,14 +45,14 @@ void __fastcall hooks::players::do_extra_bones_processing::hook( void* ecx, void
 
 vec3_t* __fastcall hooks::players::get_eye_ang::hook( void* ecx, void* edx ) {
 	auto pl = ( c_base_player* ) ecx;
-	if ( !g::cmd || !pl || !g_local || pl != g_local || !i::engine->is_in_game( ) )
+	if ( !g::cmd || !pl || !g_local || pl != g_local )
 		return o_get_eye_ang( ecx, edx );
 
 	static auto ret_to_thirdperson_pitch = utils::find_sig_ida( "client.dll", "8B CE F3 0F 10 00 8B 06 F3 0F 11 45 ? FF 90 ? ? ? ? F3 0F 10 55 ?" );
 	static auto ret_to_thirdperson_yaw = utils::find_sig_ida( "client.dll", "F3 0F 10 55 ? 51 8B 8E ? ? ? ?" );
 
 	if ( _ReturnAddress( ) == ( void* ) ret_to_thirdperson_pitch || _ReturnAddress( ) == ( void* ) ret_to_thirdperson_yaw )
-		return &g::cmd->viewangles;
+		return antiaim::m_in_lby_update ? &g::fake_angle : &g::cmd->viewangles;
 
 	return o_get_eye_ang( ecx, edx );
 }

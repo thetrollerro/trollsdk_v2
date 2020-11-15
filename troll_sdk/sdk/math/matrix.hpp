@@ -9,7 +9,7 @@
 #define assert( _exp ) ( (void ) 0 )
 
 inline float bits_to_float( std::uint32_t i ) {
-	union convertor_t
+	struct convertor_t
 	{
 		float f;
 		unsigned long ul;

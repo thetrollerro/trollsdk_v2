@@ -180,6 +180,19 @@ public:
 		return res;
 	}
 
+	float normalize_place( ) const
+	{
+		vec3_t v = *this;
+
+		float iradius = 1.f / ( this->length( ) + 1.192092896e-07F ); //FLT_EPSILON
+
+		v.x *= iradius;
+		v.y *= iradius;
+		v.z *= iradius;
+
+		return v.length( );
+	}
+
 	float dist_to( const vec3_t& vec ) const {
 		vec3_t delta;
 

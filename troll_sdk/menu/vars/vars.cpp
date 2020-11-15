@@ -25,22 +25,18 @@ void vars::setup_config( ) {
 }
 
 void vars::save_ragebot( ) {
-	
 }
 
-void vars::save_antiaim( ){
-
+void vars::save_antiaim( ) {
 }
 
 void vars::save_legitbot( ) {
 }
 
 void vars::save_esp( ) {
-
 }
 
 void vars::save_misc( ) {
-
 }
 
 void vars::save_skins( ) {

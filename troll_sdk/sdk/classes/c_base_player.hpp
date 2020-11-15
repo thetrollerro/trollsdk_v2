@@ -388,20 +388,30 @@ public:
 		return unk3;
 	}
 
-	vec3_t get_hitbox_pos( int hitbox_id )
+	vec3_t get_hitbox_pos( int hitbox, matrix_t* matrix = nullptr )
 	{
-		auto studio_model = i::modelinfo->get_studio_model( this->get_model( ) );
-		if ( studio_model ) {
-			auto hitbox = studio_model->hitbox_set( 0 )->hitbox( hitbox_id );
-			if ( hitbox ) {
-				vec3_t min, max;
-				math::vector_transform( hitbox->mins, this->get_bone_acessor( )->get_bone( hitbox->bone ), min );
-				math::vector_transform( hitbox->maxs, this->get_bone_acessor( )->get_bone( hitbox->bone ), max );
+		auto mdl = this->get_model( );
+		if ( !mdl ) return vec3_t( 0, 0, 0 );
 
-				return ( min + max ) / 2.0f;
-			}
+		studio_hdr_t* m_studio_model = i::modelinfo->get_studio_model( this->get_model( ) );
+		if ( !m_studio_model ) return vec3_t( 0, 0, 0 );
+
+		auto* m_hitbox = m_studio_model->hitbox_set( 0 )->hitbox( hitbox );
+		if ( !m_hitbox ) return vec3_t( 0, 0, 0 );
+
+		/* if there is no matrix use bone accessor's one */
+		if ( !matrix ) {
+			matrix = ( matrix_t* ) this->get_bone_acessor( )->get_bone_arr_for_write( );
 		}
-		return vec3_t {};
+
+		vec3_t vmin, vmax;
+
+		math::vector_transform( m_hitbox->mins, matrix[ m_hitbox->bone ], vmin );
+		math::vector_transform( m_hitbox->maxs, matrix[ m_hitbox->bone ], vmax );
+
+		auto pos = ( vmin + vmax ) * 0.5f;
+
+		return pos;
 	}
 
 	vec3_t get_eye_pos( ) {

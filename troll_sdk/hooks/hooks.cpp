@@ -19,6 +19,8 @@ void hooks::init( ) {
 	/* get targets */
 	auto create_move_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 EC 08 FF 15 ? ? ? ? 84 C0" ); // 22
 	auto frame_stage_notify_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 8B 0D ? ? ? ? 8B 01 8B 80 74 01 00 00 FF D0 A2" ); // 37
+	auto write_usercmd_delta_to_buffer_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 EC 68 53 56 8B D9 C7 45" ); // 24
+	auto do_post_screen_effects_target = ( void* ) get_virtual( i::clientmode, 44 ); // 44
 	auto override_view_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F8 83 EC 58 56 57 8B 3D ? ? ? ? 85 FF" ); // 18
 	auto endscene_target = ( void* ) get_virtual( i::dx9, 42 ); // 42
 	auto reset_target = ( void* ) get_virtual( i::dx9, 16 ); // 16
@@ -38,6 +40,8 @@ void hooks::init( ) {
 	/* do our hooks */
 	MH_CreateHook( create_move_target, clientdll::create_move::hook, ( void** ) &o_create_move );
 	MH_CreateHook( frame_stage_notify_target, clientdll::frame_stage_notify::hook, ( void** ) &o_frame_stage_notify );
+	MH_CreateHook( write_usercmd_delta_to_buffer_target, clientdll::write_usercmd_delta_to_buffer::hook, ( void** ) &o_write_usercmd_delta_to_buffer );
+	MH_CreateHook( do_post_screen_effects_target, clientmode::do_post_screen_effects::hook, ( void** ) &o_do_post_screen_effects );
 	MH_CreateHook( override_view_target, clientmode::override_view::hook, ( void** ) &o_override_view );
 	MH_CreateHook( endscene_target, dx9::endscene::hook, ( void** ) &o_endscene );
 	MH_CreateHook( reset_target, dx9::reset::hook, ( void** ) &o_reset );

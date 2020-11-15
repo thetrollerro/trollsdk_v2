@@ -1,5 +1,6 @@
 #pragma once
 #include "../../main.hpp"
+#include "sounds.hpp"
 
 class events : public i_game_event_listener {
 public:

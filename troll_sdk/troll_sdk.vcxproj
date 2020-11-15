@@ -99,7 +99,7 @@
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;MY_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;TROLLSDK_EXPORTS;_WINDOWS;_USRDLL;_NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -144,7 +144,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;ANTI_DEBUG;DEV_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;TROLLSDK_EXPORTS;_WINDOWS;_USRDLL;ANTI_DEBUG;DEV_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -159,7 +159,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalDependencies>utilities/minhook/minhook.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -182,6 +182,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="features\animations\animations.cpp" />
+    <ClCompile Include="features\antiaim\antiaim.cpp" />
     <ClCompile Include="features\engine_prediction\engine_prediction.cpp" />
     <ClCompile Include="features\events\events.cpp" />
     <ClCompile Include="hooks\vtables\clientdll.cpp" />
@@ -209,8 +211,11 @@
     <ClCompile Include="utilities\utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="features\animations\animations.hpp" />
+    <ClInclude Include="features\antiaim\antiaim.hpp" />
     <ClInclude Include="features\engine_prediction\engine_prediction.hpp" />
     <ClInclude Include="features\events\events.hpp" />
+    <ClInclude Include="features\events\sounds.hpp" />
     <ClInclude Include="features\features.hpp" />
     <ClInclude Include="hooks\hooks.hpp" />
     <ClInclude Include="menu\vars\vars.hpp" />
@@ -220,6 +225,7 @@
     <ClInclude Include="sdk\classes\c_base_entity.hpp" />
     <ClInclude Include="sdk\classes\c_base_player.hpp" />
     <ClInclude Include="sdk\classes\c_usercmd.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\c_glow_object_manager.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_game_event_manager.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_input_system.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_memalloc.hpp" />
@@ -265,6 +271,7 @@
     <ClInclude Include="sdk\recv.hpp" />
     <ClInclude Include="sdk\sdk.hpp" />
     <ClInclude Include="sdk\structs.hpp" />
+    <ClInclude Include="sdk\utl.hpp" />
     <ClInclude Include="utilities\checksum_crc\checksum_crc.hpp" />
     <ClInclude Include="utilities\globals\globals.hpp" />
     <ClInclude Include="utilities\math\math.hpp" />

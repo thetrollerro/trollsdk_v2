@@ -19,9 +19,11 @@
     <ClCompile Include="hooks\vtables\surface.cpp" />
     <ClCompile Include="utilities\math\math.cpp" />
     <ClCompile Include="menu\vars\vars.cpp" />
+    <ClCompile Include="features\animations\animations.cpp" />
     <ClCompile Include="hooks\vtables\players.cpp" />
     <ClCompile Include="utilities\checksum_crc\checksum_crc.cpp" />
     <ClCompile Include="features\engine_prediction\engine_prediction.cpp" />
+    <ClCompile Include="features\antiaim\antiaim.cpp" />
     <ClCompile Include="utilities\render\render.cpp" />
     <ClCompile Include="hooks\vtables\modelrender.cpp" />
     <ClCompile Include="hooks\vtables\engine.cpp" />
@@ -74,6 +76,7 @@
     <ClInclude Include="sdk\interfaces\classes\i_trace.hpp" />
     <ClInclude Include="utilities\math\math.hpp" />
     <ClInclude Include="menu\vars\vars.hpp" />
+    <ClInclude Include="features\animations\animations.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_cvar.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_input_system.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_material_system.hpp" />
@@ -84,14 +87,18 @@
     <ClInclude Include="features\engine_prediction\engine_prediction.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_move_helper.hpp" />
     <ClInclude Include="sdk\interfaces\classes\iv_model_info.hpp" />
-    <ClInclude Include="sdk\classes\c_base_entity.hpp" />
-    <ClInclude Include="sdk\classes\c_base_attributable_item.hpp" />
+    <ClInclude Include="features\antiaim\antiaim.hpp" />
     <ClInclude Include="utilities\render\render.hpp" />
     <ClInclude Include="sdk\classes\color.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_memalloc.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_surface_props.hpp" />
     <ClInclude Include="features\events\events.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_game_event_manager.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\c_glow_object_manager.hpp" />
+    <ClInclude Include="sdk\utl.hpp" />
+    <ClInclude Include="sdk\classes\c_base_attributable_item.hpp" />
+    <ClInclude Include="sdk\classes\c_base_entity.hpp" />
+    <ClInclude Include="features\events\sounds.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="utilities\minhook\minhook.lib" />
