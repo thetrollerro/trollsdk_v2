@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include "i_trace.hpp"
+#include "../../client_class.hpp"
 
 class c_clock_drift_mgr
 {
@@ -38,7 +39,7 @@ public:
 	double connect_time;
 	int retry_number;
 	char pad002[ 0x54 ];
-	int nSignonState;
+	int signon_state;
 	char pad003[ 0x4 ];
 	double next_cmd_time;
 	int server_count;
