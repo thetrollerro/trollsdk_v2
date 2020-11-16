@@ -12,19 +12,12 @@ void antiaim::predict_lby( ) {
 		return;
 	}
 
-	const auto state = g_local->get_animstate( );
-	if ( !state ) return;
-
-	if ( g_local->m_flSpawnTime( ) != spawn_time ) {
-		spawn_time = g_local->m_flSpawnTime( );
-		m_lby_update_time = spawn_time;
-	}
-
-	if ( g_local->m_vecVelocity( ).length_2d( ) > 0.1f )
+	if ( g_local->m_vecVelocity( ).length_2d( ) > 0.1f ) {
 		m_lby_update_time = i::globalvars->m_cur_time + 0.22f;
-	else if ( i::globalvars->m_cur_time >= m_lby_update_time ) {
-		m_in_lby_update = true;
+	}
+	if ( m_lby_update_time < i::globalvars->m_cur_time ) {
 		m_lby_update_time = i::globalvars->m_cur_time + 1.1f;
+		m_in_lby_update = true;
 	}
 
 	if ( m_lby_update_time - i::globalvars->m_interval_per_tick < i::globalvars->m_cur_time )
