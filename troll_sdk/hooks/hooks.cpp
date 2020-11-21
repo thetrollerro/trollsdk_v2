@@ -17,6 +17,7 @@ void hooks::init( ) {
 	o_wndproc = reinterpret_cast< WNDPROC >( SetWindowLongPtr( csgo_window, GWLP_WNDPROC, reinterpret_cast< LONG_PTR >( dx9::wndproc::hook ) ) );
 
 	/* get targets */
+	auto list_leaves_in_box_target = ( void* ) utils::find_sig_ida( "engine.dll", "55 8B EC 83 EC 18 8B 4D 0C" );
 	auto create_move_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 EC 08 FF 15 ? ? ? ? 84 C0" ); // 22
 	auto frame_stage_notify_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 8B 0D ? ? ? ? 8B 01 8B 80 74 01 00 00 FF D0 A2" ); // 37
 	auto write_usercmd_delta_to_buffer_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 EC 68 53 56 8B D9 C7 45" ); // 24
@@ -38,6 +39,7 @@ void hooks::init( ) {
 	MH_Initialize( );
 
 	/* do our hooks */
+	MH_CreateHook( o_list_leaves_in_box, bsptreequery::list_leaves_in_box::hook, ( void** ) &o_list_leaves_in_box );
 	MH_CreateHook( create_move_target, clientdll::create_move::hook, ( void** ) &o_create_move );
 	MH_CreateHook( frame_stage_notify_target, clientdll::frame_stage_notify::hook, ( void** ) &o_frame_stage_notify );
 	MH_CreateHook( write_usercmd_delta_to_buffer_target, clientdll::write_usercmd_delta_to_buffer::hook, ( void** ) &o_write_usercmd_delta_to_buffer );

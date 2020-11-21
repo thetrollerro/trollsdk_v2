@@ -186,6 +186,7 @@
     <ClCompile Include="features\antiaim\antiaim.cpp" />
     <ClCompile Include="features\engine_prediction\engine_prediction.cpp" />
     <ClCompile Include="features\events\events.cpp" />
+    <ClCompile Include="hooks\vtables\bsptreequery.cpp" />
     <ClCompile Include="hooks\vtables\clientdll.cpp" />
     <ClCompile Include="hooks\vtables\clientmode.cpp" />
     <ClCompile Include="hooks\vtables\dx9.cpp" />

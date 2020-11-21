@@ -28,6 +28,7 @@
     <ClCompile Include="hooks\vtables\modelrender.cpp" />
     <ClCompile Include="hooks\vtables\engine.cpp" />
     <ClCompile Include="features\events\events.cpp" />
+    <ClCompile Include="hooks\vtables\bsptreequery.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sdk\math\vector.hpp" />

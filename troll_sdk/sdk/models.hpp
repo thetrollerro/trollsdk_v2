@@ -229,3 +229,20 @@ struct draw_model_state_t {
 	int                     m_drawflags;
 	int                     m_lod;
 };
+
+struct renderable_info_t {
+	i_client_renderable* renderable;
+	void* alpha_property;
+	int enum_count;
+	int render_frame;
+	unsigned short first_shadow;
+	unsigned short leaf_list;
+	short area;
+	uint16_t flags;
+	uint16_t flags2;
+	vec3_t bloated_abs_mins;
+	vec3_t bloated_abs_maxs;
+	vec3_t abs_mins;
+	vec3_t abs_maxs;
+	int pad;
+};

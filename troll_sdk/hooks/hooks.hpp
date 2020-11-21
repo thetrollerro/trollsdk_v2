@@ -11,6 +11,13 @@ namespace hooks {
 		return static_cast< unsigned int >( ( *reinterpret_cast< int** >( _class ) )[ index ] );
 	}
 
+	namespace bsptreequery {
+		namespace list_leaves_in_box {
+			int __fastcall hook( void* ecx, void* edx, vec3_t& mins, vec3_t& maxs, unsigned short* list, int list_max );
+			using fn = int( __fastcall* )( void*, void*, const vec3_t&, const vec3_t&, unsigned short*, int );
+		}
+	}
+
 	namespace clientdll {
 		namespace create_move {
 			void __fastcall call( void* ecx, void* edx, int sequence_number, float sample_frametime, bool active, bool& send_packet );
@@ -116,6 +123,7 @@ namespace hooks {
 	void restore( );
 }
 
+inline hooks::bsptreequery::list_leaves_in_box::fn o_list_leaves_in_box = nullptr;
 inline hooks::clientdll::create_move::fn o_create_move = nullptr;
 inline hooks::clientdll::frame_stage_notify::fn o_frame_stage_notify = nullptr;
 inline hooks::clientdll::write_usercmd_delta_to_buffer::fn o_write_usercmd_delta_to_buffer = nullptr;
