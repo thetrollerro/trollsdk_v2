@@ -39,7 +39,7 @@ void hooks::init( ) {
 	MH_Initialize( );
 
 	/* do our hooks */
-	MH_CreateHook( o_list_leaves_in_box, bsptreequery::list_leaves_in_box::hook, ( void** ) &o_list_leaves_in_box );
+	MH_CreateHook( list_leaves_in_box_target, bsptreequery::list_leaves_in_box::hook, ( void** ) &o_list_leaves_in_box );
 	MH_CreateHook( create_move_target, clientdll::create_move::hook, ( void** ) &o_create_move );
 	MH_CreateHook( frame_stage_notify_target, clientdll::frame_stage_notify::hook, ( void** ) &o_frame_stage_notify );
 	MH_CreateHook( write_usercmd_delta_to_buffer_target, clientdll::write_usercmd_delta_to_buffer::hook, ( void** ) &o_write_usercmd_delta_to_buffer );
