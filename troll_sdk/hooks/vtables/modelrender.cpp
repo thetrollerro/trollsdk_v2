@@ -78,11 +78,5 @@ void __fastcall hooks::modelrender::draw_model_exec::hook( void* ecx, void* edx,
 		}
 	};
 
-	/* get model */
-	bool is_player = strstr( info.model->name, ( "models/player" ) ) != nullptr;
-	bool is_arm = strstr( info.model->name, ( "arms" ) ) != nullptr;
-	bool is_weapon = strstr( info.model->name, ( "weapons/v_" ) ) != nullptr;
-
 	o_draw_model_exec( i::modelrender, 0, ctx, state, info, custom_bone_to_world );
-	i::modelrender->force_mat( nullptr );
 }

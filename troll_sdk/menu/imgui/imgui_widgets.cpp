@@ -2004,7 +2004,7 @@ const char* keys[ ] = {
 #define VK_BACK           0x08
 #define VK_RMENU          0xA5
 
-bool ImGui::Keybind( const char* str_id , int* current_key , int* key_style ) {
+bool ImGui::Keybind( const char* str_id , int* current_key , int* key_style, bool types ) {
 	ImGuiWindow* window = GetCurrentWindow( );
 	if ( window->SkipItems )
 		return false;
@@ -2085,7 +2085,7 @@ bool ImGui::Keybind( const char* str_id , int* current_key , int* key_style ) {
 			*current_key = key;
 	}
 	else {
-		if ( key_style ) {
+		if ( key_style && types ) {
 			bool popup_open = IsPopupOpen( id );
 
 			if ( style_requested && !popup_open )

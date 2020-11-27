@@ -29,7 +29,7 @@ void antiaim::predict_lby( ) {
 	*/
 
 	/* get if can micro move */
-	if ( ( i::clientstate->choked( ) <= 0 && !m_in_lby_update ) ) {
+	if ( i::clientstate->choked_commands <= 0 && !m_in_lby_update ) {
 		m_can_micro_move = true;
 	}
 }

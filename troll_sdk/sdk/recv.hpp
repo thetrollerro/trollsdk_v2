@@ -65,3 +65,11 @@ public:
 	bool is_initialized;
 	bool is_in_main_list;
 };
+
+struct event_t {
+public:
+	uint8_t pad1[ 4 ];
+	float delay;
+	uint8_t pad2[ 48 ];
+	event_t* next;
+};

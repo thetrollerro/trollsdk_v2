@@ -2,6 +2,7 @@
 #include "c_base_combat_weapon.hpp"
 #include "../interfaces/interfaces.hpp"
 #include "i_client_entity.hpp"
+#include "c_base_handle.hpp"
 #include "../../utilities/math/math.hpp"
 #include "c_base_entity.hpp"
 
@@ -108,6 +109,10 @@ public:
 
 	void set_bone_arr_for_write( matrix_t* bone ) {
 		m_bones = bone;
+	}
+
+	void write( matrix_t* bone ) {
+		bone = m_bones;
 	}
 
 private:
@@ -284,6 +289,10 @@ public:
 
 	animstate_t* get_animstate( ) {
 		return *( animstate_t** ) ( ( DWORD ) this + 0x3914 );
+	}
+
+	bool& should_use_new_animstate( ) {
+		return *( bool* ) ( ( uintptr_t ) this + 0x3AB4 );
 	}
 
 	bool is_player( ) {
@@ -496,7 +505,7 @@ public:
 	//m_iBonusChallenge
 	NETVAR( "DT_BasePlayer->m_flMaxspeed", m_flMaxspeed, float );
 	NETVAR( "DT_BasePlayer->m_fFlags", m_fFlags, int );
-	// m_iObserverMode
+	NETVAR( "DT_BasePlayer->m_iObserverMode", m_iObserverMode, int );
 	// m_bActiveCameraMan
 	// m_bCameraManXRay
 	// m_bCameraManOverview
@@ -725,8 +734,11 @@ public:
 	// m_iMatchStats_EnemiesFlashed                
 	// m_rank                                      
 	// m_passiveItems    
-	NETVAR_PTR( "DT_CSPlayer->m_hMyWeapons", m_hMyWeapons, UINT );
 	NETVAR_PTR( "DT_CSPlayer->m_hMyWearables", m_hMyWearables, UINT );
+
+	int* m_hMyWeapons( ){
+		return reinterpret_cast< int* >( uintptr_t( this ) + 0x2DF8 );
+	}
 
 	/* DT_SmokeGrenadeProjectile */
 	NETVAR( "DT_SmokeGrenadeProjectile->m_nSmokeEffectTickBegin", m_nSmokeEffectTickBegin, int );
@@ -736,5 +748,94 @@ public:
 	std::array<float, 24>& m_flPoseParameter( ) {
 		static int _m_flPoseParameter = netvars::get_offset( "DT_BaseAnimating->m_flPoseParameter" );
 		return *( std::array<float, 24>* )( uintptr_t( this ) + _m_flPoseParameter );
+	}
+};
+
+class stored_data {
+public:
+	int    m_tickbase;
+	vec3_t  m_punch;
+	vec3_t  m_punch_vel;
+	vec3_t m_view_offset;
+	float  m_velocity_modifier;
+
+public:
+	__forceinline stored_data( ) : m_tickbase { }, m_punch { }, m_punch_vel { }, m_view_offset { }, m_velocity_modifier { } {};
+};
+
+namespace netdata {
+	inline std::array< stored_data, 150 > m_data;
+
+	inline void reset( ) {
+		m_data.fill( stored_data( ) );
+	}
+
+	inline void store( ) {
+		int          tickbase;
+		stored_data* data;
+
+		if ( !g_local || !g_local->is_alive( ) ) {
+			reset( );
+			return;
+		}
+
+		tickbase = g_local->m_nTickBase( );
+
+		// get current record and store data.
+		data = &m_data[ tickbase % 150 ];
+
+		data->m_tickbase = tickbase;
+		data->m_punch = g_local->m_aimPunchAngle( );
+		//data->m_punch_vel = g::local->m_aimPunchAngleVel( );
+		data->m_view_offset = g_local->m_vecViewOffset( );
+		data->m_velocity_modifier = g_local->m_flVelocityModifier( );
+	}
+
+	inline void apply( ) {
+		int          tickbase;
+		stored_data* data;
+		vec3_t        punch_delta, punch_vel_delta;
+		vec3_t       view_delta;
+		float        modifier_delta;
+
+		if ( !g_local || !g_local->is_alive( ) ) {
+			reset( );
+			return;
+		}
+
+		tickbase = g_local->m_nTickBase( );
+
+		// get current record and validate.
+		data = &m_data[ tickbase % 150 ];
+
+		if ( g_local->m_nTickBase( ) != data->m_tickbase )
+			return;
+
+		// get deltas.
+		// note - dex;  before, when you stop shooting, punch values would sit around 0.03125 and then goto 0 next update.
+		//              with this fix applied, values slowly decay under 0.03125.
+		punch_delta = g_local->m_aimPunchAngle( ) - data->m_punch;
+		//punch_vel_delta = g::local->m_aimPunchAngleVel( ) - data->m_punch_vel;
+		view_delta = g_local->m_vecViewOffset( ) - data->m_view_offset;
+		modifier_delta = g_local->m_flVelocityModifier( ) - data->m_velocity_modifier;
+
+		// set data.
+		if ( std::abs( punch_delta.x ) < 0.03125f &&
+			std::abs( punch_delta.y ) < 0.03125f &&
+			std::abs( punch_delta.z ) < 0.03125f )
+			g_local->m_aimPunchAngle( ) = data->m_punch;
+
+		/*if ( std::abs( punch_vel_delta.x ) < 0.03125f &&
+			std::abs( punch_vel_delta.y ) < 0.03125f &&
+			std::abs( punch_vel_delta.z ) < 0.03125f )
+			g::local->m_aimPunchAngleVel( ) = data->m_punch_vel;*/
+
+		if ( std::abs( view_delta.x ) < 0.03125f &&
+			std::abs( view_delta.y ) < 0.03125f &&
+			std::abs( view_delta.z ) < 0.03125f )
+			g_local->m_vecViewOffset( ) = data->m_view_offset;
+
+		if ( std::abs( modifier_delta ) < 0.03125f )
+			g_local->m_flVelocityModifier( ) = data->m_velocity_modifier;
 	}
 };

@@ -4,11 +4,11 @@
 class c_base_attributable_item : public c_base_entity {
 public:
 	/* DT_BaseAttributableItem */
-	// m_OriginalOwnerXuidLow                      
-	// m_OriginalOwnerXuidHigh                     
-	// m_nFallbackPaintKit                         
+	NETVAR( "DT_BaseAttributableItem->m_OriginalOwnerXuidLow", m_OriginalOwnerXuidLow, int );
+	NETVAR( "DT_BaseAttributableItem->m_OriginalOwnerXuidHigh", m_OriginalOwnerXuidHigh, int );
+	NETVAR( "DT_BaseAttributableItem->m_nFallbackPaintKit", m_nFallbackPaintKit, int );
 	// m_nFallbackSeed                             
-	// m_flFallbackWear                            
+	NETVAR( "DT_BaseAttributableItem->m_flFallbackWear", m_flFallbackWear, float );
 	// m_nFallbackStatTrak                         
 	// m_AttributeManager                          
 	// m_hOuter                                
@@ -17,10 +17,10 @@ public:
 	// m_Item                                  
 	NETVAR( "DT_BaseAttributableItem->m_iItemDefinitionIndex", m_iItemDefinitionIndex, short );
 	// m_iEntityLevel                      
-	// m_iItemIDHigh                       
+	NETVAR( "DT_BaseAttributableItem->m_iItemIDHigh", m_iItemIDHigh, int );
 	// m_iItemIDLow                        
-	// m_iAccountID                        
-	// m_iEntityQuality                    
+	// m_iAccountID    
+	NETVAR( "DT_BaseAttributableItem->m_iEntityQuality", m_iEntityQuality, int );               
 	// m_bInitialized                      
 	// m_szCustomName                      
 	// m_NetworkedDynamicAttributesForDemos

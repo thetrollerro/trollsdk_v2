@@ -11,7 +11,7 @@ namespace hooks {
 		return static_cast< unsigned int >( ( *reinterpret_cast< int** >( _class ) )[ index ] );
 	}
 
-	namespace bsptreequery {
+	namespace bsp_tree_query {
 		namespace list_leaves_in_box {
 			int __fastcall hook( void* ecx, void* edx, vec3_t& mins, vec3_t& maxs, unsigned short* list, int list_max );
 			using fn = int( __fastcall* )( void*, void*, const vec3_t&, const vec3_t&, unsigned short*, int );
@@ -37,9 +37,19 @@ namespace hooks {
 	}
 
 	namespace clientmode {
+		namespace createmove {
+			bool __fastcall hook( void* ecx, void* edx, float input_sample_frametime, c_usercmd* cmd );
+			using fn = bool( __fastcall* )( void*, void*, float, c_usercmd* );
+		}
+
 		namespace do_post_screen_effects {
 			int __fastcall hook( void* ecx, void* edx, int a );
 			using fn = int( __fastcall* )( void*, void*, int );
+		}
+
+		namespace get_viewmodel_fov {
+			float __fastcall hook( void* ecx, void* edx );
+			using fn = float( __fastcall* )( void*, void* );
 		}
 
 		namespace override_view {
@@ -65,14 +75,48 @@ namespace hooks {
 	}
 
 	namespace engine {
+		namespace cl_move {
+			void __cdecl hook( float accumulated_extra_samples, bool final_tick );
+			using fn = void( __cdecl* )( float, bool );
+		}
+
 		namespace fire_game_event {
 			void __fastcall hook( void* ecx, void* edx );
 			using fn = void( __fastcall* )( void*, void* );
 		}
 
+		namespace is_connected {
+			bool __fastcall hook( void* ecx, void* edx );
+			using fn = bool( __fastcall* )( void*, void* );
+		}
+
 		namespace is_hltv {
 			bool __fastcall hook( void* ecx, void* edx );
 			using fn = bool( __fastcall* )( void*, void* );
+		}
+
+		namespace is_in_game {
+			bool __fastcall hook( void* ecx, void* edx );
+			using fn = bool( __fastcall* )( void*, void* );
+		}
+	}
+
+	namespace game {
+		namespace should_skip_animframe {
+			bool __fastcall hook( void* ecx, void* edx );
+			using fn = bool( __fastcall* )( void*, void* );
+		}
+
+		namespace sv_cheats_get_bool {
+			bool __fastcall hook( void* ecx, void* edx );
+			using fn = bool( __fastcall* )( void*, void* );
+		}
+	}
+
+	namespace material_system {
+		namespace find_material {
+			i_material* __fastcall hook( void* ecx, void* edx, const char* mat_name, const char* group_name, bool complain, const char* complain_prefix );
+			using fn = i_material * ( __fastcall* )( void*, void*, const char*, const char*, bool, const char* );
 		}
 	}
 
@@ -83,10 +127,22 @@ namespace hooks {
 		}
 	}
 
+	namespace net_channel {
+		namespace process_packet {
+			void __cdecl hook( void* packet, bool header );
+			using fn = void( __cdecl* )( void*, bool );
+		}
+	}
+
 	namespace players {
 		namespace build_transformations {
 			void __fastcall hook( void* ecx, void* edx, int a2, int a3, int a4, int a5, int a6, int a7 );
 			using fn = void( __fastcall* )( void*, void*, int, int, int, int, int, int );
+		}
+
+		namespace calc_view {
+			void __fastcall hook( void* ecx , void* edx , vec3_t& eye_origin , vec3_t& eye_angles , float& m_near, float& m_far, float& fov );
+			using fn = void( __fastcall* )( void*, void*, vec3_t&, vec3_t&, float&, float&, float& );
 		}
 
 		namespace do_extra_bones_processing {
@@ -110,7 +166,29 @@ namespace hooks {
 		}
 	}
 
+	namespace prediction {
+		namespace in_prediction {
+			bool __fastcall hook( void* ecx, void* edx );
+			using fn = bool( __fastcall* )( void*, void* );
+		}
+
+		namespace perform_prediction {
+			bool __fastcall hook( void* ecx, void* edx, int slot, c_base_player* pl, bool recived_world_update, int incoming_acknowledged, int outgoing_command );
+			using fn = bool( __fastcall* )( void*, void*, int, c_base_player*, bool, int, int );
+		}
+
+		namespace run_command {
+			void __fastcall hook( void* ecx, void* edx, c_base_player* e, c_usercmd* cmd, void* move_helper );
+			using fn = void( __fastcall* )( void*, void*, c_base_player*, c_usercmd*, void* );
+		}
+	}
+
 	namespace surface {
+		namespace draw_set_color {
+			void __fastcall hook( void* ecx, void* edx, int r, int g, int b, int a );
+			using fn = void( __fastcall* )( void*, void*, int, int, int, int );
+		}
+
 		namespace lock_cursor {
 			void __fastcall hook( void* ecx, void* edx );
 			using fn = void( __fastcall* )( void*, void* );
@@ -123,20 +201,34 @@ namespace hooks {
 	void restore( );
 }
 
-inline hooks::bsptreequery::list_leaves_in_box::fn o_list_leaves_in_box = nullptr;
+inline hooks::bsp_tree_query::list_leaves_in_box::fn o_list_leaves_in_box = nullptr;
 inline hooks::clientdll::create_move::fn o_create_move = nullptr;
 inline hooks::clientdll::frame_stage_notify::fn o_frame_stage_notify = nullptr;
 inline hooks::clientdll::write_usercmd_delta_to_buffer::fn o_write_usercmd_delta_to_buffer = nullptr;
+inline hooks::clientmode::createmove::fn o_createmove = nullptr;
 inline hooks::clientmode::do_post_screen_effects::fn o_do_post_screen_effects = nullptr;
+inline hooks::clientmode::get_viewmodel_fov::fn o_get_viewmodel_fov = nullptr;
 inline hooks::clientmode::override_view::fn o_override_view = nullptr;
 inline hooks::dx9::endscene::fn o_endscene = nullptr;
 inline hooks::dx9::reset::fn o_reset = nullptr;
+inline hooks::engine::cl_move::fn o_cl_move = nullptr;
 inline hooks::engine::fire_game_event::fn o_fire_game_event = nullptr;
+inline hooks::engine::is_connected::fn o_is_connected = nullptr;
 inline hooks::engine::is_hltv::fn o_is_hltv = nullptr;
+inline hooks::engine::is_in_game::fn o_is_in_game = nullptr;
+inline hooks::game::should_skip_animframe::fn o_should_skip_animframe = nullptr;
+inline hooks::game::sv_cheats_get_bool::fn o_sv_cheats_get_bool = nullptr;
+inline hooks::material_system::find_material::fn o_find_material = nullptr;
 inline hooks::modelrender::draw_model_exec::fn o_draw_model_exec = nullptr;
+inline hooks::net_channel::process_packet::fn o_process_packet = nullptr;
 inline hooks::players::build_transformations::fn o_build_transformations = nullptr;
+inline hooks::players::calc_view::fn o_calc_view = nullptr;
 inline hooks::players::do_extra_bones_processing::fn o_do_extra_bones_processing = nullptr;
 inline hooks::players::get_eye_ang::fn o_get_eye_ang = nullptr;
 inline hooks::players::setup_bones::fn o_setup_bones = nullptr;
 inline hooks::players::standard_blending_rules::fn o_standard_blending_rules = nullptr;
+inline hooks::prediction::in_prediction::fn o_in_prediction = nullptr;
+inline hooks::prediction::perform_prediction::fn o_perform_prediction = nullptr;
+inline hooks::prediction::run_command::fn o_run_command = nullptr;
+inline hooks::surface::draw_set_color::fn o_draw_set_color = nullptr;
 inline hooks::surface::lock_cursor::fn o_lock_cursor = nullptr;

@@ -14,6 +14,7 @@
 #include <shlwapi.h>
 #include <iomanip>
 #include <ctime>
+#include "../menu.hpp"
 
 void vars::setup_config( ) {
 	save_ragebot( );
@@ -24,22 +25,28 @@ void vars::setup_config( ) {
 	save_skins( );
 }
 
+void vars::save_legitbot( ) {
+	
+}
+
 void vars::save_ragebot( ) {
+	
 }
 
 void vars::save_antiaim( ) {
-}
-
-void vars::save_legitbot( ) {
+	
 }
 
 void vars::save_esp( ) {
+	
 }
 
 void vars::save_misc( ) {
+	
 }
 
 void vars::save_skins( ) {
+	
 }
 
 void vars::setup_value( int& value, int def, std::string category, std::string name )
@@ -65,14 +72,11 @@ void vars::save_config( )
 	static char path[ MAX_PATH ];
 	std::string folder, file;
 
-	if ( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_MYDOCUMENTS, NULL, 0, path ) ) )
-	{
-		char szCmd[ 256 ];
-		sprintf( szCmd, "\\TrollerWare.xyz\\%s.cfg", g_vars.misc.config_name );
+	char szCmd[ 256 ];
+	sprintf( szCmd, "C:\\TrollerWare.xyz\\%s.cfg", g_vars.misc.config_name );
 
-		folder = std::string( path ) + "\\TrollerWare.xyz\\";
-		file = std::string( path ) + szCmd;
-	}
+	folder = std::string( path ) + "C:\\TrollerWare.xyz\\";
+	file = std::string( path ) + szCmd;
 
 	CreateDirectoryA( folder.c_str( ), NULL );
 
@@ -91,14 +95,11 @@ void vars::load_config( )
 	static char path[ MAX_PATH ];
 	std::string folder, file;
 
-	if ( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_MYDOCUMENTS, NULL, 0, path ) ) )
-	{
-		char szCmd[ 256 ];
-		sprintf( szCmd, "\\TrollerWare.xyz\\%s.cfg", g_vars.misc.config_name );
+	char szCmd[ 256 ];
+	sprintf( szCmd, "C:\\TrollerWare.xyz\\%s.cfg", g_vars.misc.config_name );
 
-		folder = std::string( path ) + "\\TrollerWare.xyz\\";
-		file = std::string( path ) + szCmd;
-	}
+	folder = std::string( path ) + "C:\\TrollerWare.xyz\\";
+	file = std::string( path ) + szCmd;
 
 	CreateDirectoryA( folder.c_str( ), NULL );
 
@@ -130,10 +131,7 @@ void get_config( ) {
 	static char path[ MAX_PATH ];
 	std::string szPath1;
 
-	if ( !SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_MYDOCUMENTS, NULL, 0, path ) ) )
-		return;
-
-	szPath1 = std::string( path ) + "\\TrollerWare.xyz\\*";
+	szPath1 = std::string( path ) + "C:\\TrollerWare.xyz\\*";
 
 	WIN32_FIND_DATA FindFileData;
 	HANDLE hf;

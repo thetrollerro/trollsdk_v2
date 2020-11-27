@@ -27,6 +27,12 @@ public:
 		utils::call_virtual< fn >( this, 18 )( this, player, frametime );
 	}
 
+	void run_command( c_base_player* player, c_usercmd* ucmd, c_move_helper* moveHelper )
+	{
+		typedef void( __thiscall* fn )( void*, c_base_player*, c_usercmd*, c_move_helper* );
+		utils::call_virtual< fn >( this, 19 )( this, player, ucmd, moveHelper );
+	}
+
 	void setup_move( c_base_player* player, c_usercmd* ucmd, c_move_helper* helper, void* movedata ) {
 		using fn = void( __thiscall* )( void*, c_base_player*, c_usercmd*, c_move_helper*, void* );
 		utils::call_virtual< fn >( this, 20 )( this, player, ucmd, helper, movedata );

@@ -32,10 +32,10 @@ void render::destroy_fonts( ) {
 
 void render::create_fonts( ) {
 	render::create_font( ( void** ) &render::fonts::def, "Tahoma", 32, true );
-	render::create_font( ( void** ) &render::fonts::watermark, "Verdana", 16, false );
-	render::create_font( ( void** ) &render::fonts::esp_def, "Verdana", 10, FW_NORMAL );
+	render::create_font( ( void** ) &render::fonts::watermark, "Tahoma", 16, false );
+	render::create_font( ( void** ) &render::fonts::esp_def, "Smallest Pixel-7", 10, FW_NORMAL );
 	render::create_font( ( void** ) &render::fonts::esp_sec, "Tahoma", 10, false );
-	render::create_font( ( void** ) &render::fonts::keystrokes, "Verdana", 22, FW_NORMAL );
+	render::create_font( ( void** ) &render::fonts::keystrokes, "Verdana", 20, FW_BOLD );
 }
 
 void render::create_font( void** font, const std::string& family, int size, bool bold ) {

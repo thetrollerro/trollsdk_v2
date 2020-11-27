@@ -28,7 +28,12 @@
     <ClCompile Include="hooks\vtables\modelrender.cpp" />
     <ClCompile Include="hooks\vtables\engine.cpp" />
     <ClCompile Include="features\events\events.cpp" />
-    <ClCompile Include="hooks\vtables\bsptreequery.cpp" />
+    <ClCompile Include="hooks\vtables\net_channel.cpp" />
+    <ClCompile Include="hooks\vtables\prediction.cpp" />
+    <ClCompile Include="hooks\vtables\material_system.cpp" />
+    <ClCompile Include="hooks\vtables\bsp_tree_query.cpp" />
+    <ClCompile Include="hooks\vtables\game.cpp" />
+    <ClCompile Include="utilities\parser\parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sdk\math\vector.hpp" />
@@ -84,7 +89,6 @@
     <ClInclude Include="sdk\interfaces\classes\iv_model_render.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_prediction.hpp" />
     <ClInclude Include="utilities\checksum_crc\checksum_crc.hpp" />
-    <ClInclude Include="sdk\interfaces\classes\i_client_state.hpp" />
     <ClInclude Include="features\engine_prediction\engine_prediction.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_move_helper.hpp" />
     <ClInclude Include="sdk\interfaces\classes\iv_model_info.hpp" />
@@ -100,6 +104,11 @@
     <ClInclude Include="sdk\classes\c_base_attributable_item.hpp" />
     <ClInclude Include="sdk\classes\c_base_entity.hpp" />
     <ClInclude Include="features\events\sounds.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_client_state.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\iv_view_render_beams.hpp" />
+    <ClInclude Include="utilities\parser\parser.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_localize.hpp" />
+    <ClInclude Include="sdk\classes\c_base_handle.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="utilities\minhook\minhook.lib" />

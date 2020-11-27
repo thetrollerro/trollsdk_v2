@@ -14,6 +14,7 @@ public:
 		i::event_manager->add_listener( this, "weapon_fire", false );
 		i::event_manager->add_listener( this, "round_start", false );
 		i::event_manager->add_listener( this, "item_purchase", false );
+		i::event_manager->add_listener( this, "bullet_impact", false );
 	}
 
 	void restore( ) {

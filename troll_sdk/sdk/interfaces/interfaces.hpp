@@ -19,6 +19,7 @@
 #include "classes/i_client_state.hpp"
 #include "classes/i_cvar.hpp"
 #include "classes/i_game_event_manager.hpp"
+#include "classes/i_localize.hpp"
 #include "classes/i_material_system.hpp"
 #include "classes/i_surface.hpp"
 #include "classes/i_surface_props.hpp"
@@ -26,6 +27,7 @@
 #include "classes/iv_engine_client.hpp"
 #include "classes/iv_model_info.hpp"
 #include "classes/iv_model_render.hpp"
+#include "classes/iv_view_render_beams.hpp"
 #include <d3d9.h>
 
 namespace i {
@@ -88,6 +90,7 @@ namespace i {
 	inline i_client_state* clientstate;
 	inline i_cvar* cvar;
 	inline i_game_event_manager* event_manager;
+	inline i_localize* localize;
 	inline i_material_system* material_system;
 	inline i_surface* surface;
 	inline i_surface_props* surface_props;
@@ -95,6 +98,7 @@ namespace i {
 	inline iv_engine_client* engine;
 	inline iv_model_info* modelinfo;
 	inline iv_model_render* modelrender;
+	inline iv_view_render_beams* render_beams;
 	inline IDirect3DDevice9* dx9;
 
 	void init( );

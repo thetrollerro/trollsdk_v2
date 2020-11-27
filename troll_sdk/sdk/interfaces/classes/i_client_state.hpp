@@ -32,48 +32,43 @@ public:
 		delta_tick = -1;
 	}
 
-	char pad000[ 0x9C ];
-	i_net_channel* net_channel;
-	int challenge_nr;
-	char pad001[ 0x4 ];
-	double connect_time;
-	int retry_number;
-	char pad002[ 0x54 ];
-	int signon_state;
-	char pad003[ 0x4 ];
-	double next_cmd_time;
-	int server_count;
-	int current_sequence;
-	char pad004[ 0x8 ];
-	c_clock_drift_mgr clock_drift_mgr;
-	int delta_tick;
-	char pad005[ 0x4 ];
-	int view_entity;
-	int player_slot;
-	bool paused;
-	char pad006[ 0x3 ];
-	char level_name[ 0x104 ];
-	char level_name_short[ 0x28 ];
-	char  pad007[ 0xD4 ];
-	int max_clients;
-	char pad008[ 0x4994 ];
-	int old_tickcount;
-	float tick_reminder;
-	float frame_time;
-	int last_outgoing_command;
-	int choked_commands;
-	int last_command_ack;
-	int last_server_tick;
-	int command_ack;
-	int sound_sequence;
-	int last_progress_percent;
-	bool is_hltv;
-	char pad009[ 0x4B ];
-	vec3_t viewangles;
-	char pad010[ 0xCC ];
-	c_event_info* events;
-
-	std::uint32_t& choked( ) {
-		return *reinterpret_cast< std::uint32_t* >( reinterpret_cast< std::uintptr_t >( this ) + 0x4D30 );
-	}
+	std::byte pad0[ 0x9C ]; //0x0000
+	i_net_channel* net_channel; //0x009C
+	int challenge_nr; //0x00A0
+	std::byte pad1[ 0x64 ]; //0x00A4
+	int signon_state;  //0x0108
+	std::byte pad2[ 0x8 ]; //0x010C
+	float next_cmd_time; //0x0114
+	int server_count; //0x0118
+	int current_seqeunce; //0x011C
+	char _0x0120[ 4 ];
+	__int32 clock_drift_mgr; //0x0124 
+	char _0x0128[ 68 ];
+	__int32 server_tick; //0x016C 
+	__int32 client_tick; //0x0170 
+	int delta_tick; //0x0174
+	bool paused; //0x0178
+	std::byte pad4[ 0x7 ]; //0x0179
+	int view_entity; //0x0180
+	int player_slot; //0x0184
+	char level_name[ 260 ]; //0x0188
+	char level_name_short[ 80 ]; //0x028C
+	char group_name[ 80 ]; //0x02DC
+	std::byte pad5[ 0x5C ]; //0x032C
+	int max_clients;  //0x0388
+	std::byte pad6[ 0x4984 ]; //0x038C
+	float last_server_tick_time; //0x4D10
+	bool in_simulation; //0x4D14
+	std::byte pad7[ 0xB ]; //0x4D15
+	int old_tickcount; //0x4D18
+	float tick_remainder; //0x4D1C
+	float frametime; //0x4D20
+	int last_outgoing_command; //0x4D38
+	int choked_commands; //0x4D30
+	int last_command_ack; //0x4D2C
+	int command_ack; //0x4D30
+	int sound_sequence; //0x4D34
+	std::byte pad8[ 0x50 ]; //0x4D38
+	vec3_t viewangles; //0x4D88
+	std::byte pad9[ 0xD0 ]; //0x4D9A
 };

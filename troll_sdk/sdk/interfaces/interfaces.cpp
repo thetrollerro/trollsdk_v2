@@ -11,6 +11,7 @@ void i::init( ) {
 	clientdll = get_interface<i_client_dll>( "client.dll", "VClient018", true );
 	cvar = get_interface<i_cvar>( "vstdlib.dll", "VEngineCvar007", true );
 	event_manager = get_interface<i_game_event_manager>( "engine.dll", "GAMEEVENTSMANAGER002", true );
+	localize = get_interface<i_localize>( "localize.dll", "Localize_001", true );
 	material_system = get_interface<i_material_system>( "materialsystem.dll", "VMaterialSystem080", true );
 	surface = get_interface<i_surface>( "vguimatsurface.dll", "VGUI_Surface031", true );
 	surface_props = get_interface<i_surface_props>( "vphysics.dll", "VPhysicsSurfaceProps001", true );
@@ -26,5 +27,6 @@ void i::init( ) {
 	movehelper = **( c_move_helper*** ) ( utils::find_sig_ida( "client.dll", "8B 0D ? ? ? ? 8B 46 08 68" ) + 2 );
 	clientmode = **( i_client_mode*** ) ( ( *( DWORD** ) clientdll )[ 10 ] + 5 );
 	clientstate = **( i_client_state*** ) ( utils::find_sig_ida( "engine.dll", "A1 ? ? ? ? 8B 80 ? ? ? ? C3" ) + 1 );
+	render_beams = *( iv_view_render_beams** ) ( utils::find_sig_ida( "client.dll", "A1 ? ? ? ? FF 10 A1 ? ? ? ? B9" ) + 0x1 );
 	dx9 = **( IDirect3DDevice9*** ) ( utils::find_sig_ida( "shaderapidx9.dll", "A1 ?? ?? ?? ?? 50 8B 08 FF 51 0C" ) + 1 );
 }

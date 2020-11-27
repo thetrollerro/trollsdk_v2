@@ -16,6 +16,7 @@
 #include "menu/imgui/impl/imgui_impl_win32.h"
 #include "sdk/interfaces/interfaces.hpp"
 #include "sdk/sdk.hpp"
+#include "utilities/parser/parser.hpp"
 #include "utilities/render/render.hpp"
 #include "utilities/globals/globals.hpp"
 #include "utilities/utilities.hpp"

@@ -1,6 +1,9 @@
 #include "menu.hpp"
 #include "../hooks/hooks.hpp"
 
+#include "menu.hpp"
+#include "../hooks/hooks.hpp"
+
 void text( const char* name, int x )
 {
 	auto text_size = ImGui::CalcTextSize( name );
@@ -113,7 +116,7 @@ void menu::misc_tab( ) {
 	ImGui::NextColumn( );
 
 	ImGui::BeginChild( "Miscellaneous", ImVec2( 230, 160 ), true ); {
-		
+
 	}
 	ImGui::EndChild( );
 	ImGui::BeginChild( "Config", ImVec2( 230, 140 ), true ); {

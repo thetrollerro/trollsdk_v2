@@ -12,7 +12,7 @@ static t* find_hud_element( const char* name )
 }
 
 void events::fire_game_event( i_game_event* event ) {
-	if ( !event || !g_local || !i::engine->is_in_game( ) ) return;
+	if ( !event || !i::engine->is_in_game( ) || !g_local ) return;
 
 	/* vars */
 	auto attacker = i::entitylist->get_client_entity( i::engine->get_player_for_userid( event->get_int( "attacker" ) ) );
@@ -22,7 +22,7 @@ void events::fire_game_event( i_game_event* event ) {
 
 	auto name = event->get_name( );
 	if ( !strcmp( name, "player_hurt" ) ) {
-	
+		if ( attacker != g_local ) return;
 	}
 	if ( !strcmp( name, "player_death" ) ) {
 		if ( attacker != g_local ) {
@@ -32,7 +32,7 @@ void events::fire_game_event( i_game_event* event ) {
 			
 		}
 	}
-	if ( !strcmp( name, "weapon_fire" ) ) {
+	if ( !strcmp( name, "fire" ) ) {
 		if ( pl != g_local ) return;
 
 	}
@@ -41,5 +41,8 @@ void events::fire_game_event( i_game_event* event ) {
 	}
 	if ( strstr( name, "item_purchase" ) ) {
 
+	}
+	if ( !strcmp( name, "bullet_impact" ) ) {
+		
 	}
 };

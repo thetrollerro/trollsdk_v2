@@ -11,52 +11,6 @@ void __fastcall hooks::clientdll::create_move::call( void* ecx, void* edx, int s
 		return;
 	}
 
-	/* fix attack stuff */ {
-		auto weapon = g_local->get_active_weapon( );
-		if ( weapon ) {
-			float flServerTime = g_local->m_nTickBase( ) * i::globalvars->m_interval_per_tick;
-			bool can_shoot = ( weapon->m_flNextPrimaryAttack( ) <= flServerTime );
-			if ( ( !can_shoot && !weapon->is_knife( ) && !weapon->is_nade( ) && !weapon->is_zeus( ) ) || menu::opened ) {
-				cmd->buttons &= ~in_attack;
-			}
-		}
-	}
-
-	/* globals */
-	g::cmd = cmd;
-	g::send_packet = send_packet =  true;
-
-	vec3_t o_ang = cmd->viewangles;
-
-	/* update prediction */
-	engine_prediction::update( );
-
-	/* do predict */ {
-		engine_prediction::predict( cmd );
-
-		/* lby */
-		antiaim::predict_lby( );
-
-		/* features */
-		animations::fix_onshot( cmd );
-
-		engine_prediction::restore( );
-	}
-
-	/* get global angles */ {
-		if ( g::send_packet ) {
-			g::fake_angle = cmd->viewangles;
-		}
-		else {
-			g::real_angle = cmd->viewangles;
-		}
-	}
-
-	/* anti-untrsted */ {
-		cmd->viewangles.clamp( );
-	}
-
-	send_packet = g::send_packet;
 	verified->m_cmd = *cmd;
 	verified->m_crc = cmd->get_checksum( );
 }
@@ -107,9 +61,22 @@ std::vector<const char*> smoke_materials =
 
 
 void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx, int stage ) {
-	if ( !i::engine->is_in_game( ) || !g_local ) {
+	if ( !i::engine->is_in_game( ) || !g_local || !g_local->is_alive( ) ) {
 		o_frame_stage_notify( i::clientdll, 0, stage );
 		return;
+	}
+
+	if ( stage != frame_start ) {
+		g::stage = stage;
+	}
+
+	int framstage_minus2 = stage - 2;
+
+	if ( framstage_minus2 ) {
+		// do shit onetap does idk
+	}
+	else {
+		exploit::vel_mod = g_local->m_flVelocityModifier( );
 	}
 
 	switch ( stage )
@@ -124,7 +91,7 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 		break;
 
 	case frame_net_update_postdataupdate_start:
-
+		
 		break;
 
 	case frame_net_update_postdataupdate_end:
@@ -132,16 +99,17 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 		break;
 
 	case frame_net_update_end:
-
+		netdata::apply( );
 		break;
 
 	case frame_render_start:
-	
+
 		/* pvs fix */
 		for ( int i = 1; i < 65; i++ ) {
 			auto pl = c_base_player::get_player_by_index( i );
 			if ( !pl || !pl->is_player( ) || pl == g_local ) continue;
 
+			*( int* ) ( ( uintptr_t ) pl + 0xA64 ) = i::globalvars->m_frame_count;
 			*( int* ) ( ( uintptr_t ) pl + 0xA30 ) = i::globalvars->m_frame_count;
 			*( int* ) ( ( uintptr_t ) pl + 0xA28 ) = 0;
 		}
@@ -154,7 +122,12 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 
 	}
 
+	/* call og and do our features that needs to be done after */
 	o_frame_stage_notify( i::clientdll, 0, stage );
+
+	if ( stage == frame_render_start ) {
+		exploit::shift_rate = ( int ) std::round( 1.f / i::globalvars->m_interval_per_tick );
+	}
 }
 
 void write_cmd( bf_write* buf, c_usercmd* pin, c_usercmd* pout ) {

@@ -1,6 +1,7 @@
 #pragma once
 
 namespace antiaim {
+	/* delas */
 	inline float m_max_delta;
 	inline float m_max_lby_delta;
 

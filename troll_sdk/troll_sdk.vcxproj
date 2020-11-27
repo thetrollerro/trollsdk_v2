@@ -186,13 +186,17 @@
     <ClCompile Include="features\antiaim\antiaim.cpp" />
     <ClCompile Include="features\engine_prediction\engine_prediction.cpp" />
     <ClCompile Include="features\events\events.cpp" />
-    <ClCompile Include="hooks\vtables\bsptreequery.cpp" />
+    <ClCompile Include="hooks\vtables\bsp_tree_query.cpp" />
     <ClCompile Include="hooks\vtables\clientdll.cpp" />
     <ClCompile Include="hooks\vtables\clientmode.cpp" />
     <ClCompile Include="hooks\vtables\dx9.cpp" />
     <ClCompile Include="hooks\vtables\engine.cpp" />
+    <ClCompile Include="hooks\vtables\game.cpp" />
+    <ClCompile Include="hooks\vtables\material_system.cpp" />
     <ClCompile Include="hooks\vtables\modelrender.cpp" />
+    <ClCompile Include="hooks\vtables\net_channel.cpp" />
     <ClCompile Include="hooks\vtables\players.cpp" />
+    <ClCompile Include="hooks\vtables\prediction.cpp" />
     <ClCompile Include="hooks\vtables\surface.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="hooks\hooks.cpp" />
@@ -208,6 +212,7 @@
     <ClCompile Include="utilities\checksum_crc\checksum_crc.cpp" />
     <ClCompile Include="utilities\globals\globals.cpp" />
     <ClCompile Include="utilities\math\math.cpp" />
+    <ClCompile Include="utilities\parser\parser.cpp" />
     <ClCompile Include="utilities\render\render.cpp" />
     <ClCompile Include="utilities\utilities.cpp" />
   </ItemGroup>
@@ -224,17 +229,20 @@
     <ClInclude Include="sdk\classes\c_base_attributable_item.hpp" />
     <ClInclude Include="sdk\classes\c_base_combat_weapon.hpp" />
     <ClInclude Include="sdk\classes\c_base_entity.hpp" />
+    <ClInclude Include="sdk\classes\c_base_handle.hpp" />
     <ClInclude Include="sdk\classes\c_base_player.hpp" />
     <ClInclude Include="sdk\classes\c_usercmd.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_glow_object_manager.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\iv_view_render_beams.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_client_state.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_game_event_manager.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_input_system.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_memalloc.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_move_helper.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_prediction.hpp" />
     <ClInclude Include="sdk\interfaces\classes\iv_model_render.hpp" />
-    <ClInclude Include="sdk\interfaces\classes\i_client_state.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_cvar.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_localize.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_material_system.hpp" />
     <ClInclude Include="sdk\interfaces\classes\iv_model_info.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_surface_props.hpp" />
@@ -277,6 +285,7 @@
     <ClInclude Include="utilities\globals\globals.hpp" />
     <ClInclude Include="utilities\math\math.hpp" />
     <ClInclude Include="utilities\minhook\minhook.h" />
+    <ClInclude Include="utilities\parser\parser.hpp" />
     <ClInclude Include="utilities\render\render.hpp" />
     <ClInclude Include="utilities\utilities.hpp" />
     <ClInclude Include="sdk\math\vector.hpp" />

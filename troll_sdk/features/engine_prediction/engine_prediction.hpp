@@ -15,7 +15,6 @@ namespace engine_prediction {
 	}stored_viewmodel;
 
 	inline c_movedata data;
-	inline float m_spread, m_inaccuracy;
 
 	void predict( c_usercmd* cmd );
 	void restore( );
