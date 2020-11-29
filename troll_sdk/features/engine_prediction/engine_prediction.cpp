@@ -52,10 +52,6 @@ void engine_prediction::predict( c_usercmd* cmd ) {
 	i::game_movement->process_movement( g_local, &data );
 	i::prediction->finish_move( g_local, cmd, &data );
 
-	/* reset player host */
-	i::game_movement->finish_track_prediction_errors( g_local );
-	i::movehelper->set_host( nullptr );
-
 	/* fix accuracy */
 	auto weapon = g_local->get_active_weapon( );
 	if ( !weapon ) {
@@ -78,6 +74,10 @@ void engine_prediction::restore( ) {
 	/* restore vars */
 	i::globalvars->m_cur_time = stored_vars.m_cur_time;
 	i::globalvars->m_frame_time = stored_vars.m_frame_time;
+
+	/* reset player host */
+	i::game_movement->finish_track_prediction_errors( g_local );
+	i::movehelper->set_host( nullptr );
 }
 
 void engine_prediction::update( ) {
