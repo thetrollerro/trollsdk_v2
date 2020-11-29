@@ -2,7 +2,7 @@
 #include "../../menu/menu.hpp"
 
 void __fastcall hooks::clientdll::create_move::call( void* ecx, void* edx, int sequence_number, float sample_frametime, bool active, bool& send_packet ) {
-	o_create_move( i::clientdll, 0, sequence_number, sample_frametime, active, send_packet );
+	o_create_move( ecx, edx, sequence_number, sample_frametime, active, send_packet );
 
 	auto cmd = i::input->get_user_cmd( sequence_number );
 	auto verified = i::input->get_verified_user_cmd( sequence_number );
@@ -65,7 +65,7 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 	g_local = ( c_base_player* ) i::entitylist->get_client_entity( i::engine->get_local_player( ) );
 
 	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !g_local || !g_local->is_alive( ) ) {
-		o_frame_stage_notify( i::clientdll, 0, stage );
+		o_frame_stage_notify( ecx, edx, stage );
 		return;
 	}
 
@@ -126,7 +126,7 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 	}
 
 	/* call og and do our features that needs to be done after */
-	o_frame_stage_notify( i::clientdll, 0, stage );
+	o_frame_stage_notify( ecx, edx, stage );
 
 	if ( stage == frame_render_start ) {
 		exploit::shift_rate = ( int ) std::round( 1.f / i::globalvars->m_interval_per_tick );
@@ -146,11 +146,11 @@ void write_cmd( bf_write* buf, c_usercmd* pin, c_usercmd* pout ) {
 
 bool __fastcall hooks::clientdll::write_usercmd_delta_to_buffer::hook( void* ecx, void* edx, int slot, bf_write* buf, int from, int to, bool is_new_cmd ) {
 	if ( exploit::tick_base_shift <= 0 )
-		return o_write_usercmd_delta_to_buffer( i::clientdll, 0, slot, buf, from, to, is_new_cmd );
+		return o_write_usercmd_delta_to_buffer( ecx, edx, slot, buf, from, to, is_new_cmd );
 
 	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !g_local || !g_local->is_alive( ) ) {
 		exploit::tick_base_shift = 0;
-		return o_write_usercmd_delta_to_buffer( i::clientdll, 0, slot, buf, from, to, is_new_cmd );
+		return o_write_usercmd_delta_to_buffer( ecx, edx, slot, buf, from, to, is_new_cmd );
 	}
 
 	if ( from != -1 )
@@ -171,7 +171,7 @@ bool __fastcall hooks::clientdll::write_usercmd_delta_to_buffer::hook( void* ecx
 	*num_backup_commands = 0;
 
 	for ( to = next_cmdnr - new_commands + 1; to <= next_cmdnr; to++ ) {
-		if ( !o_write_usercmd_delta_to_buffer( i::clientdll, 0, slot, buf, from, to, true ) )
+		if ( !o_write_usercmd_delta_to_buffer( ecx, edx, slot, buf, from, to, true ) )
 			return false;
 
 		from = to;

@@ -17,7 +17,7 @@ void __fastcall hooks::modelrender::draw_model_exec::hook( void* ecx, void* edx,
 
 	/* checks */
 	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || i::modelrender->is_forced_mat( ) || !g_local )
-		return o_draw_model_exec( i::modelrender, 0, ctx, state, info, custom_bone_to_world );
+		return o_draw_model_exec( ecx, edx, ctx, state, info, custom_bone_to_world );
 
 	auto chams_materials = [ ] ( int type ) -> i_material* {
 		/* chams materials */
@@ -78,5 +78,5 @@ void __fastcall hooks::modelrender::draw_model_exec::hook( void* ecx, void* edx,
 		}
 	};
 
-	o_draw_model_exec( i::modelrender, 0, ctx, state, info, custom_bone_to_world );
+	o_draw_model_exec( ecx, edx, ctx, state, info, custom_bone_to_world );
 }

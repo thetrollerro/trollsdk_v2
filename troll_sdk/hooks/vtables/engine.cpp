@@ -6,7 +6,7 @@ void __cdecl hooks::engine::cl_move::hook( float accumulated_extra_samples, bool
 
 void __fastcall hooks::engine::fire_game_event::hook( void* ecx, void* edx ) {
 	if ( !g_local || !g_local->is_alive( ) )
-		return o_fire_game_event( i::engine, 0 );
+		return o_fire_game_event( ecx, edx );
 
 	/* get this from CL_FireEvents string "Failed to execute event for classId" in engine.dll */
 	auto event = *( event_t** ) ( uintptr_t( i::clientstate ) + 0x4E6C );
@@ -15,11 +15,11 @@ void __fastcall hooks::engine::fire_game_event::hook( void* ecx, void* edx ) {
 		event = event->next;
 	}
 
-	return o_fire_game_event( i::engine, 0 );
+	return o_fire_game_event( ecx, edx );
 }
 
 bool __fastcall hooks::engine::is_connected::hook( void* ecx, void* edx ) {
-	return o_is_connected( i::engine, 0 );
+	return o_is_connected( ecx, edx );
 }
 
 bool __fastcall hooks::engine::is_hltv::hook( void* ecx, void* edx ) {
@@ -29,9 +29,9 @@ bool __fastcall hooks::engine::is_hltv::hook( void* ecx, void* edx ) {
 	if ( _ReturnAddress( ) == return_to_setup_vel || _ReturnAddress( ) == return_to_accumulate_layers )
 		return true;
 
-	return o_is_hltv( i::engine, 0 );
+	return o_is_hltv( ecx, edx );
 }
 
 bool __fastcall hooks::engine::is_in_game::hook( void* ecx, void* edx ) {
-	return o_is_in_game( i::engine, 0 );
+	return o_is_in_game( ecx, edx );
 }
