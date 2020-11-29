@@ -9,9 +9,6 @@ void hooks::init( ) {
 	/* create fonts */
 	render::create_fonts( );
 
-	/* get local player */
-	g_local = *( c_local_player* ) ( utils::find_sig_ida( "client.dll", "8B 0D ? ? ? ? 83 FF FF 74 07" ) + 2 );
-
 	/* hook wproc */
 	o_wndproc = reinterpret_cast< WNDPROC >( SetWindowLongPtrA( csgo_window, GWLP_WNDPROC, reinterpret_cast< LONG_PTR >( dx9::wndproc::hook ) ) );
 
@@ -53,7 +50,7 @@ void hooks::init( ) {
 
 	/* do our hooks */
 	MH_CreateHook( list_leaves_in_box_target, bsp_tree_query::list_leaves_in_box::hook, ( void** ) &o_list_leaves_in_box );
-	MH_CreateHook( create_move_target, clientdll::create_move::hook, ( void** ) &o_create_move );
+	//MH_CreateHook( create_move_target, clientdll::create_move::hook, ( void** ) &o_create_move ); // hook if u need
 	MH_CreateHook( frame_stage_notify_target, clientdll::frame_stage_notify::hook, ( void** ) &o_frame_stage_notify );
 	MH_CreateHook( write_usercmd_delta_to_buffer_target, clientdll::write_usercmd_delta_to_buffer::hook, ( void** ) &o_write_usercmd_delta_to_buffer );
 	MH_CreateHook( createmove_target, clientmode::createmove::hook, ( void** ) &o_createmove );
@@ -97,7 +94,7 @@ void hooks::restore( ) {
 	MH_Uninitialize( );
 
 	/* animate again */
-	if ( i::engine->is_in_game( ) && g_local && g_local->is_alive( ) )
+	if ( i::engine->is_in_game( ) && i::engine->is_connected( ) && g_local && g_local->is_alive( ) )
 		g_local->m_bClientSideAnimation( ) = true;
 
 	/* shutdown imgui */

@@ -7,7 +7,7 @@ void __fastcall hooks::clientdll::create_move::call( void* ecx, void* edx, int s
 	auto cmd = i::input->get_user_cmd( sequence_number );
 	auto verified = i::input->get_verified_user_cmd( sequence_number );
 
-	if ( !cmd || !cmd->command_number || !i::engine->is_in_game( ) || !g_local || !g_local->is_alive( ) ) {
+	if ( !cmd || !cmd->command_number || !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !g_local || !g_local->is_alive( ) ) {
 		return;
 	}
 
@@ -61,7 +61,10 @@ std::vector<const char*> smoke_materials =
 
 
 void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx, int stage ) {
-	if ( !i::engine->is_in_game( ) || !g_local || !g_local->is_alive( ) ) {
+	/* get localplayer here bcuz frame is before tick */
+	g_local = ( c_base_player* ) i::entitylist->get_client_entity( i::engine->get_local_player( ) );
+
+	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !g_local || !g_local->is_alive( ) ) {
 		o_frame_stage_notify( i::clientdll, 0, stage );
 		return;
 	}
@@ -91,7 +94,7 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 		break;
 
 	case frame_net_update_postdataupdate_start:
-		
+
 		break;
 
 	case frame_net_update_postdataupdate_end:
@@ -143,11 +146,11 @@ void write_cmd( bf_write* buf, c_usercmd* pin, c_usercmd* pout ) {
 
 bool __fastcall hooks::clientdll::write_usercmd_delta_to_buffer::hook( void* ecx, void* edx, int slot, bf_write* buf, int from, int to, bool is_new_cmd ) {
 	if ( exploit::tick_base_shift <= 0 )
-		return o_write_usercmd_delta_to_buffer( ecx, edx, slot, buf, from, to, is_new_cmd );
+		return o_write_usercmd_delta_to_buffer( i::clientdll, 0, slot, buf, from, to, is_new_cmd );
 
-	if ( !g_local || !g_local->is_alive( ) || !i::engine->is_connected( ) || !i::engine->is_in_game( ) ) {
+	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !g_local || !g_local->is_alive( ) ) {
 		exploit::tick_base_shift = 0;
-		return o_write_usercmd_delta_to_buffer( ecx, edx, slot, buf, from, to, is_new_cmd );
+		return o_write_usercmd_delta_to_buffer( i::clientdll, 0, slot, buf, from, to, is_new_cmd );
 	}
 
 	if ( from != -1 )
@@ -168,7 +171,7 @@ bool __fastcall hooks::clientdll::write_usercmd_delta_to_buffer::hook( void* ecx
 	*num_backup_commands = 0;
 
 	for ( to = next_cmdnr - new_commands + 1; to <= next_cmdnr; to++ ) {
-		if ( !o_write_usercmd_delta_to_buffer( ecx, edx, slot, buf, from, to, true ) )
+		if ( !o_write_usercmd_delta_to_buffer( i::clientdll, 0, slot, buf, from, to, true ) )
 			return false;
 
 		from = to;

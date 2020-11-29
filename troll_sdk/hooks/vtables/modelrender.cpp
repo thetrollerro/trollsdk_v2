@@ -16,7 +16,7 @@ void __fastcall hooks::modelrender::draw_model_exec::hook( void* ecx, void* edx,
 	auto player = c_base_player::get_player_by_index( info.entity_index );
 
 	/* checks */
-	if ( i::modelrender->is_forced_mat( ) || !i::engine->is_in_game( ) || !g_local )
+	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || i::modelrender->is_forced_mat( ) || !g_local )
 		return o_draw_model_exec( i::modelrender, 0, ctx, state, info, custom_bone_to_world );
 
 	auto chams_materials = [ ] ( int type ) -> i_material* {

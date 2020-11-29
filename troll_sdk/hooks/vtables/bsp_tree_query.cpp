@@ -2,7 +2,7 @@
 
 int __fastcall hooks::bsp_tree_query::list_leaves_in_box::hook( void* ecx, void* edx, vec3_t& mins, vec3_t& maxs, unsigned short* list, int list_max )
 {
-	if ( !i::engine->is_in_game( ) || !g_local )
+	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !g_local )
 		return o_list_leaves_in_box( ecx, 0, mins, maxs, list, list_max );
 
 	/* func sig 55 8B EC 83 E4 F8 81 EC ? ? ? ? 8B 45 08 53 56 8B 75 */

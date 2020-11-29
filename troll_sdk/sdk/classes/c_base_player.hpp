@@ -224,24 +224,7 @@ struct animlayer_t {
 	char pad_0x02[ 0x4 ];
 };
 
-/* local player */
-class c_local_player
-{
-	friend bool operator==( const c_local_player& lhs, void* rhs );
-public:
-	c_local_player( ) : m_local( nullptr ) {}
-
-	operator bool( ) const { return *m_local != nullptr; }
-	operator c_base_player* ( ) const { return *m_local; }
-
-	c_base_player* operator->( ) { return *m_local; }
-
-private:
-	c_base_player** m_local;
-};
-
-
-inline c_local_player g_local;
+inline c_base_player* g_local;
 
 class c_base_player : public c_base_entity {
 public:

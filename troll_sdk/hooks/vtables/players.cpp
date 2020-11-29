@@ -63,7 +63,7 @@ vec3_t* __fastcall hooks::players::get_eye_ang::hook( void* ecx, void* edx ) {
 	static auto ret_to_thirdperson_yaw = utils::find_sig_ida( "client.dll", "F3 0F 10 55 ? 51 8B 8E ? ? ? ?" );
 
 	if ( _ReturnAddress( ) == ( void* ) ret_to_thirdperson_pitch || _ReturnAddress( ) == ( void* ) ret_to_thirdperson_yaw )
-		return ( antiaim::m_in_lby_update || antiaim::m_in_balance_update ) ? &g::fake_angle : &g::cmd->viewangles;
+		return  antiaim::m_in_lby_update ? &g::fake_angle : &g::cmd->viewangles;
 
 	return o_get_eye_ang( ecx, 0 );
 }
