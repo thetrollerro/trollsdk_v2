@@ -11,6 +11,52 @@ void __fastcall hooks::clientdll::create_move::call( void* ecx, void* edx, int s
 		return;
 	}
 
+	/* globals */
+	g::cmd = cmd;
+	exploit::tick_count = cmd->tick_count;
+	g::send_packet = send_packet = true;
+
+	/* get send_packet stuff */
+	uintptr_t* framePtr; __asm mov framePtr, ebp;
+
+	/* fix attack stuff */ {
+		auto weapon = g_local->get_active_weapon( );
+		if ( weapon ) {
+			float flServerTime = g_local->m_nTickBase( ) * i::globalvars->m_interval_per_tick;
+			bool can_shoot = ( weapon->m_flNextPrimaryAttack( ) <= flServerTime );
+			if ( ( !can_shoot && !weapon->is_knife( ) && !weapon->is_nade( ) && !weapon->is_zeus( ) ) || menu::opened ) {
+				cmd->buttons &= ~in_attack;
+			}
+		}
+	}
+
+	/* update prediction */
+	engine_prediction::update( );
+
+	/* prediction system related */ {
+		engine_prediction::predict( cmd );
+
+		/* predict our lby update */
+		antiaim::predict_lby( );
+
+		engine_prediction::restore( );
+	}
+
+	/* anti-untrsted */ {
+		cmd->viewangles.clamp( );
+	}
+
+	/* get global angles */ {
+		if ( g::send_packet ) {
+			g::fake_angle = cmd->viewangles;
+		}
+		else {
+			g::real_angle = cmd->viewangles;
+		}
+	}
+
+	/* end our createmove */
+	send_packet = g::send_packet;
 	verified->m_cmd = *cmd;
 	verified->m_crc = cmd->get_checksum( );
 }

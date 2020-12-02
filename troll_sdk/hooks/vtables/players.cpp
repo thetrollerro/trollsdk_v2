@@ -69,54 +69,6 @@ vec3_t* __fastcall hooks::players::get_eye_ang::hook( void* ecx, void* edx ) {
 }
 
 bool __fastcall hooks::players::setup_bones::hook( void* ecx, void* edx, matrix_t* bone_to_world_out, int max_bones, int bone_mask, float curtime ) {
-	auto pl = ( c_base_player* ) ( ( uintptr_t ) ecx - 0x4 );
-	if ( pl && pl->get_client_class( )->class_id == class_id_cs_player && !pl->is_dormant( ) ) {
-		if ( pl->ent_index( ) == i::engine->get_local_player( ) ) {
-			static auto host_timescale = i::cvar->find_var( "host_timescale" );
-			const float o_curtime = i::globalvars->m_cur_time;
-			const float o_realtime = i::globalvars->m_real_time;
-			const float o_frametime = i::globalvars->m_frame_time;
-			const float o_absframetime = i::globalvars->m_absolute_frame_time;
-			const float o_absframetimestart = i::globalvars->m_absolute_frame_start_time_std_dev;
-			const float o_interpolationamount = i::globalvars->m_interpolation_amount;
-			const int o_framecount = i::globalvars->m_frame_count;
-			const int o_tickcount = i::globalvars->m_tick_count;
-
-			/* simulate gvars */
-			i::globalvars->m_cur_time = pl->m_flSimulationTime( );
-			i::globalvars->m_real_time = pl->m_flSimulationTime( );
-			i::globalvars->m_frame_time = i::globalvars->m_interval_per_tick * host_timescale->get_float( );
-			i::globalvars->m_absolute_frame_time = i::globalvars->m_interval_per_tick * host_timescale->get_float( );
-			i::globalvars->m_absolute_frame_start_time_std_dev = pl->m_flSimulationTime( ) - i::globalvars->m_interval_per_tick * host_timescale->get_float( );
-			i::globalvars->m_interpolation_amount = 0;
-			i::globalvars->m_frame_count = time2ticks( pl->m_flSimulationTime( ) );
-			i::globalvars->m_tick_count = time2ticks( pl->m_flSimulationTime( ) );
-
-			/* stop interpolation */
-			*( uint32_t* ) ( ( uintptr_t ) pl + 0xF0 ) |= 8;
-
-			/* build bones */
-			const bool ret = o_setup_bones( ecx, edx, bone_to_world_out, max_bones, bone_mask, curtime );
-
-			/* start interpolation again */
-			*( uint32_t* ) ( ( uintptr_t ) pl + 0xF0 ) &= ~8;
-
-			/* restore */
-			i::globalvars->m_cur_time = o_curtime;
-			i::globalvars->m_real_time = o_realtime;
-			i::globalvars->m_frame_time = o_frametime;
-			i::globalvars->m_absolute_frame_time = o_absframetime;
-			i::globalvars->m_absolute_frame_start_time_std_dev = o_absframetimestart;
-			i::globalvars->m_interpolation_amount = o_interpolationamount;
-			i::globalvars->m_frame_count = o_framecount;
-			i::globalvars->m_tick_count = o_tickcount;
-			return ret;
-		}
-		else {
-
-		}
-	}
-
 	return o_setup_bones( ecx, edx, bone_to_world_out, max_bones, bone_mask, curtime );
 }
 

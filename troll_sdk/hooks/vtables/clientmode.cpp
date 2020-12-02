@@ -11,51 +11,7 @@ bool __fastcall hooks::clientmode::createmove::hook( void* ecx, void* edx, float
 		return false;
 	}
 
-	/* globals */
-	g::cmd = cmd;
-	exploit::tick_count = cmd->tick_count;
-	g::send_packet = true;
-
-	/* get send_packet stuff */
-	uintptr_t* framePtr; __asm mov framePtr, ebp;
-
-	/* fix attack stuff */ {
-		auto weapon = g_local->get_active_weapon( );
-		if ( weapon ) {
-			float flServerTime = g_local->m_nTickBase( ) * i::globalvars->m_interval_per_tick;
-			bool can_shoot = ( weapon->m_flNextPrimaryAttack( ) <= flServerTime );
-			if ( ( !can_shoot && !weapon->is_knife( ) && !weapon->is_nade( ) && !weapon->is_zeus( ) ) || menu::opened ) {
-				cmd->buttons &= ~in_attack;
-			}
-		}
-	}
-
-	/* update prediction */
-	engine_prediction::update( );
-
-	/* prediction system related */ {
-		engine_prediction::predict( cmd );
-
-		/* predict our lby update */
-		antiaim::predict_lby( );
-
-		engine_prediction::restore( );
-	}
-
-	/* anti-untrsted */ {
-		cmd->viewangles.clamp( );
-	}
-
-	/* get global angles */ {
-		if ( g::send_packet ) {
-			g::fake_angle = cmd->viewangles;
-		}
-		else {
-			g::real_angle = cmd->viewangles;
-		}
-	}
-
-	*( bool* ) ( *framePtr - 0x1C ) = g::send_packet;
+	/* timers for animfix */
 	return false;
 }
 

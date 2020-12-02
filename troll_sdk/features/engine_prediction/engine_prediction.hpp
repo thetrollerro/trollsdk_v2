@@ -14,8 +14,6 @@ namespace engine_prediction {
 		float m_viewmodel_anim_time;
 	}stored_viewmodel;
 
-	inline c_movedata data;
-
 	void predict( c_usercmd* cmd );
 	void restore( );
 

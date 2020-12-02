@@ -33,7 +33,6 @@
     <ClCompile Include="hooks\vtables\material_system.cpp" />
     <ClCompile Include="hooks\vtables\bsp_tree_query.cpp" />
     <ClCompile Include="hooks\vtables\game.cpp" />
-    <ClCompile Include="utilities\parser\parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sdk\math\vector.hpp" />
@@ -106,7 +105,6 @@
     <ClInclude Include="features\events\sounds.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_client_state.hpp" />
     <ClInclude Include="sdk\interfaces\classes\iv_view_render_beams.hpp" />
-    <ClInclude Include="utilities\parser\parser.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_localize.hpp" />
     <ClInclude Include="sdk\classes\c_base_handle.hpp" />
   </ItemGroup>
