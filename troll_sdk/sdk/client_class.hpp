@@ -167,6 +167,7 @@ enum class_id : int {
 	class_id_knife,
 	class_id_knife_gg,
 	class_id_light_glow,
+	class_id_map_veto_pick_controller,
 	class_id_material_modify_control,
 	class_id_melee,
 	class_id_molotov_grenade,

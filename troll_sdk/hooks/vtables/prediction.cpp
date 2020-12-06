@@ -18,7 +18,7 @@ bool __fastcall hooks::prediction::perform_prediction::hook( void* ecx, void* ed
 }
 
 void __fastcall hooks::prediction::run_command::hook( void* ecx, void* edx, c_base_player* e, c_usercmd* cmd, void* move_helper ) {
-	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !e || !g_local |!g_local->is_alive( ) || e != g_local )
+	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !e || !g_local || !g_local->is_alive( ) || e != g_local )
 		return;
 
 	/* predict cmd */
