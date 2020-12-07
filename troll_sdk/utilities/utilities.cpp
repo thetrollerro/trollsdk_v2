@@ -5,6 +5,30 @@
 #include <vector>
 #include <Psapi.h>
 #include "utilities.hpp"
+#include "../sdk/sdk.hpp"
+#include "globals/globals.hpp"
+
+float utils::server_time( ) {
+	static float m_nTickBase;
+	static c_usercmd* last_cmd;
+	if ( !last_cmd || last_cmd->hasbeenpredicted )
+		m_nTickBase = g_local->m_nTickBase( );
+	else
+		++m_nTickBase;
+
+	last_cmd = g::cmd;
+
+	return ticks2time( m_nTickBase );
+}
+
+bool utils::can_shoot( ) {
+	auto weapon = g_local->get_active_weapon( );
+	if ( !weapon || weapon->m_iClip1( ) == 0 ) return false;
+	if ( weapon->is_nade( ) || weapon->is_knife( ) || weapon->is_zeus( )
+		|| weapon->m_iItemDefinitionIndex( ) == weapon_c4 ) return true;
+
+	return ( weapon->m_flNextPrimaryAttack( ) <= server_time( ) );
+}
 
 typedef void( __cdecl* MsgFn )( char const* pMsg, va_list );
 MsgFn oMsg;

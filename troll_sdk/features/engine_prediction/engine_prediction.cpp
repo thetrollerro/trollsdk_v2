@@ -4,12 +4,10 @@ void engine_prediction::predict( c_usercmd* cmd ) {
 	/* fix tickbase */
 	static float m_nTickBase;
 	static c_usercmd* last_cmd;
-	if ( last_cmd ) {
-		if ( last_cmd->hasbeenpredicted )
-			m_nTickBase = g_local->m_nTickBase( );
-		else
-			++m_nTickBase;
-	}
+	if ( !last_cmd || last_cmd->hasbeenpredicted )
+		m_nTickBase = g_local->m_nTickBase( );
+	else
+		++m_nTickBase;
 
 	last_cmd = cmd;
 

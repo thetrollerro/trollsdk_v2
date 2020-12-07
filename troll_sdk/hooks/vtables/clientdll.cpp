@@ -1,8 +1,8 @@
 #include "../hooks.hpp"
 #include "../../menu/menu.hpp"
 
-void __fastcall hooks::clientdll::create_move::call( void* ecx, void* edx, int sequence_number, float sample_frametime, bool active, bool& send_packet ) {
-	o_create_move( ecx, edx, sequence_number, sample_frametime, active, send_packet );
+void __stdcall hooks::clientdll::create_move::call( int sequence_number, float sample_frametime, bool active, bool& send_packet ) {
+	o_create_move( sequence_number, sample_frametime, active, send_packet );
 
 	auto cmd = i::input->get_user_cmd( sequence_number );
 	auto verified = i::input->get_verified_user_cmd( sequence_number );
@@ -20,13 +20,8 @@ void __fastcall hooks::clientdll::create_move::call( void* ecx, void* edx, int s
 	uintptr_t* framePtr; __asm mov framePtr, ebp;
 
 	/* fix attack stuff */ {
-		auto weapon = g_local->get_active_weapon( );
-		if ( weapon ) {
-			float flServerTime = g_local->m_nTickBase( ) * i::globalvars->m_interval_per_tick;
-			bool can_shoot = ( weapon->m_flNextPrimaryAttack( ) <= flServerTime );
-			if ( ( !can_shoot && !weapon->is_knife( ) && !weapon->is_nade( ) && !weapon->is_zeus( ) ) || menu::opened ) {
-				cmd->buttons &= ~in_attack;
-			}
+		if ( utils::can_shoot( ) || menu::opened ) {
+			cmd->buttons &= ~in_attack;
 		}
 	}
 
@@ -158,7 +153,6 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 			auto pl = c_base_player::get_player_by_index( i );
 			if ( !pl || !pl->is_player( ) || pl == g_local ) continue;
 
-			*( int* ) ( ( uintptr_t ) pl + 0xA64 ) = i::globalvars->m_frame_count;
 			*( int* ) ( ( uintptr_t ) pl + 0xA30 ) = i::globalvars->m_frame_count;
 			*( int* ) ( ( uintptr_t ) pl + 0xA28 ) = 0;
 		}

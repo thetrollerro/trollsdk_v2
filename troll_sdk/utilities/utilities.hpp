@@ -23,6 +23,8 @@ namespace utils {
 		return ( FuncType ) ( dwAddress );
 	}
 
+	float server_time( );
+	bool can_shoot( );
 	uintptr_t find_sig_ida( const char* module, const char* signature );
 	DWORD find_sig_byte( const char* module_name, const BYTE* mask, const char* mask_string );
 	unsigned int find_in_data_map( datamap_t* m_map, const char* name );

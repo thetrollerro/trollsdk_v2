@@ -20,9 +20,9 @@ namespace hooks {
 
 	namespace clientdll {
 		namespace create_move {
-			void __fastcall call( void* ecx, void* edx, int sequence_number, float sample_frametime, bool active, bool& send_packet );
+			void __stdcall call( int sequence_number, float sample_frametime, bool active, bool& send_packet );
 			void __fastcall hook( void* ecx, void* edx, int sequence_number, float sample_frametime, bool active, bool& send_packet );
-			using fn = void( __fastcall* )( void*, void*, int, float, bool, bool& );
+			using fn = void( __stdcall* )( int, float, bool, bool& );
 		}
 
 		namespace frame_stage_notify {
