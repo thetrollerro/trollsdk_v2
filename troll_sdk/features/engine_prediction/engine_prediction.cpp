@@ -41,7 +41,7 @@ void engine_prediction::predict( c_usercmd* cmd ) {
 	i::prediction->finish_move( g_local, cmd, &data );
 
 	/* get deltas */
-	antiaim::m_max_delta = 90.4f;
+	antiaim::m_max_delta = 68.4f;
 	antiaim::m_max_lby_delta = ( g_local->max_desync_delta( ) * 2 ) + ( g_local->get_animstate( )->m_last_clientside_anim_update_time_delta * 120.f );
 }
 
