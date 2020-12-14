@@ -112,7 +112,7 @@ public:
 	}
 
 	void write( matrix_t* bone ) {
-		bone = m_bones;
+		std::memcpy( bone, get_bone_arr_for_write( ), sizeof( matrix_t ) * 128 );
 	}
 
 private:
@@ -224,7 +224,23 @@ struct animlayer_t {
 	char pad_0x02[ 0x4 ];
 };
 
-inline c_base_player* g_local;
+/* local player */
+class c_local_player
+{
+	friend bool operator==( const c_local_player& lhs, void* rhs );
+public:
+	c_local_player( ) : m_local( nullptr ) {}
+
+	operator bool( ) const { return *m_local != nullptr; }
+	operator c_base_player* ( ) const { return *m_local; }
+
+	c_base_player* operator->( ) { return *m_local; }
+
+private:
+	c_base_player** m_local;
+};
+
+inline c_local_player g_local;
 
 class c_base_player : public c_base_entity {
 public:
@@ -719,7 +735,7 @@ public:
 	// m_passiveItems    
 	NETVAR_PTR( "DT_CSPlayer->m_hMyWearables", m_hMyWearables, UINT );
 
-	int* m_hMyWeapons( ){
+	int* m_hMyWeapons( ) {
 		return reinterpret_cast< int* >( uintptr_t( this ) + 0x2DF8 );
 	}
 

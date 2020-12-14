@@ -4,9 +4,6 @@
 bool __fastcall hooks::clientmode::createmove::hook( void* ecx, void* edx, float input_sample_frametime, c_usercmd* cmd ) {
 	o_createmove( ecx, edx, input_sample_frametime, cmd );
 
-	/* get local here too bcuz we need it to get updated after the frame ( the tick is after the frame ) */
-	g_local = ( c_base_player* ) i::entitylist->get_client_entity( i::engine->get_local_player( ) );
-
 	if ( !cmd || !cmd->command_number || !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !g_local ) {
 		return false;
 	}

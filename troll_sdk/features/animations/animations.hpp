@@ -4,5 +4,6 @@
 
 namespace animations {
 	bool setup_bones( c_base_player* pl, matrix_t* out, int max_bones, int mask, float seed );
+	bool build_matrix( c_base_player* pl, matrix_t* out, int max_bones, int mask, float seed );
 	bool fresh_tick( );
 }

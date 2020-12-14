@@ -6,6 +6,9 @@ void hooks::init( ) {
 		std::this_thread::sleep_for( 50ms );
 	}
 
+	/* get local_player */
+	g_local = *( c_local_player* ) ( utils::find_sig_ida( "client.dll", "8B 0D ? ? ? ? 83 FF FF 74 07" ) + 2 );
+
 	/* create fonts */
 	render::create_fonts( );
 
@@ -28,6 +31,7 @@ void hooks::init( ) {
 	auto is_connected_target = ( void* ) get_virtual( i::engine, 27 ); // 27
 	auto is_hltv_target = ( void* ) get_virtual( i::engine, 93 ); // 93
 	auto is_in_game_target = ( void* ) get_virtual( i::engine, 26 ); // 26
+	auto is_paused_target = ( void* ) get_virtual( i::engine, 90 ); // 90
 	auto should_skip_animframe_target = ( void* ) utils::find_sig_ida( "client.dll", "57 8B F9 8B 07 8B 80 ? ? ? ? FF D0 84 C0 75 02 5F C3" );
 	auto sv_cheats_get_bool_target = ( void* ) utils::find_sig_ida( "engine.dll", "8B 51 1C 3B D1 75 06 8B 41 30 33 C1 C3 8B 02 8B CA FF 60 34 CC CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 83 E4 F8 0F 54 05" );
 	auto find_material_target = ( void* ) utils::find_sig_ida( "materialsystem.dll", "55 8B EC 6A FF 68 ? ? ? ? 64 A1 ? ? ? ? 50 64 89 25 ? ? ? ? 83 EC 24 53" );
@@ -39,6 +43,7 @@ void hooks::init( ) {
 	auto get_eye_ang_target = ( void* ) utils::find_sig_ida( "client.dll", "56 8B F1 85 F6 74 32" ); // its a nervar lmao
 	auto setup_bones_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F0 B8 ? ? ? ? E8 ? ? ? ? 56 57 8B F9" ); // 13
 	auto standard_blending_rules_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F0 B8 ? ? ? ? E8 ? ? ? ? 56 8B 75 08 57 8B F9 85 F6" );
+	auto update_clientside_animation_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 51 56 8B F1 80 BE ? ? ? ? ? 74 36" );
 	auto in_prediction_target = ( void* ) get_virtual( i::prediction, 14 ); // 14
 	auto perform_prediction_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 EC 18 53 56 8B 35 ? ? ? ? 8B D9 57 8B CE 89 5D F8 89 75 E8 8B 06 FF 90 ? ? ? ? FF 75 18 8B CB FF 75 14 FF 75 10 FF 75 08" );
 	auto run_command_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 C0 83 EC 34 53 56 8B 75 08" ); // 19
@@ -50,7 +55,7 @@ void hooks::init( ) {
 
 	/* do our hooks */
 	MH_CreateHook( list_leaves_in_box_target, bsp_tree_query::list_leaves_in_box::hook, ( void** ) &o_list_leaves_in_box );
-	MH_CreateHook( create_move_target, clientdll::create_move::hook, ( void** ) &o_create_move ); // hook if u need
+	MH_CreateHook( create_move_target, clientdll::create_move::hook, ( void** ) &o_create_move );  // we use this only to do stuff for our animfix xd and get weapondata stuff for weapon esp
 	MH_CreateHook( frame_stage_notify_target, clientdll::frame_stage_notify::hook, ( void** ) &o_frame_stage_notify );
 	MH_CreateHook( write_usercmd_delta_to_buffer_target, clientdll::write_usercmd_delta_to_buffer::hook, ( void** ) &o_write_usercmd_delta_to_buffer );
 	MH_CreateHook( createmove_target, clientmode::createmove::hook, ( void** ) &o_createmove );
@@ -64,6 +69,7 @@ void hooks::init( ) {
 	MH_CreateHook( is_connected_target, engine::is_connected::hook, ( void** ) &o_is_connected );
 	MH_CreateHook( is_hltv_target, engine::is_hltv::hook, ( void** ) &o_is_hltv );
 	MH_CreateHook( is_in_game_target, engine::is_in_game::hook, ( void** ) &o_is_in_game );
+	MH_CreateHook( is_paused_target, engine::is_paused::hook, ( void** ) &o_is_paused );
 	MH_CreateHook( should_skip_animframe_target, game::should_skip_animframe::hook, ( void** ) &o_should_skip_animframe );
 	MH_CreateHook( sv_cheats_get_bool_target, game::sv_cheats_get_bool::hook, ( void** ) &o_sv_cheats_get_bool );
 	MH_CreateHook( find_material_target, material_system::find_material::hook, ( void** ) &o_find_material );
@@ -75,6 +81,7 @@ void hooks::init( ) {
 	MH_CreateHook( get_eye_ang_target, players::get_eye_ang::hook, ( void** ) &o_get_eye_ang );
 	MH_CreateHook( setup_bones_target, players::setup_bones::hook, ( void** ) &o_setup_bones );
 	MH_CreateHook( standard_blending_rules_target, players::standard_blending_rules::hook, ( void** ) &o_standard_blending_rules );
+	MH_CreateHook( update_clientside_animation_target, players::update_clientside_animations::hook, ( void** ) &o_update_clientside_animations );
 	MH_CreateHook( in_prediction_target, prediction::in_prediction::hook, ( void** ) &o_in_prediction );
 	MH_CreateHook( perform_prediction_target, prediction::perform_prediction::hook, ( void** ) &o_perform_prediction );
 	MH_CreateHook( run_command_target, prediction::run_command::hook, ( void** ) &o_run_command );

@@ -42,3 +42,7 @@ bool animations::setup_bones( c_base_player* pl, matrix_t* out, int max_bones, i
 	}
 }
 
+bool animations::build_matrix( c_base_player* pl, matrix_t* out, int max_bones, int mask, float seed ) {
+	return o_setup_bones( pl->get_client_renderable( ), nullptr, out, max_bones, mask, seed );
+}
+

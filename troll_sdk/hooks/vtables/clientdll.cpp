@@ -102,9 +102,6 @@ std::vector<const char*> smoke_materials =
 
 
 void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx, int stage ) {
-	/* get localplayer here bcuz frame is before tick */
-	g_local = ( c_base_player* ) i::entitylist->get_client_entity( i::engine->get_local_player( ) );
-
 	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !g_local || !g_local->is_alive( ) ) {
 		o_frame_stage_notify( ecx, edx, stage );
 		return;

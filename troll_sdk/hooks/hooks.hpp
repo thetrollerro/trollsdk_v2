@@ -99,6 +99,11 @@ namespace hooks {
 			bool __fastcall hook( void* ecx, void* edx );
 			using fn = bool( __fastcall* )( void*, void* );
 		}
+
+		namespace is_paused {
+			bool __fastcall hook( void* ecx, void* edx );
+			using fn = bool( __fastcall* )( void*, void* );
+		}
 	}
 
 	namespace game {
@@ -164,6 +169,11 @@ namespace hooks {
 			void __fastcall hook( void* ecx, void* edx, studio_hdr_t* hdr, vec3_t* pos, quaternion* q, float curtime, int mask );
 			using fn = void( __fastcall* )( void*, void*, studio_hdr_t*, vec3_t*, quaternion*, float, int );
 		}
+
+		namespace update_clientside_animations {
+			void __fastcall hook( void* ecx, void* edx );
+			using fn = void( __fastcall* )( void*, void* );
+		}
 	}
 
 	namespace prediction {
@@ -216,6 +226,7 @@ inline hooks::engine::fire_game_event::fn o_fire_game_event = nullptr;
 inline hooks::engine::is_connected::fn o_is_connected = nullptr;
 inline hooks::engine::is_hltv::fn o_is_hltv = nullptr;
 inline hooks::engine::is_in_game::fn o_is_in_game = nullptr;
+inline hooks::engine::is_paused::fn o_is_paused = nullptr;
 inline hooks::game::should_skip_animframe::fn o_should_skip_animframe = nullptr;
 inline hooks::game::sv_cheats_get_bool::fn o_sv_cheats_get_bool = nullptr;
 inline hooks::material_system::find_material::fn o_find_material = nullptr;
@@ -227,6 +238,7 @@ inline hooks::players::do_extra_bones_processing::fn o_do_extra_bones_processing
 inline hooks::players::get_eye_ang::fn o_get_eye_ang = nullptr;
 inline hooks::players::setup_bones::fn o_setup_bones = nullptr;
 inline hooks::players::standard_blending_rules::fn o_standard_blending_rules = nullptr;
+inline hooks::players::update_clientside_animations::fn o_update_clientside_animations = nullptr;
 inline hooks::prediction::in_prediction::fn o_in_prediction = nullptr;
 inline hooks::prediction::perform_prediction::fn o_perform_prediction = nullptr;
 inline hooks::prediction::run_command::fn o_run_command = nullptr;
