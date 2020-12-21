@@ -9,31 +9,31 @@ namespace vgui
 
 enum font_feature {
 
-	FONT_FEATURE_ANTIALIASED_FONTS = 1, FONT_FEATURE_DROPSHADOW_FONTS = 2, FONT_FEATURE_OUTLINE_FONTS = 6
+	font_feature_antialiased_fonts = 1, font_feature_dropshadow_fonts = 2, font_feature_outline_fonts = 6
 
 };
 
 enum font_draw_type {
 
-	FONT_DRAW_DEFAULT = 0, FONT_DRAW_NONADDITIVE, FONT_DRAW_ADDITIVE, FONT_DRAW_TYPE_COUNT = 2
+	font_draw_default = 0, font_draw_nonadditive, font_draw_additive, font_draw_type_count = 2
 
 };
 
 enum font_flags {
 
-	FONTFLAG_NONE,
-	FONTFLAG_ITALIC = 0x001,
-	FONTFLAG_UNDERLINE = 0x002,
-	FONTFLAG_STRIKEOUT = 0x004,
-	FONTFLAG_SYMBOL = 0x008,
-	FONTFLAG_ANTIALIAS = 0x010,
-	FONTFLAG_GAUSSIANBLUR = 0x020,
-	FONTFLAG_ROTARY = 0x040,
-	FONTFLAG_DROPSHADOW = 0x080,
-	FONTFLAG_ADDITIVE = 0x100,
-	FONTFLAG_OUTLINE = 0x200,
-	FONTFLAG_CUSTOM = 0x400,
-	FONTFLAG_BITMAP = 0x800
+	fontflag_none,
+	fontflag_italic = 0x001,
+	fontflag_underline = 0x002,
+	fontflag_strikeout = 0x004,
+	fontflag_symbol = 0x008,
+	fontflag_antialias = 0x010,
+	fontflag_gaussianblur = 0x020,
+	fontflag_rotary = 0x040,
+	fontflag_dropshadow = 0x080,
+	fontflag_additive = 0x100,
+	fontflag_outline = 0x200,
+	fontflag_custom = 0x400,
+	fontflag_bitmap = 0x800
 
 };
 
@@ -87,8 +87,8 @@ public:
 	virtual void          draw_set_text_color ( colo1r col ) = 0;
 	virtual void          draw_set_text_pos ( int x, int y ) = 0;
 	virtual void          draw_get_text_pos ( int& x, int& y ) = 0;
-	virtual void          draw_print_text ( const wchar_t *text, int text_len, font_draw_type draw_type = font_draw_type::FONT_DRAW_DEFAULT ) = 0;
-	virtual void          draw_unicode_character ( wchar_t wch, font_draw_type draw_type = font_draw_type::FONT_DRAW_DEFAULT ) = 0;
+	virtual void          draw_print_text ( const wchar_t *text, int text_len, font_draw_type draw_type = font_draw_type::font_draw_default ) = 0;
+	virtual void          draw_unicode_character ( wchar_t wch, font_draw_type draw_type = font_draw_type::font_draw_default ) = 0;
 	virtual void          draw_flush_text ( ) = 0;
 	virtual void*         create_html_window ( void *events, vgui::vpanel context ) = 0; // reminder: look into this html stuff, may be useful someday.
 	virtual void          paint_html_window ( void *htmlwin ) = 0;
@@ -121,7 +121,7 @@ public:
 	virtual void          apply_changes ( ) = 0;
 	virtual bool          is_within ( int x, int y ) = 0;
 	virtual bool          has_focus ( ) = 0;
-	virtual bool          supports_feature ( int /*SurfaceFeature_t*/ feature ) = 0;
+	virtual bool          supports_feature ( int /*surfacefeature_t*/ feature ) = 0;
 	virtual void          restrict_paint_to_panel ( vgui::vpanel panel, bool allow_nonmodal_surface = false ) = 0;
 	virtual void          set_modal_panel ( vgui::vpanel ) = 0;
 	virtual vgui::vpanel  get_modal_panel ( ) = 0;

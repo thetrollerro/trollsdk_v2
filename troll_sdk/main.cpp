@@ -14,9 +14,10 @@ void dll_on_attach( HINSTANCE mod ) {
 
 	/* initialize csgo hack */
 	i::init( );
+	render::start( i::dx9 );
 	netvars::init( );
 	hooks::init( );
-	 
+
 	/* wait for unload key */
 	while ( !g_vars.misc.unload )
 		std::this_thread::sleep_for( std::chrono::milliseconds( 500 ) );
@@ -36,4 +37,4 @@ BOOL WINAPI DllMain( HINSTANCE instance, DWORD reason, LPVOID reserved ) {
 		CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( dll_on_attach ), HMODULE( instance ), 0, nullptr );
 
 	return true;
-} 
+}

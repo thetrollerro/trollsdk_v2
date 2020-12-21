@@ -488,6 +488,22 @@ public:
 		return true;
 	}
 
+	int sequence_activity( int sequence ) {
+		auto hdr = i::modelinfo->get_studio_model( this->get_model( ) );
+
+		if ( !hdr )
+			return -1;
+
+		// sig for stuidohdr_t version: 53 56 8B F1 8B DA 85 F6 74 55
+		// sig for C_BaseAnimating version: 55 8B EC 83 7D 08 FF 56 8B F1 74 3D
+		// c_csplayer vfunc 242, follow calls to find the function.
+
+		using o_fn = int( __fastcall* )( void*, studio_hdr_t*, int );
+		static auto get_sequence_activity = ( o_fn ) utils::find_sig_ida( "client.dll", "55 8B EC 83 7D 08 FF 56 8B F1 74 3D" );
+
+		return get_sequence_activity( this, hdr, sequence );
+	}
+
 	/* DT_BasePlayer */
 	// m_iFOV                                 
 	// m_iFOVStart                            
