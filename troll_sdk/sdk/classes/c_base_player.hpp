@@ -135,7 +135,7 @@ public:
 	std::uint8_t pad_0x0000[ 0x4 ]; //0x0000
 	bool m_force_update; //0x0005 
 	std::uint8_t pad_0x0006[ 0x5A ]; //0x0006
-	c_base_player* m_entity; //0x0060 
+	c_base_entity* m_entity; //0x0060 
 	c_base_combat_weapon* m_weapon; //0x0064 
 	c_base_combat_weapon* m_last_weapon; //0x0068 
 	float m_last_clientside_anim_update; //0x006C 
@@ -502,6 +502,16 @@ public:
 		static auto get_sequence_activity = ( o_fn ) utils::find_sig_ida( "client.dll", "55 8B EC 83 7D 08 FF 56 8B F1 74 3D" );
 
 		return get_sequence_activity( this, hdr, sequence );
+	}
+
+	void build_transformations( studio_hdr_t* hdr, vec3_t* pos, quaternion* q, const matrix_t& transform, int mask, uint8_t* computed ) {
+		using BuildTransformations_t = void( __thiscall* )( decltype( this ), studio_hdr_t*, vec3_t*, quaternion*, matrix_t const&, int, uint8_t* );
+		return utils::call_virtual< BuildTransformations_t >( this, 189 )( this, hdr, pos, q, transform, mask, computed );
+	}
+
+	void standard_blending_rules( studio_hdr_t* hdr, vec3_t* pos, quaternion* q, float time, int mask ) {
+		using StandardBlendingRules_t = void( __thiscall* )( decltype( this ), studio_hdr_t*, vec3_t*, quaternion*, float, int );
+		return utils::call_virtual< StandardBlendingRules_t >( this, 205 )( this, hdr, pos, q, time, mask );
 	}
 
 	/* DT_BasePlayer */

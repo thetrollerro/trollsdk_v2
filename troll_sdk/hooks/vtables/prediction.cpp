@@ -11,14 +11,14 @@ bool __fastcall hooks::prediction::in_prediction::hook( void* ecx, void* edx ) {
 }
 
 bool __fastcall hooks::prediction::perform_prediction::hook( void* ecx, void* edx, int slot, c_base_player* pl, bool recived_world_update, int incoming_acknowledged, int outgoing_command ) {
-	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !pl || !g_local | !g_local->is_alive( ) || pl != g_local )
+	if ( !i::engine->is_in_game( ) || !pl || !g_local | !g_local->is_alive( ) || pl != g_local )
 		return o_perform_prediction( ecx, edx, slot, pl, recived_world_update, incoming_acknowledged, outgoing_command );
 
 	return o_perform_prediction( ecx, edx, slot, pl, recived_world_update, incoming_acknowledged, outgoing_command );
 }
 
 void __fastcall hooks::prediction::run_command::hook( void* ecx, void* edx, c_base_player* e, c_usercmd* cmd, void* move_helper ) {
-	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !e || !g_local || !g_local->is_alive( ) || e != g_local )
+	if ( !i::engine->is_in_game( ) || !e || !g_local || !g_local->is_alive( ) || e != g_local )
 		return;
 
 	/* predict cmd */

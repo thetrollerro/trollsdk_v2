@@ -12,7 +12,7 @@ static t* find_hud_element( const char* name )
 }
 
 void events::fire_game_event( i_game_event* event ) {
-	if ( !i::engine->is_in_game( ) || !i::engine->is_connected( ) || !event || !g_local ) return;
+	if ( !i::engine->is_in_game( ) || !event || !g_local ) return;
 
 	/* vars */
 	auto attacker = i::entitylist->get_client_entity( i::engine->get_player_for_userid( event->get_int( "attacker" ) ) );

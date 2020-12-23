@@ -101,7 +101,7 @@ void hooks::restore( ) {
 	MH_Uninitialize( );
 
 	/* animate again */
-	if ( i::engine->is_in_game( ) && i::engine->is_connected( ) && g_local && g_local->is_alive( ) )
+	if ( i::engine->is_in_game( ) && g_local && g_local->is_alive( ) )
 		g_local->m_bClientSideAnimation( ) = true;
 
 	/* shutdown imgui */
