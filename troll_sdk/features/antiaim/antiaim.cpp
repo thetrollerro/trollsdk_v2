@@ -5,6 +5,7 @@ void antiaim::predict_lby( ) {
 	/* reset values every tick */
 	m_in_lby_update = false;
 	m_in_balance_update = false;
+	m_can_micro_move = false;
 
 	/* do only when on ground */
 	if ( !( g_local->m_fFlags( ) & fl_onground ) ) {
@@ -23,4 +24,8 @@ void antiaim::predict_lby( ) {
 	/* see if we are in balance update */
 	if ( m_lby_update_time - i::globalvars->m_interval_per_tick < i::globalvars->m_cur_time )
 		m_in_balance_update = true;
+	
+	/* get if we can micromove */
+	if ( i::clientstate->choked_commands <= 0 && !m_in_lby_update )
+		m_can_micro_move = true;
 }
