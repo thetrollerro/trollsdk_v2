@@ -294,6 +294,10 @@ public:
 		return *( bool* ) ( ( uintptr_t ) this + 0x3AB4 );
 	}
 
+	int& m_iOcclusionFlags( ) {
+		return *( int* ) ( ( uintptr_t ) this + 0xA28 );
+	}
+
 	bool is_player( ) {
 		using o_fn = bool( __thiscall* )( c_base_player* );
 		return utils::call_virtual<o_fn>( this, 157 )( this );
