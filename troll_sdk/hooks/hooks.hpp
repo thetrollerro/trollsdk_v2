@@ -106,7 +106,19 @@ namespace hooks {
 		}
 	}
 
+	namespace file_system {
+		namespace sv_pure_loose_file_allowed {
+			bool __fastcall hook( void* ecx, void* edx );
+			using fn = bool( __fastcall* )( void*, void* );
+		}
+	}
+
 	namespace game {
+		namespace check_file_crcs_with_server {
+			void __fastcall hook( void* ecx, void* edx );
+			using fn = void( __fastcall* )( void*, void* );
+		}
+
 		namespace should_skip_animframe {
 			bool __fastcall hook( void* ecx, void* edx );
 			using fn = bool( __fastcall* )( void*, void* );
@@ -160,11 +172,6 @@ namespace hooks {
 			using fn = vec3_t * ( __fastcall* )( void*, void* );
 		}
 
-		namespace setup_bones {
-			bool __fastcall hook( void* ecx, void* edx, matrix_t* bone_to_world_out, int max_bones, int bone_mask, float curtime );
-			using fn = bool( __fastcall* )( void*, void*, matrix_t*, int, int, float );
-		}
-
 		namespace standard_blending_rules {
 			void __fastcall hook( void* ecx, void* edx, studio_hdr_t* hdr, vec3_t* pos, quaternion* q, float curtime, int mask );
 			using fn = void( __fastcall* )( void*, void*, studio_hdr_t*, vec3_t*, quaternion*, float, int );
@@ -190,6 +197,13 @@ namespace hooks {
 		namespace run_command {
 			void __fastcall hook( void* ecx, void* edx, c_base_player* e, c_usercmd* cmd, void* move_helper );
 			using fn = void( __fastcall* )( void*, void*, c_base_player*, c_usercmd*, void* );
+		}
+	}
+
+	namespace renderable {
+		namespace setup_bones {
+			bool __fastcall hook( void* ecx, void* edx, matrix_t* bone_to_world_out, int max_bones, int bone_mask, float curtime );
+			using fn = bool( __fastcall* )( void*, void*, matrix_t*, int, int, float );
 		}
 	}
 
@@ -227,6 +241,8 @@ inline hooks::engine::is_connected::fn o_is_connected = nullptr;
 inline hooks::engine::is_hltv::fn o_is_hltv = nullptr;
 inline hooks::engine::is_in_game::fn o_is_in_game = nullptr;
 inline hooks::engine::is_paused::fn o_is_paused = nullptr;
+inline hooks::file_system::sv_pure_loose_file_allowed::fn o_sv_pure_loose_file_allowed = nullptr;
+inline hooks::game::check_file_crcs_with_server::fn o_check_file_crcs_with_server = nullptr;
 inline hooks::game::should_skip_animframe::fn o_should_skip_animframe = nullptr;
 inline hooks::game::sv_cheats_get_bool::fn o_sv_cheats_get_bool = nullptr;
 inline hooks::material_system::find_material::fn o_find_material = nullptr;
@@ -236,11 +252,11 @@ inline hooks::players::build_transformations::fn o_build_transformations = nullp
 inline hooks::players::calc_view::fn o_calc_view = nullptr;
 inline hooks::players::do_extra_bones_processing::fn o_do_extra_bones_processing = nullptr;
 inline hooks::players::get_eye_ang::fn o_get_eye_ang = nullptr;
-inline hooks::players::setup_bones::fn o_setup_bones = nullptr;
 inline hooks::players::standard_blending_rules::fn o_standard_blending_rules = nullptr;
 inline hooks::players::update_clientside_animations::fn o_update_clientside_animations = nullptr;
 inline hooks::prediction::in_prediction::fn o_in_prediction = nullptr;
 inline hooks::prediction::perform_prediction::fn o_perform_prediction = nullptr;
 inline hooks::prediction::run_command::fn o_run_command = nullptr;
+inline hooks::renderable::setup_bones::fn o_setup_bones = nullptr;
 inline hooks::surface::draw_set_color::fn o_draw_set_color = nullptr;
 inline hooks::surface::lock_cursor::fn o_lock_cursor = nullptr;

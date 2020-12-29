@@ -3,7 +3,8 @@
 
 void i::init( ) {
 	/* init interfaces */
-	entitylist = get_interface<c_entity_list>( ( "client.dll" ), ( "VClientEntityList003" ), true );
+	entitylist = get_interface<c_entity_list>( "client.dll", "VClientEntityList003", true );
+	file_system = get_interface<c_file_system>( "filesystem_stdio.dll", "VFileSystem017", true );
 	game_movement = get_interface<c_game_movement>( "client.dll", "GameMovement001", true );
 	input_system = get_interface<c_input_system>( "inputsystem.dll", "InputSystemVersion001", true );
 	memalloc = *reinterpret_cast< c_memalloc** >( GetProcAddress( GetModuleHandleA( "tier0.dll" ), "g_pMemAlloc" ) );

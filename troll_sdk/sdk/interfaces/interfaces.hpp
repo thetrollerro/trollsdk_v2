@@ -5,6 +5,7 @@
 #include <stdexcept>
 
 #include "classes/c_entity_list.hpp"
+#include "classes/c_file_system.hpp"
 #include "classes/c_game_movement.hpp"
 #include "classes/c_global_vars.hpp"
 #include "classes/c_glow_object_manager.hpp"
@@ -77,6 +78,7 @@ namespace i {
 
 	/* do interfaces here */
 	inline c_entity_list* entitylist;
+	inline c_file_system* file_system;
 	inline c_game_movement* game_movement;
 	inline c_global_vars* globalvars;
 	inline c_glow_object_manager* glow_manager;

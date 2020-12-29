@@ -38,6 +38,8 @@
     <ClCompile Include="utilities\minhook\hde\hde32.c" />
     <ClCompile Include="utilities\minhook\hde\hde64.c" />
     <ClCompile Include="utilities\minhook\buffer.c" />
+    <ClCompile Include="hooks\vtables\renderable.cpp" />
+    <ClCompile Include="hooks\vtables\file_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sdk\math\vector.hpp" />
@@ -119,6 +121,7 @@
     <ClInclude Include="utilities\minhook\hde\pstdint.h" />
     <ClInclude Include="utilities\minhook\hde\table32.h" />
     <ClInclude Include="utilities\minhook\hde\table64.h" />
+    <ClInclude Include="sdk\interfaces\classes\c_file_system.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sdk\interfaces\classes\c_game_movement.hpp" />

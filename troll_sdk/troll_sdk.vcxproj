@@ -112,7 +112,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SupportJustMyCode>false</SupportJustMyCode>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -157,7 +157,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <EnableModules>
       </EnableModules>
@@ -201,12 +201,14 @@
     <ClCompile Include="hooks\vtables\clientmode.cpp" />
     <ClCompile Include="hooks\vtables\dx9.cpp" />
     <ClCompile Include="hooks\vtables\engine.cpp" />
+    <ClCompile Include="hooks\vtables\file_system.cpp" />
     <ClCompile Include="hooks\vtables\game.cpp" />
     <ClCompile Include="hooks\vtables\material_system.cpp" />
     <ClCompile Include="hooks\vtables\modelrender.cpp" />
     <ClCompile Include="hooks\vtables\net_channel.cpp" />
     <ClCompile Include="hooks\vtables\players.cpp" />
     <ClCompile Include="hooks\vtables\prediction.cpp" />
+    <ClCompile Include="hooks\vtables\renderable.cpp" />
     <ClCompile Include="hooks\vtables\surface.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="hooks\hooks.cpp" />
@@ -246,6 +248,7 @@
     <ClInclude Include="sdk\classes\c_base_handle.hpp" />
     <ClInclude Include="sdk\classes\c_base_player.hpp" />
     <ClInclude Include="sdk\classes\c_usercmd.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\c_file_system.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_glow_object_manager.hpp" />
     <ClInclude Include="sdk\interfaces\classes\iv_view_render_beams.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_client_state.hpp" />

@@ -1,6 +1,48 @@
 #include "math.hpp"
 #include "../../main.hpp"
 
+void math::angle_matrix( const vec3_t& ang, matrix_t& out )
+{
+	float sr, sp, sy, cr, cp, cy;
+
+	sp = std::sin( math::deg2rad( ang[ 0 ] ) );
+	cp = std::cos( math::deg2rad( ang[ 0 ] ) );
+
+	sy = std::sin( math::deg2rad( ang[ 1 ] ) );
+	cy = std::cos( math::deg2rad( ang[ 1 ] ) );
+
+	sr = std::sin( math::deg2rad( ang[ 2 ] ) );
+	cr = std::cos( math::deg2rad( ang[ 2 ] ) );
+
+	// matrix = (YAW * PITCH) * ROLL
+	out[ 0 ][ 0 ] = cp * cy;
+	out[ 1 ][ 0 ] = cp * sy;
+	out[ 2 ][ 0 ] = -sp;
+
+	float crcy = cr * cy;
+	float crsy = cr * sy;
+	float srcy = sr * cy;
+	float srsy = sr * sy;
+	out[ 0 ][ 1 ] = sp * srcy - crsy;
+	out[ 1 ][ 1 ] = sp * srsy + crcy;
+	out[ 2 ][ 1 ] = sr * cp;
+
+	out[ 0 ][ 2 ] = ( sp * crcy + srsy );
+	out[ 1 ][ 2 ] = ( sp * crsy - srcy );
+	out[ 2 ][ 2 ] = cr * cp;
+
+	out[ 0 ][ 3 ] = 0.0f;
+	out[ 1 ][ 3 ] = 0.0f;
+	out[ 2 ][ 3 ] = 0.0f;
+}
+
+void math::angle_matrix( const vec3_t& ang, const vec3_t& pos, matrix_t& out ) {
+	//	g_csgo.AngleMatrix( ang , out );
+	angle_matrix( ang, out );
+
+	out.set_origin( pos );
+}
+
 void math::sin_cos( float rad, float* sine, float* cosine )
 {
 	*sine = std::sinf( rad );

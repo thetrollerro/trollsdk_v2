@@ -24,6 +24,10 @@ void __fastcall hooks::players::calc_view::hook( void* ecx, void* edx, vec3_t& e
 	if ( !pl || pl->ent_index( ) != i::engine->get_local_player( ) )
 		return o_calc_view( ecx, edx, eye_origin, eye_angles, m_near, m_far, fov );
 
+	// Prevent CalcView from calling CCSGOPlayerAnimState::ModifyEyePosition( ... )
+	// this will fix inaccuracies, for example when fakeducking - and will enforce
+	// us to use our own rebuilt version of CCSGOPlayerAnimState::ModifyEyePosition from the server.
+
 	/* backup our state */
 	const auto o_new_animstate = pl->should_use_new_animstate( );
 
@@ -76,10 +80,6 @@ vec3_t* __fastcall hooks::players::get_eye_ang::hook( void* ecx, void* edx ) {
 		return ( antiaim::m_in_lby_update || antiaim::m_in_balance_update ) ? &g::fake_angle : &g::cmd->viewangles;
 
 	return o_get_eye_ang( ecx, edx );
-}
-
-bool __fastcall hooks::players::setup_bones::hook( void* ecx, void* edx, matrix_t* bone_to_world_out, int max_bones, int bone_mask, float curtime ) {
-	return o_setup_bones( ecx, edx, bone_to_world_out, max_bones, bone_mask, curtime );
 }
 
 void __fastcall hooks::players::standard_blending_rules::hook( void* ecx, void* edx, studio_hdr_t* hdr, vec3_t* pos, quaternion* q, float curtime, int mask ) {

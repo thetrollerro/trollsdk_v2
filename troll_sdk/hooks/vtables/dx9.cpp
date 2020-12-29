@@ -69,6 +69,8 @@ long __stdcall hooks::dx9::wndproc::hook( HWND hwnd, UINT msg, WPARAM wparam, LP
 		}
 	}
 
+	/* we should fix wndproc properly instead but do it later cuz imgui kinda gay ngl */
+
 	// ImGui_ImplWin32_WndProcHandler returns false instead of true, so we just do this.
 	if ( menu::d3d_init && menu::opened && !ImGui_ImplWin32_WndProcHandler( hwnd, msg, wparam, lparam ) )
 		return true;
