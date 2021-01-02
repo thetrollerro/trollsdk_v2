@@ -25,6 +25,12 @@ void __stdcall hooks::clientdll::create_move::call( int sequence_number, float s
 		}
 	}
 
+	/* invalidate tickbase shift */
+	exploit::tick_base_shift = 0;
+
+	/* get viewangle before our prediction cuz prediction will change it */
+	g::non_predicted_angle = cmd->viewangles;
+
 	/* update prediction */
 	engine_prediction::update( );
 

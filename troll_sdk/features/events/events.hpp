@@ -10,7 +10,6 @@ public:
 	void initialize( ) {
 		i::event_manager->add_listener( this, "player_hurt", false );
 		i::event_manager->add_listener( this, "player_death", false );
-		i::event_manager->add_listener( this, "bullet_impact", false );
 		i::event_manager->add_listener( this, "weapon_fire", false );
 		i::event_manager->add_listener( this, "round_start", false );
 		i::event_manager->add_listener( this, "item_purchase", false );

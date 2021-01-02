@@ -18,6 +18,15 @@ void __fastcall hooks::engine::fire_game_event::hook( void* ecx, void* edx ) {
 	return o_fire_game_event( ecx, edx );
 }
 
+void __fastcall hooks::engine::get_viewangles::hook( void* ecx, void* edx, vec3_t& ang ) {
+	if ( g::should_store_angle ) {
+		/* may need in some feature idk */
+		g::should_store_angle = false;
+	}
+
+	o_get_viewangles( ecx, edx, ang );
+}
+
 bool __fastcall hooks::engine::is_connected::hook( void* ecx, void* edx ) {
 	return o_is_connected( ecx, edx );
 }

@@ -28,6 +28,7 @@ void hooks::init( ) {
 	auto reset_target = ( void* ) get_virtual( i::dx9, 16 ); // 16
 	auto cl_move_target = ( void* ) utils::find_sig_ida( "engine.dll", "55 8B EC 81 EC ? ? ? ? 53 56 57 8B 3D ? ? ? ? 8A" );
 	auto fire_game_event_target = ( void* ) get_virtual( i::engine, 59 ); // 59
+	auto get_viewangles_target = ( void* ) get_virtual( i::engine, 18 ); // 18
 	auto is_connected_target = ( void* ) get_virtual( i::engine, 27 ); // 27
 	auto is_hltv_target = ( void* ) get_virtual( i::engine, 93 ); // 93
 	auto is_in_game_target = ( void* ) get_virtual( i::engine, 26 ); // 26
@@ -68,6 +69,7 @@ void hooks::init( ) {
 	MH_CreateHook( reset_target, dx9::reset::hook, ( void** ) &o_reset );
 	MH_CreateHook( cl_move_target, engine::cl_move::hook, ( void** ) &o_cl_move );
 	MH_CreateHook( fire_game_event_target, engine::fire_game_event::hook, ( void** ) &o_fire_game_event );
+	MH_CreateHook( get_viewangles_target, engine::get_viewangles::hook, ( void** ) &o_get_viewangles );
 	MH_CreateHook( is_connected_target, engine::is_connected::hook, ( void** ) &o_is_connected );
 	MH_CreateHook( is_hltv_target, engine::is_hltv::hook, ( void** ) &o_is_hltv );
 	MH_CreateHook( is_in_game_target, engine::is_in_game::hook, ( void** ) &o_is_in_game );

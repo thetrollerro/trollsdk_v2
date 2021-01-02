@@ -6,6 +6,8 @@ namespace g {
 	vec3_t real_angle = vec3_t( 0, 0, 0 );
 	vec3_t fake_angle = vec3_t( 0, 0, 0 );
 	int stage;
+	bool should_store_angle;
+	vec3_t non_predicted_angle;
 }
 
 namespace exploit {

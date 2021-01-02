@@ -8,6 +8,8 @@ namespace g {
 	extern vec3_t real_angle;
 	extern vec3_t fake_angle;
 	extern int stage;
+	extern bool should_store_angle;
+	extern vec3_t non_predicted_angle;
 }
 
 namespace exploit {

@@ -43,7 +43,7 @@ void __fastcall hooks::players::calc_view::hook( void* ecx, void* edx, vec3_t& e
 
 void __fastcall hooks::players::do_extra_bones_processing::hook( void* ecx, void* edx, int a2, int a3, int a4, int a5, int a6, int a7 )
 {
-	const auto pl = ( c_base_player* ) ecx;
+	auto pl = ( c_base_player* ) ecx;
 	if ( !pl ) {
 		o_do_extra_bones_processing( ecx, edx, a2, a3, a4, a5, a6, a7 );
 		return;
@@ -57,7 +57,7 @@ void __fastcall hooks::players::do_extra_bones_processing::hook( void* ecx, void
 
 	/* backup on ground */
 	const auto o_on_ground = animstate->m_on_ground;
-	
+
 	/* set it to false */
 	animstate->m_on_ground = false;
 
@@ -76,8 +76,9 @@ vec3_t* __fastcall hooks::players::get_eye_ang::hook( void* ecx, void* edx ) {
 	static auto ret_to_thirdperson_pitch = utils::find_sig_ida( "client.dll", "8B CE F3 0F 10 00 8B 06 F3 0F 11 45 ? FF 90 ? ? ? ? F3 0F 10 55 ?" );
 	static auto ret_to_thirdperson_yaw = utils::find_sig_ida( "client.dll", "F3 0F 10 55 ? 51 8B 8E ? ? ? ?" );
 
+	/* if we micromoving/breaking balance/breaking lby show sent angle so we won t see any flick on our animation */
 	if ( _ReturnAddress( ) == ( void* ) ret_to_thirdperson_pitch || _ReturnAddress( ) == ( void* ) ret_to_thirdperson_yaw )
-		return ( antiaim::m_in_lby_update || antiaim::m_in_balance_update ) ? &g::fake_angle : &g::cmd->viewangles;
+		return ( antiaim::m_in_lby_update || antiaim::m_in_balance_update || antiaim::m_can_micro_move ) ? &g::fake_angle : &g::cmd->viewangles;
 
 	return o_get_eye_ang( ecx, edx );
 }

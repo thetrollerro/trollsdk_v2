@@ -85,6 +85,11 @@ namespace hooks {
 			using fn = void( __fastcall* )( void*, void* );
 		}
 
+		namespace get_viewangles {
+			void __fastcall hook( void* ecx, void* edx, vec3_t& ang );
+			using fn = void( __fastcall* )( void*, void*, vec3_t& );
+		}
+
 		namespace is_connected {
 			bool __fastcall hook( void* ecx, void* edx );
 			using fn = bool( __fastcall* )( void*, void* );
@@ -237,6 +242,7 @@ inline hooks::dx9::endscene::fn o_endscene = nullptr;
 inline hooks::dx9::reset::fn o_reset = nullptr;
 inline hooks::engine::cl_move::fn o_cl_move = nullptr;
 inline hooks::engine::fire_game_event::fn o_fire_game_event = nullptr;
+inline hooks::engine::get_viewangles::fn o_get_viewangles = nullptr;
 inline hooks::engine::is_connected::fn o_is_connected = nullptr;
 inline hooks::engine::is_hltv::fn o_is_hltv = nullptr;
 inline hooks::engine::is_in_game::fn o_is_in_game = nullptr;
