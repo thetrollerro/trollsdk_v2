@@ -7,5 +7,5 @@ bool __fastcall hooks::file_system::sv_pure_loose_file_allowed::hook( void* ecx,
 	if ( _ReturnAddress( ) == return_to_client || _ReturnAddress( ) == return_to_engine )
 		return false;
 
-	return o_sv_pure_loose_file_allowed( ecx, edx );
+	return o_sv_pure_loose_file_allowed( ecx, 0 );
 }

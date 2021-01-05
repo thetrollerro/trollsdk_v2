@@ -141,7 +141,7 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 	}
 
 	/* call og and do our features that needs to be done after */
-	o_frame_stage_notify( ecx, edx, stage );
+	o_frame_stage_notify( ecx, 0, stage );
 
 	if ( stage == frame_render_start ) {
 		exploit::shift_rate = ( int ) std::round( 1.f / i::globalvars->m_interval_per_tick );
@@ -161,11 +161,11 @@ void write_cmd( bf_write* buf, c_usercmd* pin, c_usercmd* pout ) {
 
 bool __fastcall hooks::clientdll::write_usercmd_delta_to_buffer::hook( void* ecx, void* edx, int slot, bf_write* buf, int from, int to, bool is_new_cmd ) {
 	if ( exploit::tick_base_shift <= 0 )
-		return o_write_usercmd_delta_to_buffer( ecx, edx, slot, buf, from, to, is_new_cmd );
+		return o_write_usercmd_delta_to_buffer( ecx, 0, slot, buf, from, to, is_new_cmd );
 
 	if ( !i::engine->is_in_game( ) || !g_local || !g_local->is_alive( ) ) {
 		exploit::tick_base_shift = 0;
-		return o_write_usercmd_delta_to_buffer( ecx, edx, slot, buf, from, to, is_new_cmd );
+		return o_write_usercmd_delta_to_buffer( ecx, 0, slot, buf, from, to, is_new_cmd );
 	}
 
 	if ( from != -1 )
@@ -173,42 +173,40 @@ bool __fastcall hooks::clientdll::write_usercmd_delta_to_buffer::hook( void* ecx
 
 	int* num_backup_commands = ( int* ) ( reinterpret_cast< uintptr_t >( buf ) - 0x30 );
 	int* num_new_commands = ( int* ) ( reinterpret_cast< uintptr_t >( buf ) - 0x2C );
-	auto net_channel = i::clientstate->net_channel;
 
 	int32_t new_commands = *num_new_commands;
 
 	int32_t next_cmdnr = i::clientstate->last_outgoing_command + i::clientstate->choked_commands + 1;
-	int32_t total_new_commands = min( new_commands + abs( exploit::tick_base_shift ), 18 );
-
+	int32_t total_new_commands = min( new_commands + exploit::tick_base_shift, 62 );
 
 	from = -1;
 	*num_new_commands = total_new_commands;
 	*num_backup_commands = 0;
 
 	for ( to = next_cmdnr - new_commands + 1; to <= next_cmdnr; to++ ) {
-		if ( !o_write_usercmd_delta_to_buffer( ecx, edx, slot, buf, from, to, true ) )
+		if ( !o_write_usercmd_delta_to_buffer( ecx, 0, slot, buf, from, to, true ) )
 			return false;
 
 		from = to;
 	}
 
-	c_usercmd* last_realCmd = i::input->get_user_cmd( slot, from );
-	c_usercmd fromCmd;
+	c_usercmd* last_real_cmd = i::input->get_user_cmd( slot, from );
 
-	if ( last_realCmd )
-		fromCmd = *last_realCmd;
+	if ( !last_real_cmd )
+		return true;
 
-	c_usercmd toCmd = fromCmd;
-	toCmd.command_number++;
-	toCmd.tick_count += 3 * exploit::shift_rate;
+	c_usercmd from_cmd, to_cmd;
+	from_cmd = *last_real_cmd;
+	to_cmd = from_cmd;
 
-	for ( int i = new_commands; i <= total_new_commands; i++ )
-	{
-		write_cmd( buf, &toCmd, &fromCmd );
-		fromCmd = toCmd;
-		toCmd.command_number++;
-		toCmd.tick_count++;
-		exploit::tick_base_shift--;
+	to_cmd.command_number++;
+	to_cmd.tick_count += 3 * exploit::shift_rate; // if we wan't teleport do ++ instead of += 3 * exploit::shift_rate
+
+	for ( int i = new_commands; i <= total_new_commands; i++ ) {
+		write_cmd( buf, &to_cmd, &from_cmd );
+		from_cmd = to_cmd;
+		to_cmd.command_number++;
+		to_cmd.tick_count++;
 	}
 
 	return true;
