@@ -25,6 +25,7 @@
 #include "classes/i_surface.hpp"
 #include "classes/i_surface_props.hpp"
 #include "classes/i_trace.hpp"
+#include "classes/iv_debug_overlay.hpp"
 #include "classes/iv_engine_client.hpp"
 #include "classes/iv_model_info.hpp"
 #include "classes/iv_model_render.hpp"
@@ -97,6 +98,7 @@ namespace i {
 	inline i_surface* surface;
 	inline i_surface_props* surface_props;
 	inline i_trace* trace;
+	inline iv_debug_overlay* debug_overlay;
 	inline iv_engine_client* engine;
 	inline iv_model_info* modelinfo;
 	inline iv_model_render* modelrender;

@@ -48,10 +48,8 @@ bool __fastcall hooks::engine::is_in_game::hook( void* ecx, void* edx ) {
 bool __fastcall hooks::engine::is_paused::hook( void* ecx, void* edx ) {
 	static auto return_to_extrapolation = ( void* ) ( utils::find_sig_ida( "client.dll", "FF D0 A1 ?? ?? ?? ?? B9 ?? ?? ?? ?? D9 1D ?? ?? ?? ?? FF 50 34 85 C0 74 22 8B 0D ?? ?? ?? ??" ) + 0x29 );
 
-	/*
 	if ( _ReturnAddress( ) == return_to_extrapolation )
 		return true;
-	*/
 
 	return o_is_paused( ecx, 0 );
 }

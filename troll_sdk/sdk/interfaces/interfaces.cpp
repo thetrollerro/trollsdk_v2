@@ -17,6 +17,7 @@ void i::init( ) {
 	surface = get_interface<i_surface>( "vguimatsurface.dll", "VGUI_Surface031", true );
 	surface_props = get_interface<i_surface_props>( "vphysics.dll", "VPhysicsSurfaceProps001", true );
 	trace = get_interface<i_trace>( "engine.dll", "EngineTraceClient004", true );
+	debug_overlay = get_interface<iv_debug_overlay>( "engine.dll", "VDebugOverlay004", true );
 	engine = get_interface<iv_engine_client>( "engine.dll", "VEngineClient014", true );
 	modelinfo = get_interface<iv_model_info>( "engine.dll", "VModelInfoClient004", true );
 	modelrender = get_interface<iv_model_render>( "engine.dll", "VEngineModel016", true );

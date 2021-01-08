@@ -1,17 +1,6 @@
 #include "../hooks.hpp"
 #include "../../menu/menu.hpp"
 
-bool __fastcall hooks::clientmode::createmove::hook( void* ecx, void* edx, float input_sample_frametime, c_usercmd* cmd ) {
-	o_createmove( ecx, 0, input_sample_frametime, cmd );
-
-	if ( !cmd || !cmd->command_number || !i::engine->is_in_game( ) || !g_local ) {
-		return false;
-	}
-
-	/* timers for animfix */
-	return false;
-}
-
 int __fastcall hooks::clientmode::do_post_screen_effects::hook( void* ecx, void* edx, int a ) {
 	if ( !i::engine->is_in_game( ) || !g_local ) {
 		return o_do_post_screen_effects( ecx, 0, a );

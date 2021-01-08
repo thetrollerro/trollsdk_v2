@@ -37,11 +37,6 @@ namespace hooks {
 	}
 
 	namespace clientmode {
-		namespace createmove {
-			bool __fastcall hook( void* ecx, void* edx, float input_sample_frametime, c_usercmd* cmd );
-			using fn = bool( __fastcall* )( void*, void*, float, c_usercmd* );
-		}
-
 		namespace do_post_screen_effects {
 			int __fastcall hook( void* ecx, void* edx, int a );
 			using fn = int( __fastcall* )( void*, void*, int );
@@ -234,7 +229,6 @@ inline hooks::bsp_tree_query::list_leaves_in_box::fn o_list_leaves_in_box = null
 inline hooks::clientdll::create_move::fn o_create_move = nullptr;
 inline hooks::clientdll::frame_stage_notify::fn o_frame_stage_notify = nullptr;
 inline hooks::clientdll::write_usercmd_delta_to_buffer::fn o_write_usercmd_delta_to_buffer = nullptr;
-inline hooks::clientmode::createmove::fn o_createmove = nullptr;
 inline hooks::clientmode::do_post_screen_effects::fn o_do_post_screen_effects = nullptr;
 inline hooks::clientmode::get_viewmodel_fov::fn o_get_viewmodel_fov = nullptr;
 inline hooks::clientmode::override_view::fn o_override_view = nullptr;

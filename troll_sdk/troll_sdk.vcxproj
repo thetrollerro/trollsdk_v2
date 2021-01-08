@@ -250,6 +250,7 @@
     <ClInclude Include="sdk\classes\c_usercmd.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_file_system.hpp" />
     <ClInclude Include="sdk\interfaces\classes\c_glow_object_manager.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\iv_debug_overlay.hpp" />
     <ClInclude Include="sdk\interfaces\classes\iv_view_render_beams.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_client_state.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_game_event_manager.hpp" />

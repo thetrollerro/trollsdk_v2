@@ -112,7 +112,7 @@ public:
 	}
 
 	void write( matrix_t* bone ) {
-		std::memcpy( bone, get_bone_arr_for_write( ), sizeof( matrix_t ) * 128 );
+		bone = m_bones;
 	}
 
 private:
@@ -242,6 +242,40 @@ private:
 
 inline c_local_player g_local;
 
+class ik_context
+{
+public:
+	void init( studio_hdr_t* hdr, vec3_t& angles, vec3_t& origin, float curtime, int framecount, int boneMask ) {
+		static const auto ik_init_address = utils::find_sig_ida( "client.dll", "55 8B EC 83 EC 08 8B 45 08 56 57 8B F9 8D 8F" );
+		reinterpret_cast< void( __thiscall* )( ik_context*, studio_hdr_t*, vec3_t&, vec3_t&, float, int, int ) >( ik_init_address )( this, hdr, angles, origin, curtime, framecount, boneMask );
+	}
+
+	void update_targets( vec3_t* pos, quaternion* q, matrix_t* bone_array, byte* computed ) {
+		static const auto update_targets_address = utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F0 81 EC ? ? ? ? 33 D2" );
+		reinterpret_cast< void( __thiscall* )( ik_context*, vec3_t*, quaternion*, matrix_t*, byte* ) >( update_targets_address )( this, pos, q, bone_array, computed );
+	}
+
+	void solve_dependencies( vec3_t* pos, quaternion* q, matrix_t* bone_array, byte* computed ) {
+		static const auto solve_dependencies_address = utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F0 81 EC ? ? ? ? 8B 81" );
+		reinterpret_cast< void( __thiscall* )( ik_context*, vec3_t*, quaternion*, matrix_t*, byte* ) >( solve_dependencies_address )( this, pos, q, bone_array, computed );
+	}
+
+	void clear_targets( )
+	{
+		auto v56 = 0;
+		if ( *( int* ) ( ( DWORD ) this + 4080 ) > 0 )
+		{
+			auto v57 = ( int* ) ( ( DWORD ) this + 208 );
+			do
+			{
+				*v57 = -9999;
+				v57 += 85;
+				++v56;
+			} while ( v56 < *( int* ) ( ( DWORD ) this + 4080 ) );
+		}
+	}
+};
+
 class c_base_player : public c_base_entity {
 public:
 	static __forceinline c_base_player* get_player_by_index( int index ) {
@@ -255,6 +289,10 @@ public:
 
 	int& m_iEFlags( ) {
 		return *( int* ) ( ( uintptr_t ) this + 0xE8 );
+	}
+
+	int& m_nFinalPredictedTick( ) {
+		return *( int* ) ( ( DWORD ) this + 0x3434 );
 	}
 
 	vec3_t& tp_angles( ) {
@@ -326,6 +364,24 @@ public:
 	void update_clientside_animation( ) {
 		typedef void( __thiscall* o_fn )( void* );
 		return utils::call_virtual<o_fn>( this, 223 )( this );
+	}
+
+	void update_ik_locks( float curtime ) {
+		using o_fn = void( __thiscall* )( void*, float );
+		utils::call_virtual<o_fn>( this, 191 )( this, curtime );
+	}
+
+	void calculate_ik_locks( float curtime ) {
+		using o_fn = void( __thiscall* )( void*, float );
+		utils::call_virtual<o_fn>( this, 192 )( this, curtime );
+	}
+
+	studio_hdr_t* get_model_ptr( ) {
+		return *( studio_hdr_t** ) ( ( uintptr_t ) this + 0x294C );
+	}
+
+	ik_context* get_ik_context( ) {
+		return *( ik_context** ) ( ( uintptr_t ) this + 9836 + 0x4 );
 	}
 
 	/* other */
@@ -411,15 +467,10 @@ public:
 		auto* m_hitbox = m_studio_model->hitbox_set( 0 )->hitbox( hitbox );
 		if ( !m_hitbox ) return vec3_t( 0, 0, 0 );
 
-		/* if there is no matrix use bone accessor's one */
-		if ( !matrix ) {
-			matrix = ( matrix_t* ) this->get_bone_acessor( )->get_bone_arr_for_write( );
-		}
-
 		vec3_t vmin, vmax;
 
-		math::vector_transform( m_hitbox->mins, matrix[ m_hitbox->bone ], vmin );
-		math::vector_transform( m_hitbox->maxs, matrix[ m_hitbox->bone ], vmax );
+		math::vector_transform( m_hitbox->maxs, matrix ? matrix[ m_hitbox->bone ] : this->get_bone_acessor( )->get_bone( m_hitbox->bone ), vmax );
+		math::vector_transform( m_hitbox->mins, matrix ? matrix[ m_hitbox->bone ] : this->get_bone_acessor( )->get_bone( m_hitbox->bone ), vmin );
 
 		auto pos = ( vmin + vmax ) * 0.5f;
 
@@ -508,14 +559,14 @@ public:
 		return get_sequence_activity( this, hdr, sequence );
 	}
 
-	void build_transformations( studio_hdr_t* hdr, vec3_t* pos, quaternion* q, const matrix_t& transform, int mask, uint8_t* computed ) {
-		using BuildTransformations_t = void( __thiscall* )( decltype( this ), studio_hdr_t*, vec3_t*, quaternion*, matrix_t const&, int, uint8_t* );
-		return utils::call_virtual< BuildTransformations_t >( this, 189 )( this, hdr, pos, q, transform, mask, computed );
+	void build_transformations( studio_hdr_t* hdr, vec3_t* pos, quaternion* q, const matrix_t& transform, int mask, byte* computed ) {
+		using o_fn = void( __thiscall* )( void*, studio_hdr_t*, vec3_t*, quaternion*, const matrix_t&, int, byte* );
+		utils::call_virtual< o_fn >( this, 189 )( this, hdr, pos, q, transform, mask, computed );
 	}
 
 	void standard_blending_rules( studio_hdr_t* hdr, vec3_t* pos, quaternion* q, float time, int mask ) {
-		using StandardBlendingRules_t = void( __thiscall* )( decltype( this ), studio_hdr_t*, vec3_t*, quaternion*, float, int );
-		return utils::call_virtual< StandardBlendingRules_t >( this, 205 )( this, hdr, pos, q, time, mask );
+		using o_fn = void( __thiscall* )( void*, studio_hdr_t*, vec3_t*, quaternion*, float, int );
+		utils::call_virtual< o_fn >( this, 205 )( this, hdr, pos, q, time, mask );
 	}
 
 	/* DT_BasePlayer */
@@ -763,7 +814,7 @@ public:
 	// m_iMatchStats_EnemiesFlashed                
 	// m_rank                                      
 	// m_passiveItems    
-	NETVAR_PTR( "DT_CSPlayer->m_hMyWearables", m_hMyWearables, UINT );
+	NETVAR_PTR( "DT_CSPlayer->m_hMyWearables", m_hMyWearables, c_base_handle );
 
 	int* m_hMyWeapons( ) {
 		return reinterpret_cast< int* >( uintptr_t( this ) + 0x2DF8 );
