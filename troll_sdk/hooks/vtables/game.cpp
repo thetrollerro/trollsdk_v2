@@ -20,5 +20,8 @@ bool __fastcall hooks::game::sv_cheats_get_bool::hook( void* ecx, void* edx ) {
 	if ( _ReturnAddress( ) == cam_think )
 		return true;
 
+	if ( !o_sv_cheats_get_bool( ecx, 0 ) )
+		return false;
+
 	return o_sv_cheats_get_bool( ecx, 0 );
 }
