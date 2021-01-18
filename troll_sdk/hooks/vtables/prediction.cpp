@@ -7,14 +7,14 @@ bool __fastcall hooks::prediction::in_prediction::hook( void* ecx, void* edx ) {
 	if ( _ReturnAddress( ) == maintain_sequence_transitions || _ReturnAddress( ) == setup_bones_ptr )
 		return false;
 
-	return o_in_prediction( ecx, 0 );
+	return o_in_prediction( ecx, edx );
 }
 
 bool __fastcall hooks::prediction::perform_prediction::hook( void* ecx, void* edx, int slot, c_base_player* pl, bool recived_world_update, int incoming_acknowledged, int outgoing_command ) {
 	if ( !i::engine->is_in_game( ) || !pl || !g_local | !g_local->is_alive( ) || pl != g_local )
-		return o_perform_prediction( ecx, 0, slot, pl, recived_world_update, incoming_acknowledged, outgoing_command );
+		return o_perform_prediction( ecx, edx, slot, pl, recived_world_update, incoming_acknowledged, outgoing_command );
 
-	return o_perform_prediction( ecx, 0, slot, pl, recived_world_update, incoming_acknowledged, outgoing_command );
+	return o_perform_prediction( ecx, edx, slot, pl, recived_world_update, incoming_acknowledged, outgoing_command );
 }
 
 void __fastcall hooks::prediction::run_command::hook( void* ecx, void* edx, c_base_player* e, c_usercmd* cmd, void* move_helper ) {
@@ -44,7 +44,7 @@ void __fastcall hooks::prediction::run_command::hook( void* ecx, void* edx, c_ba
 		g_local->m_flVelocityModifier( ) = exploit::vel_mod;
 
 	/* run usercommands */
-	o_run_command( ecx, 0, e, cmd, move_helper );
+	o_run_command( ecx, edx, e, cmd, move_helper );
 
 	/* restore */
 	if ( cmd->command_number == exploit::last_cmdnr ) {

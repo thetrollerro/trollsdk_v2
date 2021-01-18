@@ -86,7 +86,7 @@ void hooks::init( ) {
 	MH_CreateHook( standard_blending_rules_target, players::standard_blending_rules::hook, ( void** ) &o_standard_blending_rules );
 	MH_CreateHook( update_clientside_animation_target, players::update_clientside_animations::hook, ( void** ) &o_update_clientside_animations );
 	MH_CreateHook( in_prediction_target, prediction::in_prediction::hook, ( void** ) &o_in_prediction );
-	MH_CreateHook( perform_prediction_target, prediction::perform_prediction::hook, ( void** ) &o_perform_prediction );
+	//MH_CreateHook( perform_prediction_target, prediction::perform_prediction::hook, ( void** ) &o_perform_prediction ); // use only if u need it ( may cause issues if u let it empty )
 	MH_CreateHook( run_command_target, prediction::run_command::hook, ( void** ) &o_run_command );
 	MH_CreateHook( setup_bones_target, renderable::setup_bones::hook, ( void** ) &o_setup_bones );
 	MH_CreateHook( draw_set_color_target, surface::draw_set_color::hook, ( void** ) &o_draw_set_color );
