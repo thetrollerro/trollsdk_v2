@@ -19,8 +19,8 @@ public:
 	// m_iEntityLevel                      
 	NETVAR( "DT_BaseAttributableItem->m_iItemIDHigh", m_iItemIDHigh, int );
 	// m_iItemIDLow                        
-	// m_iAccountID    
-	NETVAR( "DT_BaseAttributableItem->m_iEntityQuality", m_iEntityQuality, int );               
+	NETVAR( "DT_BaseAttributableItem->m_iAccountID", m_iAccountID, int );
+	NETVAR( "DT_BaseAttributableItem->m_iEntityQuality", m_iEntityQuality, int );
 	// m_bInitialized                      
 	// m_szCustomName                      
 	// m_NetworkedDynamicAttributesForDemos

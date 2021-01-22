@@ -40,7 +40,7 @@ void __fastcall hooks::prediction::run_command::hook( void* ecx, void* edx, c_ba
 		i::globalvars->m_cur_time = ticks2time( e->m_nTickBase( ) );
 	}
 
-	if ( cmd->command_number == i::clientstate->last_command_ack + 1 )
+	if ( cmd->command_number == i::clientstate->m_last_command_ack + 1 )
 		g_local->m_flVelocityModifier( ) = exploit::vel_mod;
 
 	/* run usercommands */

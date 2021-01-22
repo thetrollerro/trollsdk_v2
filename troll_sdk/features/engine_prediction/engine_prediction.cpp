@@ -61,7 +61,7 @@ void engine_prediction::restore( ) {
 void engine_prediction::update( ) {
 	if ( g::stage == frame_net_update_end && !g::cmd->buttons & in_attack ) {
 		/* call CPrediction::Update */
-		i::prediction->update( i::clientstate->delta_tick, i::clientstate->delta_tick > 0, i::clientstate->last_command_ack, i::clientstate->last_outgoing_command + i::clientstate->choked_commands );
+		i::prediction->update( i::clientstate->m_delta_tick, i::clientstate->m_delta_tick > 0, i::clientstate->m_last_command_ack, i::clientstate->m_last_outgoing_command + i::clientstate->m_choked_commands );
 	}
 }
 

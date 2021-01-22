@@ -4,6 +4,7 @@
 #include "i_client_entity.hpp"
 #include "../interfaces/interfaces.hpp"
 
+class c_base_player;
 class c_base_entity : public i_client_entity {
 public:
 	static __forceinline c_base_entity* get_entity_by_index( int index ) {
@@ -19,6 +20,22 @@ public:
 	datamap_t* get_pred_desc_map( ) {
 		typedef datamap_t* ( __thiscall* o_fn )( void* );
 		return utils::call_virtual<o_fn>( this, 17 )( this );
+	}
+
+	/* other */
+	bool is_player( ) {
+		using o_fn = bool( __thiscall* )( c_base_entity* );
+		return utils::call_virtual<o_fn>( this, 157 )( this );
+	}
+
+	bool is_weapon( ) {
+		using o_fn = bool( __thiscall* )( c_base_entity* );
+		return utils::call_virtual<o_fn>( this, 166 )( this );
+	}
+
+	const matrix_t& m_rgflCoordinateFrame( ) {
+		static auto _m_rgflCoordinateFrame = netvars::get_offset( "DT_BaseEntity->m_CollisionGroup" ) - 0x30;
+		return *( matrix_t* ) ( ( uintptr_t ) this + _m_rgflCoordinateFrame );
 	}
 
 	/* DT_BaseEntity */

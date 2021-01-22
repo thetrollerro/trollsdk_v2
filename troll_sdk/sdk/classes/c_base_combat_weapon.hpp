@@ -215,9 +215,80 @@ public:
 		return get_cs_weapon_data( )->weapon_type == weapontype_machinegun;
 	}
 
+	void set_model_index( int index ) {
+		using o_fn = void( __thiscall* )( void*, int );
+		return utils::call_virtual<o_fn>( this, 75 )( this, index );
+	}
+
 	std::string get_name( ) {
-		if ( !this || !this->get_cs_weapon_data( ) ) return "invalid";
 		return std::string( this->get_cs_weapon_data( )->weapon_name );
+	}
+
+	float fire_rate( ) {
+		if ( !this || this->is_knife( ) || this->is_nade( ) ) return 0.f;
+
+		std::string weapon_name = this->get_name( );
+
+		if ( weapon_name == "weapon_glock" )
+			return 0.15f;
+		else if ( weapon_name == "weapon_hkp2000" )
+			return 0.169f;
+		else if ( weapon_name == "weapon_p250" )//the cz and p250 have the same name idky same with other guns
+			return 0.15f;
+		else if ( weapon_name == "weapon_tec9" )
+			return 0.12f;
+		else if ( weapon_name == "weapon_elite" )
+			return 0.12f;
+		else if ( weapon_name == "weapon_fiveseven" )
+			return 0.15f;
+		else if ( weapon_name == "weapon_deagle" )
+			return 0.224f;
+		else if ( weapon_name == "weapon_nova" )
+			return 0.882f;
+		else if ( weapon_name == "weapon_sawedoff" )
+			return 0.845f;
+		else if ( weapon_name == "weapon_mag7" )
+			return 0.845f;
+		else if ( weapon_name == "weapon_xm1014" )
+			return 0.35f;
+		else if ( weapon_name == "weapon_mac10" )
+			return 0.075f;
+		else if ( weapon_name == "weapon_ump45" )
+			return 0.089f;
+		else if ( weapon_name == "weapon_mp9" )
+			return 0.070f;
+		else if ( weapon_name == "weapon_bizon" )
+			return 0.08f;
+		else if ( weapon_name == "weapon_mp7" )
+			return 0.08f;
+		else if ( weapon_name == "weapon_p90" )
+			return 0.070f;
+		else if ( weapon_name == "weapon_galilar" )
+			return 0.089f;
+		else if ( weapon_name == "weapon_ak47" )
+			return 0.1f;
+		else if ( weapon_name == "weapon_sg556" )
+			return 0.089f;
+		else if ( weapon_name == "weapon_m4a1" )
+			return 0.089f;
+		else if ( weapon_name == "weapon_aug" )
+			return 0.089f;
+		else if ( weapon_name == "weapon_m249" )
+			return 0.08f;
+		else if ( weapon_name == "weapon_negev" )
+			return 0.0008f;
+		else if ( weapon_name == "weapon_ssg08" )
+			return 1.25f;
+		else if ( weapon_name == "weapon_awp" )
+			return 1.463f;
+		else if ( weapon_name == "weapon_g3sg1" )
+			return 0.25f;
+		else if ( weapon_name == "weapon_scar20" )
+			return 0.25f;
+		else if ( weapon_name == "weapon_mp5sd" )
+			return 0.08f;
+		else
+			return .0f;
 	}
 
 	std::string weapon_name( ) {
@@ -230,7 +301,7 @@ public:
 			return "Deagle";
 			break;
 		case weapon_elite:
-			return "Elites";
+			return "Duals";
 			break;
 		case weapon_fiveseven:
 			return "Five Seven";
@@ -420,73 +491,6 @@ public:
 		}
 	}
 
-	float fire_rate( ) {
-		if ( !this || this->is_knife( ) || this->is_nade( ) ) return 0.f;
-
-		std::string weapon_name = this->get_name( );
-
-		if ( weapon_name == "weapon_glock" )
-			return 0.15f;
-		else if ( weapon_name == "weapon_hkp2000" )
-			return 0.169f;
-		else if ( weapon_name == "weapon_p250" )//the cz and p250 have the same name idky same with other guns
-			return 0.15f;
-		else if ( weapon_name == "weapon_tec9" )
-			return 0.12f;
-		else if ( weapon_name == "weapon_elite" )
-			return 0.12f;
-		else if ( weapon_name == "weapon_fiveseven" )
-			return 0.15f;
-		else if ( weapon_name == "weapon_deagle" )
-			return 0.224f;
-		else if ( weapon_name == "weapon_nova" )
-			return 0.882f;
-		else if ( weapon_name == "weapon_sawedoff" )
-			return 0.845f;
-		else if ( weapon_name == "weapon_mag7" )
-			return 0.845f;
-		else if ( weapon_name == "weapon_xm1014" )
-			return 0.35f;
-		else if ( weapon_name == "weapon_mac10" )
-			return 0.075f;
-		else if ( weapon_name == "weapon_ump45" )
-			return 0.089f;
-		else if ( weapon_name == "weapon_mp9" )
-			return 0.070f;
-		else if ( weapon_name == "weapon_bizon" )
-			return 0.08f;
-		else if ( weapon_name == "weapon_mp7" )
-			return 0.08f;
-		else if ( weapon_name == "weapon_p90" )
-			return 0.070f;
-		else if ( weapon_name == "weapon_galilar" )
-			return 0.089f;
-		else if ( weapon_name == "weapon_ak47" )
-			return 0.1f;
-		else if ( weapon_name == "weapon_sg556" )
-			return 0.089f;
-		else if ( weapon_name == "weapon_m4a1" )
-			return 0.089f;
-		else if ( weapon_name == "weapon_aug" )
-			return 0.089f;
-		else if ( weapon_name == "weapon_m249" )
-			return 0.08f;
-		else if ( weapon_name == "weapon_negev" )
-			return 0.0008f;
-		else if ( weapon_name == "weapon_ssg08" )
-			return 1.25f;
-		else if ( weapon_name == "weapon_awp" )
-			return 1.463f;
-		else if ( weapon_name == "weapon_g3sg1" )
-			return 0.25f;
-		else if ( weapon_name == "weapon_scar20" )
-			return 0.25f;
-		else if ( weapon_name == "weapon_mp5sd" )
-			return 0.08f;
-		else
-			return .0f;
-	}
-
 	/* DT_BaseCombatWeapon */
 	NETVAR( "DT_BaseCombatWeapon->m_iViewModelIndex", m_iViewModelIndex, int );
 	// m_iWorldModelIndex          
@@ -534,4 +538,18 @@ public:
 
 	/* DT_BaseCSGrenade */
 	NETVAR( "DT_BaseCSGrenade->m_fThrowTime", m_fThrowTime, float );
+};
+
+class c_gloves : public c_base_combat_weapon {
+public:
+	void pre_data_update( int type ) {
+		PVOID networkable = ( PVOID ) ( ( DWORD ) ( this ) + 0x8 );
+		typedef void( __thiscall* o_fn )( PVOID, int );
+		return utils::call_virtual<o_fn>( networkable, 6 )( networkable, type );
+	}
+
+	void set_glove_model_index( int index ) {
+		using o_fn = void( __thiscall* )( void*, int );
+		return utils::call_virtual<o_fn>( this, 75 )( this, index );
+	}
 };

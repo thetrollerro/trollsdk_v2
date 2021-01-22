@@ -336,16 +336,6 @@ public:
 		return *( int* ) ( ( uintptr_t ) this + 0xA28 );
 	}
 
-	bool is_player( ) {
-		using o_fn = bool( __thiscall* )( c_base_player* );
-		return utils::call_virtual<o_fn>( this, 157 )( this );
-	}
-
-	bool is_weapon( ) {
-		using o_fn = bool( __thiscall* )( c_base_player* );
-		return utils::call_virtual<o_fn>( this, 166 )( this );
-	}
-
 	void set_model_index( int index ) {
 		using o_fn = void( __thiscall* )( void*, int );
 		return utils::call_virtual<o_fn>( this, 75 )( this, index );
@@ -496,15 +486,11 @@ public:
 	}
 
 	int get_choked_packets( ) {
-		static int last_ticks[ 65 ];
-		auto ticks = time2ticks( this->m_flSimulationTime( ) - this->m_flOldSimulationTime( ) );
-		if ( ticks == 0 && last_ticks[ this->ent_index( ) ] > 0 ) {
-			return last_ticks[ this->ent_index( ) ] - 1;
-		}
-		else {
-			last_ticks[ this->ent_index( ) ] = ticks;
-			return ticks;
-		}
+		float simtime = this->m_flSimulationTime( );
+		float oldsimtime = this->m_flOldSimulationTime( );
+		float simdiff = simtime - oldsimtime;
+
+		return time2ticks( std::fmaxf( 0, simdiff ) );
 	}
 
 	player_info_t get_player_info( )

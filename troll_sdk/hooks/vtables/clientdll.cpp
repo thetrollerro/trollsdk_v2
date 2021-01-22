@@ -176,7 +176,7 @@ bool __fastcall hooks::clientdll::write_usercmd_delta_to_buffer::hook( void* ecx
 
 	int32_t new_commands = *num_new_commands;
 
-	int32_t next_cmdnr = i::clientstate->last_outgoing_command + i::clientstate->choked_commands + 1;
+	int32_t next_cmdnr = i::clientstate->m_last_outgoing_command + i::clientstate->m_choked_commands + 1;
 	int32_t total_new_commands = min( new_commands + exploit::tick_base_shift, 62 );
 
 	from = -1;

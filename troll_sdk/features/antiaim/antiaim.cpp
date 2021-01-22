@@ -34,7 +34,7 @@ void antiaim::predict_lby( ) {
 		m_in_balance_update = true;
 
 	/* check if we can micromove so ur lby will update faster */
-	if ( i::clientstate->choked_commands <= 0 && !m_in_lby_update ) { // micromove and add our lby delta to our desync
+	if ( i::clientstate->m_choked_commands <= 0 && !m_in_lby_update ) { // micromove and add our lby delta to our desync
 		m_can_micro_move = true;
 	}
 }
