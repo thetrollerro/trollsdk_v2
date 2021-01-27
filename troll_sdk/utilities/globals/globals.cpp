@@ -13,9 +13,10 @@ namespace g {
 namespace exploit {
 	int shift_rate;
 	int tick_base_shift;
-	float last_doubletap;
+	int shifted_ticks;
 	int last_tickbase;
 	int last_cmdnr;
 	int tick_count;
 	float vel_mod;
+	int shot_tick;
 }

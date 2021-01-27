@@ -6,7 +6,7 @@ void __cdecl hooks::engine::cl_move::hook( float accumulated_extra_samples, bool
 
 void __fastcall hooks::engine::fire_game_event::hook( void* ecx, void* edx ) {
 	if ( !g_local || !g_local->is_alive( ) )
-		return o_fire_game_event( ecx, edx );
+		return o_fire_game_event( ecx, 0 );
 
 	/* get this from CL_FireEvents string "Failed to execute event for classId" in engine.dll */
 	auto event = *( event_t** ) ( uintptr_t( i::clientstate ) + 0x4E6C );
@@ -15,7 +15,7 @@ void __fastcall hooks::engine::fire_game_event::hook( void* ecx, void* edx ) {
 		event = event->next;
 	}
 
-	return o_fire_game_event( ecx, edx );
+	return o_fire_game_event( ecx, 0 );
 }
 
 void __fastcall hooks::engine::get_viewangles::hook( void* ecx, void* edx, vec3_t& ang ) {
@@ -24,11 +24,11 @@ void __fastcall hooks::engine::get_viewangles::hook( void* ecx, void* edx, vec3_
 		g::should_store_angle = false;
 	}
 
-	o_get_viewangles( ecx, edx, ang );
+	o_get_viewangles( ecx, 0, ang );
 }
 
 bool __fastcall hooks::engine::is_connected::hook( void* ecx, void* edx ) {
-	return o_is_connected( ecx, edx );
+	return o_is_connected( ecx, 0 );
 }
 
 bool __fastcall hooks::engine::is_hltv::hook( void* ecx, void* edx ) {
@@ -38,11 +38,11 @@ bool __fastcall hooks::engine::is_hltv::hook( void* ecx, void* edx ) {
 	if ( _ReturnAddress( ) == return_to_setup_vel || _ReturnAddress( ) == return_to_accumulate_layers )
 		return true;
 
-	return o_is_hltv( ecx, edx );
+	return o_is_hltv( ecx, 0 );
 }
 
 bool __fastcall hooks::engine::is_in_game::hook( void* ecx, void* edx ) {
-	return o_is_in_game( ecx, edx );
+	return o_is_in_game( ecx, 0 );
 }
 
 bool __fastcall hooks::engine::is_paused::hook( void* ecx, void* edx ) {
@@ -51,5 +51,5 @@ bool __fastcall hooks::engine::is_paused::hook( void* ecx, void* edx ) {
 	if ( _ReturnAddress( ) == return_to_extrapolation )
 		return true;
 
-	return o_is_paused( ecx, edx );
+	return o_is_paused( ecx, 0 );
 }

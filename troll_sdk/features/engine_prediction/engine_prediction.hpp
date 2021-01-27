@@ -21,4 +21,6 @@ namespace engine_prediction {
 
 	void update_viewmodel_data( );
 	void correct_viewmodel_data( );
+
+	void patch_attack_packet( c_usercmd* cmd, bool predicted );
 }

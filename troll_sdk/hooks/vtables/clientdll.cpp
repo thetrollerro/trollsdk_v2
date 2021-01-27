@@ -115,7 +115,7 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 			break;
 
 		case frame_net_update_end:
-			netdata::apply( );
+			//netdata::apply( );
 			break;
 
 		case frame_render_start:
@@ -141,7 +141,7 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 	}
 
 	/* call og and do our features that needs to be done after */
-	o_frame_stage_notify( ecx, edx, stage );
+	o_frame_stage_notify( ecx, 0, stage );
 
 	if ( stage == frame_render_start ) {
 		exploit::shift_rate = ( int ) std::round( 1.f / i::globalvars->m_interval_per_tick );
@@ -161,11 +161,11 @@ void write_cmd( bf_write* buf, c_usercmd* pin, c_usercmd* pout ) {
 
 bool __fastcall hooks::clientdll::write_usercmd_delta_to_buffer::hook( void* ecx, void* edx, int slot, bf_write* buf, int from, int to, bool is_new_cmd ) {
 	if ( exploit::tick_base_shift <= 0 )
-		return o_write_usercmd_delta_to_buffer( ecx, edx, slot, buf, from, to, is_new_cmd );
+		return o_write_usercmd_delta_to_buffer( ecx, 0, slot, buf, from, to, is_new_cmd );
 
 	if ( !i::engine->is_in_game( ) || !g_local || !g_local->is_alive( ) ) {
 		exploit::tick_base_shift = 0;
-		return o_write_usercmd_delta_to_buffer( ecx, edx, slot, buf, from, to, is_new_cmd );
+		return o_write_usercmd_delta_to_buffer( ecx, 0, slot, buf, from, to, is_new_cmd );
 	}
 
 	if ( from != -1 )
@@ -184,7 +184,7 @@ bool __fastcall hooks::clientdll::write_usercmd_delta_to_buffer::hook( void* ecx
 	*num_backup_commands = 0;
 
 	for ( to = next_cmdnr - new_commands + 1; to <= next_cmdnr; to++ ) {
-		if ( !o_write_usercmd_delta_to_buffer( ecx, edx, slot, buf, from, to, true ) )
+		if ( !o_write_usercmd_delta_to_buffer( ecx, 0, slot, buf, from, to, true ) )
 			return false;
 
 		from = to;

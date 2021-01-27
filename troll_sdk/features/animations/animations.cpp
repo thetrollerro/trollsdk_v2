@@ -20,29 +20,32 @@ void animstate_t::update( vec3_t& ang ) {
 	update_animstate( this, nullptr, ang.z, ang.y, ang.x, nullptr );
 }
 
-bool animations::fresh_tick( ) {
-	static int o_tick = i::globalvars->m_tick_count;
-	if ( o_tick != i::globalvars->m_tick_count ) {
-		o_tick = i::globalvars->m_tick_count;
-		return true;
+namespace animations {
+
+	bool fresh_tick( ) {
+		static int o_tick = i::globalvars->m_tick_count;
+		if ( o_tick != i::globalvars->m_tick_count ) {
+			o_tick = i::globalvars->m_tick_count;
+			return true;
+		}
+		return false;
 	}
-	return false;
-}
 
-bool animations::setup_bones( c_base_player* pl, matrix_t* out, int max_bones, int mask, float seed ) {
-	__asm {
-		mov edi, pl
-		lea ecx, dword ptr ds : [edi + 0x4]
-		mov edx, dword ptr ds : [ecx]
-		push seed
-		push mask
-		push max_bones
-		push out
-		call dword ptr ds : [edx + 0x34]
+	bool setup_bones( c_base_player* pl, matrix_t* out, int max_bones, int mask, float seed ) {
+		__asm {
+			mov edi, pl
+			lea ecx, dword ptr ds : [edi + 0x4]
+			mov edx, dword ptr ds : [ecx]
+			push seed
+			push mask
+			push max_bones
+			push out
+			call dword ptr ds : [edx + 0x34]
+		}
 	}
-}
 
-bool animations::build_matrix( c_base_player* pl, matrix_t* out, int max_bones, int mask, float seed ) {
-	return o_setup_bones( pl->get_client_renderable( ), nullptr, out, max_bones, mask, seed );
-}
+	bool build_matrix( c_base_player* pl, matrix_t* out, int max_bones, int mask, float seed ) {
+		return o_setup_bones( pl->get_client_renderable( ), nullptr, out, max_bones, mask, seed );
+	}
 
+}

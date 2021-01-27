@@ -11,7 +11,7 @@ void __fastcall hooks::game::check_file_crcs_with_server::hook( void* ecx, void*
 
 bool __fastcall hooks::game::should_skip_animframe::hook( void* ecx, void* edx ) {
 	return false;
-	/* return o_should_skip_animframe( ecx, edx ) */
+	/* return o_should_skip_animframe( ecx, 0 ) */
 }
 
 bool __fastcall hooks::game::sv_cheats_get_bool::hook( void* ecx, void* edx ) {
@@ -20,8 +20,8 @@ bool __fastcall hooks::game::sv_cheats_get_bool::hook( void* ecx, void* edx ) {
 	if ( _ReturnAddress( ) == cam_think )
 		return true;
 
-	if ( !o_sv_cheats_get_bool( ecx, edx ) )
+	if ( !o_sv_cheats_get_bool( ecx, 0 ) )
 		return false;
 
-	return o_sv_cheats_get_bool( ecx, edx );
+	return o_sv_cheats_get_bool( ecx, 0 );
 }

@@ -11,7 +11,7 @@ long __fastcall hooks::dx9::endscene::hook( void* ecx, void* edx, IDirect3DDevic
 	/* endscene gets called twice so we call it once */
 	static auto ret = _ReturnAddress( );
 	if ( ret != _ReturnAddress( ) ) {
-		return o_endscene( ecx, edx, dev );
+		return o_endscene( ecx, 0, dev );
 	}
 
 	/* backup */
@@ -28,7 +28,7 @@ long __fastcall hooks::dx9::endscene::hook( void* ecx, void* edx, IDirect3DDevic
 	stateBlock->Release( );
 	dev->SetVertexDeclaration( vertDec );
 
-	return o_endscene( ecx, edx, dev );
+	return o_endscene( ecx, 0, dev );
 }
 
 long __fastcall hooks::dx9::reset::hook( void* ecx, void* edx, IDirect3DDevice9* dev, D3DPRESENT_PARAMETERS* params ) {
@@ -36,12 +36,12 @@ long __fastcall hooks::dx9::reset::hook( void* ecx, void* edx, IDirect3DDevice9*
 	render::destroy_fonts( );
 
 	if ( !menu::d3d_init )
-		return o_reset( ecx, edx, dev, params );
+		return o_reset( ecx, 0, dev, params );
 
 	/* invalidate dev objects */
 	ImGui_ImplDX9_InvalidateDeviceObjects( );
 
-	auto hr = o_reset( ecx, edx, dev, params );
+	auto hr = o_reset( ecx, 0, dev, params );
 	if ( SUCCEEDED( hr ) ) {
 		/* recreate imgui */
 		ImGui_ImplDX9_CreateDeviceObjects( );
