@@ -53,6 +53,13 @@ namespace hooks {
 		}
 	}
 
+	namespace clientstate {
+		namespace check_file_crcs_with_server {
+			void __fastcall hook( void* ecx, void* edx );
+			using fn = void( __fastcall* )( void*, void* );
+		}
+	}
+
 	namespace dx9 {
 		namespace endscene {
 			long __fastcall hook( void* ecx, void* edx, IDirect3DDevice9* dev );
@@ -114,11 +121,6 @@ namespace hooks {
 	}
 
 	namespace game {
-		namespace check_file_crcs_with_server {
-			void __fastcall hook( void* ecx, void* edx );
-			using fn = void( __fastcall* )( void*, void* );
-		}
-
 		namespace should_skip_animframe {
 			bool __fastcall hook( void* ecx, void* edx );
 			using fn = bool( __fastcall* )( void*, void* );
@@ -232,6 +234,7 @@ inline hooks::clientdll::write_usercmd_delta_to_buffer::fn o_write_usercmd_delta
 inline hooks::clientmode::do_post_screen_effects::fn o_do_post_screen_effects = nullptr;
 inline hooks::clientmode::get_viewmodel_fov::fn o_get_viewmodel_fov = nullptr;
 inline hooks::clientmode::override_view::fn o_override_view = nullptr;
+inline hooks::clientstate::check_file_crcs_with_server::fn o_check_file_crcs_with_server = nullptr;
 inline hooks::dx9::endscene::fn o_endscene = nullptr;
 inline hooks::dx9::reset::fn o_reset = nullptr;
 inline hooks::engine::cl_move::fn o_cl_move = nullptr;
@@ -242,7 +245,6 @@ inline hooks::engine::is_hltv::fn o_is_hltv = nullptr;
 inline hooks::engine::is_in_game::fn o_is_in_game = nullptr;
 inline hooks::engine::is_paused::fn o_is_paused = nullptr;
 inline hooks::file_system::sv_pure_loose_file_allowed::fn o_sv_pure_loose_file_allowed = nullptr;
-inline hooks::game::check_file_crcs_with_server::fn o_check_file_crcs_with_server = nullptr;
 inline hooks::game::should_skip_animframe::fn o_should_skip_animframe = nullptr;
 inline hooks::game::sv_cheats_get_bool::fn o_sv_cheats_get_bool = nullptr;
 inline hooks::material_system::find_material::fn o_find_material = nullptr;
