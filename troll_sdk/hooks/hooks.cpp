@@ -65,7 +65,7 @@ namespace hooks {
 		MH_CreateHook( do_post_screen_effects_target, clientmode::do_post_screen_effects::hook, ( void** ) &o_do_post_screen_effects );
 		MH_CreateHook( get_viewmodel_fov_target, clientmode::get_viewmodel_fov::hook, ( void** ) &o_get_viewmodel_fov );
 		MH_CreateHook( override_view_target, clientmode::override_view::hook, ( void** ) &o_override_view );
-		MH_CreateHook( check_file_crcs_with_server_target, clientstate::check_file_crcs_with_server::hook, ( void** ) &o_check_file_crcs_with_server );
+		//MH_CreateHook( check_file_crcs_with_server_target, clientstate::check_file_crcs_with_server::hook, ( void** ) &o_check_file_crcs_with_server );
 		MH_CreateHook( endscene_target, dx9::endscene::hook, ( void** ) &o_endscene );
 		MH_CreateHook( reset_target, dx9::reset::hook, ( void** ) &o_reset );
 		MH_CreateHook( cl_move_target, engine::cl_move::hook, ( void** ) &o_cl_move );
@@ -75,7 +75,7 @@ namespace hooks {
 		MH_CreateHook( is_hltv_target, engine::is_hltv::hook, ( void** ) &o_is_hltv );
 		MH_CreateHook( is_in_game_target, engine::is_in_game::hook, ( void** ) &o_is_in_game );
 		MH_CreateHook( is_paused_target, engine::is_paused::hook, ( void** ) &o_is_paused );
-		MH_CreateHook( sv_pure_loose_file_allowed_target, file_system::sv_pure_loose_file_allowed::hook, ( void** ) &o_sv_pure_loose_file_allowed );
+		//MH_CreateHook( sv_pure_loose_file_allowed_target, file_system::sv_pure_loose_file_allowed::hook, ( void** ) &o_sv_pure_loose_file_allowed );
 		MH_CreateHook( should_skip_animframe_target, game::should_skip_animframe::hook, ( void** ) &o_should_skip_animframe );
 		MH_CreateHook( sv_cheats_get_bool_target, game::sv_cheats_get_bool::hook, ( void** ) &o_sv_cheats_get_bool );
 		MH_CreateHook( find_material_target, material_system::find_material::hook, ( void** ) &o_find_material );
