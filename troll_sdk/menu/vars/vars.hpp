@@ -49,9 +49,9 @@ protected:
 	std::vector<config_value<bool>*> bools;
 	std::vector<config_value<float>*> floats;
 private:
-	void setup_value( int&, int, std::string, std::string );
-	void setup_value( bool&, bool, std::string, std::string );
-	void setup_value( float&, float, std::string, std::string );
+	void add_var( int&, int, std::string, std::string );
+	void add_var( bool&, bool, std::string, std::string );
+	void add_var( float&, float, std::string, std::string );
 public:
 	vars( )
 	{

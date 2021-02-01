@@ -40,7 +40,6 @@
     <ClCompile Include="utilities\minhook\buffer.c" />
     <ClCompile Include="hooks\vtables\renderable.cpp" />
     <ClCompile Include="hooks\vtables\file_system.cpp" />
-    <ClCompile Include="hooks\vtables\clientstate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sdk\math\vector.hpp" />

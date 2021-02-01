@@ -49,19 +49,19 @@ void vars::save_skins( ) {
 	
 }
 
-void vars::setup_value( int& value, int def, std::string category, std::string name )
+void vars::add_var( int& value, int def, std::string category, std::string name )
 {
 	value = def;
 	ints.push_back( new config_value<int>( category, name, &value ) );
 }
 
-void vars::setup_value( float& value, float def, std::string category, std::string name )
+void vars::add_var( float& value, float def, std::string category, std::string name )
 {
 	value = def;
 	floats.push_back( new config_value<float>( category, name, &value ) );
 }
 
-void vars::setup_value( bool& value, bool def, std::string category, std::string name )
+void vars::add_var( bool& value, bool def, std::string category, std::string name )
 {
 	value = def;
 	bools.push_back( new config_value<bool>( category, name, &value ) );

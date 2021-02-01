@@ -199,7 +199,6 @@
     <ClCompile Include="hooks\vtables\bsp_tree_query.cpp" />
     <ClCompile Include="hooks\vtables\clientdll.cpp" />
     <ClCompile Include="hooks\vtables\clientmode.cpp" />
-    <ClCompile Include="hooks\vtables\clientstate.cpp" />
     <ClCompile Include="hooks\vtables\dx9.cpp" />
     <ClCompile Include="hooks\vtables\engine.cpp" />
     <ClCompile Include="hooks\vtables\file_system.cpp" />

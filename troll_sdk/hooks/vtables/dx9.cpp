@@ -54,26 +54,42 @@ long __fastcall hooks::dx9::reset::hook( void* ecx, void* edx, IDirect3DDevice9*
 }
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
-long __stdcall hooks::dx9::wndproc::hook( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam )
-{
-	/* open menu */ {
-		static bool m_pressed = false;
-		const bool m_held = GetAsyncKeyState( VK_INSERT );
-		if ( m_pressed != m_held ) {
+long __stdcall hooks::dx9::wndproc::hook( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
 
-			if ( m_held ) {
-				menu::opened = !menu::opened;
-			}
+	if ( msg == WM_KEYUP && wparam == VK_INSERT )
+		menu::opened = !menu::opened;
 
-			m_pressed = m_held;
+	if ( menu::opened ) {
+		/* ImGui_ImplWin32_WndProcHandler returns false instead of true, so we just do this. */
+		if ( ImGui_ImplWin32_WndProcHandler( hwnd, msg, wparam, lparam ) ) {
+			return true;
+		}
+
+		/* block game input for some messages */
+		switch ( msg )
+		{
+			/* pressing mouse key */
+		case WM_LBUTTONDOWN: case WM_LBUTTONDBLCLK:
+		case WM_RBUTTONDOWN: case WM_RBUTTONDBLCLK:
+		case WM_MBUTTONDOWN: case WM_MBUTTONDBLCLK:
+		case WM_XBUTTONDOWN: case WM_XBUTTONDBLCLK:
+
+			/* scrolling */
+		case WM_MOUSEWHEEL:
+
+			/* after releasing mouse key */
+		case WM_LBUTTONUP:
+		case WM_RBUTTONUP:
+		case WM_MBUTTONUP:
+		case WM_XBUTTONUP:
+
+			/* when moving mouse */
+		case WM_MOUSEMOVE:
+
+			/* don't allow game input */
+			return true;
 		}
 	}
-
-	/* we should fix wndproc properly instead but do it later cuz imgui kinda gay ngl */
-
-	// ImGui_ImplWin32_WndProcHandler returns false instead of true, so we just do this.
-	if ( menu::d3d_init && menu::opened && !ImGui_ImplWin32_WndProcHandler( hwnd, msg, wparam, lparam ) )
-		return true;
 
 	return CallWindowProcA( o_wndproc, hwnd, msg, wparam, lparam );
 }

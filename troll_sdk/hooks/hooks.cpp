@@ -25,7 +25,6 @@ namespace hooks {
 		auto do_post_screen_effects_target = ( void* ) get_virtual( i::clientmode, 44 ); // 44
 		auto get_viewmodel_fov_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 8B 0D ? ? ? ? 83 EC 08 57" );
 		auto override_view_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F8 83 EC 58 56 57 8B 3D ? ? ? ? 85 FF" ); // 18
-		auto check_file_crcs_with_server_target = ( void* ) utils::find_sig_ida( "engine.dll", "55 8B EC 81 EC ? ? ? ? 53 8B D9 89 5D F8 80" ); // 23
 		auto endscene_target = ( void* ) get_virtual( i::dx9, 42 ); // 42
 		auto reset_target = ( void* ) get_virtual( i::dx9, 16 ); // 16
 		auto cl_move_target = ( void* ) utils::find_sig_ida( "engine.dll", "55 8B EC 81 EC ? ? ? ? 53 56 57 8B 3D ? ? ? ? 8A" );
@@ -65,7 +64,6 @@ namespace hooks {
 		MH_CreateHook( do_post_screen_effects_target, clientmode::do_post_screen_effects::hook, ( void** ) &o_do_post_screen_effects );
 		MH_CreateHook( get_viewmodel_fov_target, clientmode::get_viewmodel_fov::hook, ( void** ) &o_get_viewmodel_fov );
 		MH_CreateHook( override_view_target, clientmode::override_view::hook, ( void** ) &o_override_view );
-		//MH_CreateHook( check_file_crcs_with_server_target, clientstate::check_file_crcs_with_server::hook, ( void** ) &o_check_file_crcs_with_server );
 		MH_CreateHook( endscene_target, dx9::endscene::hook, ( void** ) &o_endscene );
 		MH_CreateHook( reset_target, dx9::reset::hook, ( void** ) &o_reset );
 		MH_CreateHook( cl_move_target, engine::cl_move::hook, ( void** ) &o_cl_move );
@@ -75,7 +73,7 @@ namespace hooks {
 		MH_CreateHook( is_hltv_target, engine::is_hltv::hook, ( void** ) &o_is_hltv );
 		MH_CreateHook( is_in_game_target, engine::is_in_game::hook, ( void** ) &o_is_in_game );
 		MH_CreateHook( is_paused_target, engine::is_paused::hook, ( void** ) &o_is_paused );
-		//MH_CreateHook( sv_pure_loose_file_allowed_target, file_system::sv_pure_loose_file_allowed::hook, ( void** ) &o_sv_pure_loose_file_allowed );
+		MH_CreateHook( sv_pure_loose_file_allowed_target, file_system::sv_pure_loose_file_allowed::hook, ( void** ) &o_sv_pure_loose_file_allowed );
 		MH_CreateHook( should_skip_animframe_target, game::should_skip_animframe::hook, ( void** ) &o_should_skip_animframe );
 		MH_CreateHook( sv_cheats_get_bool_target, game::sv_cheats_get_bool::hook, ( void** ) &o_sv_cheats_get_bool );
 		MH_CreateHook( find_material_target, material_system::find_material::hook, ( void** ) &o_find_material );
