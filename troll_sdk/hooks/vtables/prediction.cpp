@@ -39,18 +39,10 @@ void __fastcall hooks::prediction::run_command::hook( void* ecx, void* edx, c_ba
 		i::globalvars->m_cur_time = ticks2time( e->m_nTickBase( ) );
 	}
 
-	//const auto o_vel_modifier = g_local->m_flVelocityModifier( );
-
 	engine_prediction::patch_attack_packet( cmd, true );
-
-	//if ( cmd->command_number == i::clientstate->m_last_command_ack + 1 )
-		//g_local->m_flVelocityModifier( ) = exploit::vel_mod;
 
 	/* run usercommands */
 	o_run_command( ecx, 0, e, cmd, move_helper );  // stuff with vel mod crashes sometimes idk
-
-	/* restore vel modifier */
-	//g_local->m_flVelocityModifier( ) = o_vel_modifier;
 
 	/* restore */
 	if ( cmd->command_number == exploit::last_cmdnr ) {
@@ -60,7 +52,4 @@ void __fastcall hooks::prediction::run_command::hook( void* ecx, void* edx, c_ba
 	}
 
 	engine_prediction::patch_attack_packet( cmd, false );
-
-	/* store netdata */
-	//netdata::store( );
 }

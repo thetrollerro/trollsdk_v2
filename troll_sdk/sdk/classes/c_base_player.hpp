@@ -262,16 +262,17 @@ public:
 
 	void clear_targets( )
 	{
-		auto v56 = 0;
-		if ( *( int* ) ( ( DWORD ) this + 4080 ) > 0 )
-		{
-			auto v57 = ( int* ) ( ( DWORD ) this + 208 );
-			do
-			{
-				*v57 = -9999;
-				v57 += 85;
-				++v56;
-			} while ( v56 < *( int* ) ( ( DWORD ) this + 4080 ) );
+		auto i = 0;
+		auto count = *reinterpret_cast < int* > ( ( uintptr_t ) this + 0xFF0 );
+
+		if ( count > 0 ) {
+			auto target = reinterpret_cast < int* > ( ( uintptr_t ) this + 0xD0 );
+
+			do {
+				*target = -9999;
+				target += 85;
+				++i;
+			} while ( i < count );
 		}
 	}
 };
@@ -402,7 +403,7 @@ public:
 	vec3_t get_bone_pos( int i ) {
 		matrix_t matrix[ 128 ];
 
-		if ( this->setup_bones( matrix, 128, 0x00000100, GetTickCount64( ) ) ) {
+		if ( this->setup_bones( matrix, 128, 256, this->m_flSimulationTime( ) ) ) {
 			return vec3_t( matrix[ i ][ 0 ][ 3 ], matrix[ i ][ 1 ][ 3 ], matrix[ i ][ 2 ][ 3 ] );
 		}
 
@@ -522,7 +523,6 @@ public:
 		if ( !this->is_enemy( ) ) return false;
 		if ( this->m_iHealth( ) <= 0 ) return false;
 		if ( class_id != class_id_cs_player ) return false;
-		if ( this->m_vecOrigin( ) == vec3_t( 0, 0, 0 ) ) return false;
 		if ( this->m_bGunGameImmunity( ) ) return false;
 		if ( this->is_dormant( ) ) return false;
 
@@ -545,14 +545,14 @@ public:
 		return get_sequence_activity( this, hdr, sequence );
 	}
 
-	void build_transformations( studio_hdr_t* hdr, vec3_t* pos, quaternion* q, const matrix_t& transform, int mask, byte* computed ) {
-		using o_fn = void( __thiscall* )( void*, studio_hdr_t*, vec3_t*, quaternion*, const matrix_t&, int, byte* );
-		utils::call_virtual< o_fn >( this, 189 )( this, hdr, pos, q, transform, mask, computed );
+	void build_transformations( studio_hdr_t* hdr, vec3_t* pos, quaternion* q, const matrix_t& transform, int mask, uint8_t* computed ) {
+		using o_fn = void( __thiscall* )( decltype( this ), studio_hdr_t*, vec3_t*, quaternion*, matrix_t const&, int, uint8_t* );
+		return utils::call_virtual< o_fn >( this, 189 )( this, hdr, pos, q, transform, mask, computed );
 	}
 
 	void standard_blending_rules( studio_hdr_t* hdr, vec3_t* pos, quaternion* q, float time, int mask ) {
-		using o_fn = void( __thiscall* )( void*, studio_hdr_t*, vec3_t*, quaternion*, float, int );
-		utils::call_virtual< o_fn >( this, 205 )( this, hdr, pos, q, time, mask );
+		using o_fn = void( __thiscall* )( decltype( this ), studio_hdr_t*, vec3_t*, quaternion*, float, int );
+		return utils::call_virtual< o_fn >( this, 205 )( this, hdr, pos, q, time, mask );
 	}
 
 	/* DT_BasePlayer */
@@ -814,94 +814,5 @@ public:
 	std::array<float, 24>& m_flPoseParameter( ) {
 		static int _m_flPoseParameter = netvars::get_offset( "DT_BaseAnimating->m_flPoseParameter" );
 		return *( std::array<float, 24>* )( uintptr_t( this ) + _m_flPoseParameter );
-	}
-};
-
-class stored_data {
-public:
-	int    m_tickbase;
-	vec3_t  m_punch;
-	vec3_t  m_punch_vel;
-	vec3_t m_view_offset;
-	float  m_velocity_modifier;
-
-public:
-	__forceinline stored_data( ) : m_tickbase { }, m_punch { }, m_punch_vel { }, m_view_offset { }, m_velocity_modifier { } {};
-};
-
-namespace netdata {
-	inline std::array< stored_data, 150 > m_data;
-
-	inline void reset( ) {
-		m_data.fill( stored_data( ) );
-	}
-
-	inline void store( ) {
-		int          tickbase;
-		stored_data* data;
-
-		if ( !g_local || !g_local->is_alive( ) ) {
-			reset( );
-			return;
-		}
-
-		tickbase = g_local->m_nTickBase( );
-
-		// get current record and store data.
-		data = &m_data[ tickbase % 150 ];
-
-		data->m_tickbase = tickbase;
-		data->m_punch = g_local->m_aimPunchAngle( );
-		//data->m_punch_vel = g::local->m_aimPunchAngleVel( );
-		data->m_view_offset = g_local->m_vecViewOffset( );
-		data->m_velocity_modifier = g_local->m_flVelocityModifier( );
-	}
-
-	inline void apply( ) {
-		int          tickbase;
-		stored_data* data;
-		vec3_t        punch_delta, punch_vel_delta;
-		vec3_t       view_delta;
-		float        modifier_delta;
-
-		if ( !g_local || !g_local->is_alive( ) ) {
-			reset( );
-			return;
-		}
-
-		tickbase = g_local->m_nTickBase( );
-
-		// get current record and validate.
-		data = &m_data[ tickbase % 150 ];
-
-		if ( g_local->m_nTickBase( ) != data->m_tickbase )
-			return;
-
-		// get deltas.
-		// note - dex;  before, when you stop shooting, punch values would sit around 0.03125 and then goto 0 next update.
-		//              with this fix applied, values slowly decay under 0.03125.
-		punch_delta = g_local->m_aimPunchAngle( ) - data->m_punch;
-		//punch_vel_delta = g::local->m_aimPunchAngleVel( ) - data->m_punch_vel;
-		view_delta = g_local->m_vecViewOffset( ) - data->m_view_offset;
-		modifier_delta = g_local->m_flVelocityModifier( ) - data->m_velocity_modifier;
-
-		// set data.
-		if ( std::abs( punch_delta.x ) < 0.03125f &&
-			std::abs( punch_delta.y ) < 0.03125f &&
-			std::abs( punch_delta.z ) < 0.03125f )
-			g_local->m_aimPunchAngle( ) = data->m_punch;
-
-		/*if ( std::abs( punch_vel_delta.x ) < 0.03125f &&
-			std::abs( punch_vel_delta.y ) < 0.03125f &&
-			std::abs( punch_vel_delta.z ) < 0.03125f )
-			g::local->m_aimPunchAngleVel( ) = data->m_punch_vel;*/
-
-		if ( std::abs( view_delta.x ) < 0.03125f &&
-			std::abs( view_delta.y ) < 0.03125f &&
-			std::abs( view_delta.z ) < 0.03125f )
-			g_local->m_vecViewOffset( ) = data->m_view_offset;
-
-		if ( std::abs( modifier_delta ) < 0.03125f )
-			g_local->m_flVelocityModifier( ) = data->m_velocity_modifier;
 	}
 };

@@ -40,6 +40,7 @@ namespace hooks {
 		auto find_material_target = ( void* ) utils::find_sig_ida( "materialsystem.dll", "55 8B EC 6A FF 68 ? ? ? ? 64 A1 ? ? ? ? 50 64 89 25 ? ? ? ? 83 EC 24 53" );
 		auto draw_model_exec_target = ( void* ) utils::find_sig_ida( "engine.dll", "55 8B EC 83 E4 F8 81 EC ? ? ? ? 53 56 8B 75 10" ); // 21
 		auto process_packet_target = ( void* ) utils::find_sig_ida( "engine.dll", "55 8B EC 83 E4 C0 81 EC ? ? ? ? 53 56" );
+		auto send_net_message_target = ( void* ) utils::find_sig_ida( "engine.dll", "55 8B EC 83 EC 08 56 8B F1 8B 86 ? ? ? ? 85 C0" );
 		auto build_transformations_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F0 81 EC ? ? ? ? 56 57 8B F9 8B 0D ? ? ? ? 89 7C 24 1C" );
 		auto calc_view_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F8 83 EC 24 53 56 57 FF 75 18" );
 		auto do_extra_bones_processing_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F8 81 EC FC 00 00 00 53 56 8B F1 57" ); // 197
@@ -79,6 +80,7 @@ namespace hooks {
 		MH_CreateHook( find_material_target, material_system::find_material::hook, ( void** ) &o_find_material );
 		MH_CreateHook( draw_model_exec_target, modelrender::draw_model_exec::hook, ( void** ) &o_draw_model_exec );
 		MH_CreateHook( process_packet_target, net_channel::process_packet::hook, ( void** ) &o_process_packet );
+		MH_CreateHook( send_net_message_target, net_channel::send_net_message::hook, ( void** ) &o_send_net_message );
 		MH_CreateHook( build_transformations_target, players::build_transformations::hook, ( void** ) &o_build_transformations );
 		MH_CreateHook( calc_view_target, players::calc_view::hook, ( void** ) &o_calc_view );
 		MH_CreateHook( do_extra_bones_processing_target, players::do_extra_bones_processing::hook, ( void** ) &o_do_extra_bones_processing );

@@ -15,3 +15,13 @@ void __cdecl hooks::net_channel::process_packet::hook( void* packet, bool header
 	/* effective delay by lerp time, now we call them right after theyre received (all receive proxies are invoked without delay). */
 	i::engine->fire_game_event( );
 }
+
+bool __fastcall hooks::net_channel::send_net_message::hook( void* ecx, void* edx, i_net_message& message, bool force_reliable, bool voice ) {
+	if ( message.get_type( ) == 14 )
+		return false;
+
+	if ( message.get_type( ) == 9 )
+		voice = true;
+
+	return o_send_net_message( ecx, 0, message, force_reliable, voice );
+}

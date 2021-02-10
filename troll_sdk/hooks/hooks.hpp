@@ -144,6 +144,11 @@ namespace hooks {
 			void __cdecl hook( void* packet, bool header );
 			using fn = void( __cdecl* )( void*, bool );
 		}
+
+		namespace send_net_message {
+			bool __fastcall hook( void* ecx, void* edx, i_net_message& message, bool force_reliable, bool voice );
+			using fn = bool( __fastcall* )( void*, void*, i_net_message&, bool, bool );
+		}
 	}
 
 	namespace players {
@@ -242,6 +247,7 @@ inline hooks::game::sv_cheats_get_bool::fn o_sv_cheats_get_bool = nullptr;
 inline hooks::material_system::find_material::fn o_find_material = nullptr;
 inline hooks::modelrender::draw_model_exec::fn o_draw_model_exec = nullptr;
 inline hooks::net_channel::process_packet::fn o_process_packet = nullptr;
+inline hooks::net_channel::send_net_message::fn o_send_net_message = nullptr;
 inline hooks::players::build_transformations::fn o_build_transformations = nullptr;
 inline hooks::players::calc_view::fn o_calc_view = nullptr;
 inline hooks::players::do_extra_bones_processing::fn o_do_extra_bones_processing = nullptr;

@@ -84,17 +84,6 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 	}
 
 	if ( i::engine->is_in_game( ) && g_local ) { // so fsn has to be void*, int and if we push edx into stack we crash while returning our func ( the thing was here before )
-		if ( g_local->is_alive( ) ) {
-			int framstage_minus2 = stage - 2;
-
-			if ( framstage_minus2 ) {
-				// do shit onetap does idk
-			}
-			else {
-				exploit::vel_mod = g_local->m_flVelocityModifier( );
-			}
-		}
-
 		switch ( stage )
 		{
 
@@ -115,7 +104,7 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 			break;
 
 		case frame_net_update_end:
-			//netdata::apply( );
+
 			break;
 
 		case frame_render_start:
@@ -143,9 +132,8 @@ void __fastcall hooks::clientdll::frame_stage_notify::hook( void* ecx, void* edx
 	/* call og and do our features that needs to be done after */
 	o_frame_stage_notify( ecx, 0, stage );
 
-	if ( stage == frame_render_start ) {
-		exploit::shift_rate = ( int ) std::round( 1.f / i::globalvars->m_interval_per_tick );
-	}
+	/* shift rate */
+	exploit::shift_rate = 100;
 }
 
 void write_cmd( bf_write* buf, c_usercmd* pin, c_usercmd* pout ) {
@@ -200,7 +188,7 @@ bool __fastcall hooks::clientdll::write_usercmd_delta_to_buffer::hook( void* ecx
 	to_cmd = from_cmd;
 
 	to_cmd.command_number++;
-	to_cmd.tick_count += 3 * exploit::shift_rate; // if we wan't teleport do ++ instead of += 3 * exploit::shift_rate
+	to_cmd.tick_count += exploit::shift_rate;
 
 	for ( int i = new_commands; i <= total_new_commands; i++ ) {
 		write_cmd( buf, &to_cmd, &from_cmd );
