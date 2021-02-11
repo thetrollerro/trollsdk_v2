@@ -31,6 +31,12 @@ long __fastcall hooks::dx9::endscene::hook( void* ecx, void* edx, IDirect3DDevic
 	return o_endscene( ecx, 0, dev );
 }
 
+long __fastcall hooks::dx9::present::hook( void* ecx, void* edx, IDirect3DDevice9* dev, RECT* source_rect, RECT* dust_rect, HWND dest_window_override, RGNDATA* dirty_region ) {
+	/* here our esp will be streamproof so ya call it here if we wan t streamproof :D */
+
+	return o_present( ecx, 0, dev, source_rect, dust_rect, dest_window_override, dirty_region );
+}
+
 long __fastcall hooks::dx9::reset::hook( void* ecx, void* edx, IDirect3DDevice9* dev, D3DPRESENT_PARAMETERS* params ) {
 	/* destroy fonts */
 	render::destroy_fonts( );

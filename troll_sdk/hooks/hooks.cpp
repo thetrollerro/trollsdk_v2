@@ -26,6 +26,7 @@ namespace hooks {
 		auto get_viewmodel_fov_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 8B 0D ? ? ? ? 83 EC 08 57" );
 		auto override_view_target = ( void* ) utils::find_sig_ida( "client.dll", "55 8B EC 83 E4 F8 83 EC 58 56 57 8B 3D ? ? ? ? 85 FF" ); // 18
 		auto endscene_target = ( void* ) get_virtual( i::dx9, 42 ); // 42
+		auto present_target = ( void* ) get_virtual( i::dx9, 17 ); // 17
 		auto reset_target = ( void* ) get_virtual( i::dx9, 16 ); // 16
 		auto cl_move_target = ( void* ) utils::find_sig_ida( "engine.dll", "55 8B EC 81 EC ? ? ? ? 53 56 57 8B 3D ? ? ? ? 8A" );
 		auto fire_game_event_target = ( void* ) get_virtual( i::engine, 59 ); // 59
@@ -66,6 +67,7 @@ namespace hooks {
 		MH_CreateHook( get_viewmodel_fov_target, clientmode::get_viewmodel_fov::hook, ( void** ) &o_get_viewmodel_fov );
 		MH_CreateHook( override_view_target, clientmode::override_view::hook, ( void** ) &o_override_view );
 		MH_CreateHook( endscene_target, dx9::endscene::hook, ( void** ) &o_endscene );
+		MH_CreateHook( present_target, dx9::present::hook, ( void** ) &o_present );
 		MH_CreateHook( reset_target, dx9::reset::hook, ( void** ) &o_reset );
 		MH_CreateHook( cl_move_target, engine::cl_move::hook, ( void** ) &o_cl_move );
 		MH_CreateHook( fire_game_event_target, engine::fire_game_event::hook, ( void** ) &o_fire_game_event );

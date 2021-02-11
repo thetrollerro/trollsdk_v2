@@ -59,6 +59,11 @@ namespace hooks {
 			using fn = long( __fastcall* )( void*, void*, IDirect3DDevice9* );
 		}
 
+		namespace present {
+			long __fastcall hook( void* ecx, void* edx, IDirect3DDevice9* dev, RECT* source_rect, RECT* dust_rect, HWND dest_window_override, RGNDATA* dirty_region );
+			using fn = long( __fastcall* )( void*, void*, IDirect3DDevice9*, RECT*, RECT*, HWND, RGNDATA* );
+		}
+
 		namespace reset {
 			long __fastcall hook( void* ecx, void* edx, IDirect3DDevice9* dev, D3DPRESENT_PARAMETERS* params );
 			using fn = long( __fastcall* )( void*, void*, IDirect3DDevice9*, D3DPRESENT_PARAMETERS* );
@@ -220,7 +225,6 @@ namespace hooks {
 	}
 
 	inline HWND csgo_window = nullptr;
-	inline WNDPROC o_wndproc = nullptr;
 	void init( );
 	void restore( );
 }
@@ -233,7 +237,9 @@ inline hooks::clientmode::do_post_screen_effects::fn o_do_post_screen_effects = 
 inline hooks::clientmode::get_viewmodel_fov::fn o_get_viewmodel_fov = nullptr;
 inline hooks::clientmode::override_view::fn o_override_view = nullptr;
 inline hooks::dx9::endscene::fn o_endscene = nullptr;
+inline hooks::dx9::present::fn o_present = nullptr;
 inline hooks::dx9::reset::fn o_reset = nullptr;
+inline WNDPROC o_wndproc = nullptr;
 inline hooks::engine::cl_move::fn o_cl_move = nullptr;
 inline hooks::engine::fire_game_event::fn o_fire_game_event = nullptr;
 inline hooks::engine::get_viewangles::fn o_get_viewangles = nullptr;
