@@ -71,7 +71,7 @@ namespace animations {
 		/* get bone matrix */
 		generate_matrix( pl, out, seed );
 
-		/* restore occlusion flags after blending rules */
+		/* restore occlusion flags after building matrix */
 		pl->m_iOcclusionFlags( ) = backup_occlusion_flags;
 
 		/* restore */
@@ -82,7 +82,7 @@ namespace animations {
 	}
 
 	bool generate_matrix( c_base_player* pl, matrix_t* out, float seed ) {
-		return o_setup_bones( pl->get_client_renderable( ), nullptr, out, 128, one_used_by_anything & ~bone_used_by_attachment, seed );
+		return o_setup_bones( pl->get_client_renderable( ), nullptr, out, 128, bone_used_by_anything & ~bone_used_by_attachment, seed );
 	}
 
 	bool copy_matrix( c_base_player* pl, matrix_t* out ) {
