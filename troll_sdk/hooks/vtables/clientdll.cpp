@@ -20,7 +20,7 @@ void __stdcall hooks::clientdll::create_move::call( int sequence_number, float s
 	uintptr_t* framePtr; __asm mov framePtr, ebp;
 
 	/* fix attack stuff */ {
-		if ( utils::can_shoot( ) || menu::opened ) {
+		if ( !utils::can_shoot( ) || menu::opened ) {
 			cmd->buttons &= ~in_attack;
 		}
 	}
