@@ -330,7 +330,7 @@ public:
 	}
 
 	bool& should_use_new_animstate( ) {
-		return *( bool* ) ( ( uintptr_t ) this + 0x3AB4 );
+		return *( bool* ) ( ( uintptr_t ) this + 0x3AC8 );
 	}
 
 	int& m_iOcclusionFlags( ) {
