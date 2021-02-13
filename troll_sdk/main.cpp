@@ -10,8 +10,6 @@ void dll_on_attach( HINSTANCE mod ) {
 	while ( !GetModuleHandleA( "serverbrowser.dll" ) )
 		std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
 
-	MessageBox( 0, "Fixed the ragebot working on target selection now, improved the animation system( enemy animations may break when u die ), added a basic bruteforce + logic resolver( better than nothing ), improved the cheat optimization alot, and added legit antiaim", "TrollerWare.xyz", MB_OK | MB_ICONINFORMATION );
-
 	/* initialize csgo hack */
 	i::init( );
 	render::start( i::dx9 );
