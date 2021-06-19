@@ -3,12 +3,8 @@
   <ItemGroup>
     <ClCompile Include="hooks\hooks.cpp" />
     <ClCompile Include="utilities\utilities.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="utilities\globals\globals.cpp" />
     <ClCompile Include="hooks\vtables\dx9.cpp" />
-    <ClCompile Include="menu\imgui\imgui.cpp" />
-    <ClCompile Include="menu\imgui\imgui_draw.cpp" />
-    <ClCompile Include="menu\imgui\imgui_widgets.cpp" />
     <ClCompile Include="menu\imgui\impl\imgui_impl_dx9.cpp" />
     <ClCompile Include="menu\imgui\impl\imgui_impl_win32.cpp" />
     <ClCompile Include="menu\menu.cpp" />
@@ -23,7 +19,6 @@
     <ClCompile Include="hooks\vtables\players.cpp" />
     <ClCompile Include="utilities\checksum_crc\checksum_crc.cpp" />
     <ClCompile Include="features\engine_prediction\engine_prediction.cpp" />
-    <ClCompile Include="features\antiaim\antiaim.cpp" />
     <ClCompile Include="utilities\render\render.cpp" />
     <ClCompile Include="hooks\vtables\modelrender.cpp" />
     <ClCompile Include="hooks\vtables\engine.cpp" />
@@ -33,28 +28,29 @@
     <ClCompile Include="hooks\vtables\material_system.cpp" />
     <ClCompile Include="hooks\vtables\bsp_tree_query.cpp" />
     <ClCompile Include="hooks\vtables\game.cpp" />
+    <ClCompile Include="utilities\minhook\buffer.c" />
     <ClCompile Include="utilities\minhook\hook.c" />
     <ClCompile Include="utilities\minhook\trampoline.c" />
     <ClCompile Include="utilities\minhook\hde\hde32.c" />
     <ClCompile Include="utilities\minhook\hde\hde64.c" />
-    <ClCompile Include="utilities\minhook\buffer.c" />
-    <ClCompile Include="hooks\vtables\renderable.cpp" />
+    <ClCompile Include="features\antiaim\antiaim.cpp" />
     <ClCompile Include="hooks\vtables\file_system.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu\imgui\imgui.cpp" />
+    <ClCompile Include="menu\imgui\imgui_draw.cpp" />
+    <ClCompile Include="menu\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="hooks\vtables\renderable.cpp" />
+    <ClCompile Include="hooks\vtables\panel.cpp" />
+    <ClCompile Include="sdk\classes\c_base_player.cpp" />
+    <ClCompile Include="hooks\vtables\engine_sound.cpp" />
+    <ClCompile Include="hooks\vtables\animstate.cpp" />
+    <ClCompile Include="sdk\classes\c_base_combat_weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="sdk\math\vector.hpp" />
-    <ClInclude Include="sdk\math\matrix.hpp" />
     <ClInclude Include="sdk\sdk.hpp" />
     <ClInclude Include="hooks\hooks.hpp" />
-    <ClInclude Include="main.hpp" />
     <ClInclude Include="utilities\utilities.hpp" />
     <ClInclude Include="utilities\globals\globals.hpp" />
-    <ClInclude Include="menu\imgui\imconfig.h" />
-    <ClInclude Include="menu\imgui\imgui.h" />
-    <ClInclude Include="menu\imgui\imgui_internal.h" />
-    <ClInclude Include="menu\imgui\imstb_rectpack.h" />
-    <ClInclude Include="menu\imgui\imstb_textedit.h" />
-    <ClInclude Include="menu\imgui\imstb_truetype.h" />
     <ClInclude Include="menu\imgui\impl\imgui_impl_dx9.h" />
     <ClInclude Include="menu\imgui\impl\imgui_impl_win32.h" />
     <ClInclude Include="menu\menu.hpp" />
@@ -113,6 +109,8 @@
     <ClInclude Include="sdk\interfaces\classes\iv_view_render_beams.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_localize.hpp" />
     <ClInclude Include="sdk\classes\c_base_handle.hpp" />
+    <ClInclude Include="sdk\math\matrix.hpp" />
+    <ClInclude Include="sdk\math\vector.hpp" />
     <ClInclude Include="utilities\minhook\buffer.h" />
     <ClInclude Include="utilities\minhook\minhook.h" />
     <ClInclude Include="utilities\minhook\trampoline.h" />
@@ -123,8 +121,19 @@
     <ClInclude Include="utilities\minhook\hde\table64.h" />
     <ClInclude Include="sdk\interfaces\classes\c_file_system.hpp" />
     <ClInclude Include="sdk\interfaces\classes\iv_debug_overlay.hpp" />
+    <ClInclude Include="main.hpp" />
+    <ClInclude Include="menu\imgui\imconfig.h" />
+    <ClInclude Include="menu\imgui\imgui.h" />
+    <ClInclude Include="menu\imgui\imgui_internal.h" />
+    <ClInclude Include="menu\imgui\imstb_rectpack.h" />
+    <ClInclude Include="menu\imgui\imstb_textedit.h" />
+    <ClInclude Include="menu\imgui\imstb_truetype.h" />
+    <ClInclude Include="utilities\security\xorstr.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_panel.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_engine_sound.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sdk\interfaces\classes\c_game_movement.hpp" />
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

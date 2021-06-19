@@ -3,8 +3,74 @@
 #include "math/vector.hpp"
 #include "math/matrix.hpp"
 
-using quaternion = float[ 4 ];
-using rad_euler = float[ 3 ];
+class quaternion;
+class radian_euler {
+public:
+	radian_euler( void ) { }
+	radian_euler( float x, float y, float z ) { this->x = x; this->y = y; this->z = z; }
+	radian_euler( quaternion const& q );
+	radian_euler( const vec3_t& angles );
+
+	inline void init( float x = 0.0f, float y = 0.0f, float z = 0.0f ) { this->x = x; this->y = y; this->z = z; }
+
+	vec3_t to_angle( void ) const;
+	bool is_valid( ) const;
+	void invalidate( );
+
+	inline float* base( ) { return &x; }
+	inline const float* base( ) const { return &x; }
+
+	float operator[]( int i ) const;
+	float& operator[]( int i );
+
+	float x, y, z;
+};
+
+class quaternion
+{
+public:
+	inline quaternion( void ) {}
+	inline quaternion( float x, float y, float z, float w ) : x( x ), y( y ), z( z ), w( w ) { }
+	inline quaternion( radian_euler const& angle );
+
+	inline void init( float ix = 0.0f, float iy = 0.0f, float iz = 0.0f, float iw = 0.0f ) { x = ix; y = iy; z = iz; w = iw; }
+
+	bool is_valid( ) const;
+	void invalidate( );
+
+	bool operator==( const quaternion& src ) const;
+	bool operator!=( const quaternion& src ) const;
+
+	float* base( ) { return ( float* ) this; }
+	const float* base( ) const { return ( float* ) this; }
+
+	// array access...
+	float operator[]( int i ) const;
+	float& operator[]( int i );
+
+	float x, y, z, w;
+};
+
+class __declspec( align( 16 ) ) quaternion_aligned : public quaternion {
+public:
+	inline quaternion_aligned( void ) {};
+	inline quaternion_aligned( float x, float y, float z, float w )
+	{
+		init( x, y, z, w );
+	}
+
+public:
+	explicit quaternion_aligned( const quaternion& other )
+	{
+		init( other.x, other.y, other.z, other.w );
+	}
+
+	quaternion_aligned& operator=( const quaternion& other )
+	{
+		init( other.x, other.y, other.z, other.w );
+		return *this;
+	}
+};
 
 enum bone_flags {
 	bone_calculate_mask = 0x1f,
@@ -35,13 +101,14 @@ enum bone_flags {
 
 enum hitgroups {
 	hitgroup_generic = 0,
-	hitgroup_head = 1,
-	hitgroup_chest = 2,
-	hitgroup_stomach = 3,
-	hitgroup_leftarm = 4,
-	hitgroup_rightarm = 5,
-	hitgroup_leftleg = 6,
-	hitgroup_rightleg = 7,
+	hitgroup_head,
+	hitgroup_chest,
+	hitgroup_stomach,
+	hitgroup_leftarm,
+	hitgroup_rightarm,
+	hitgroup_leftleg,
+	hitgroup_rightleg,
+	hitgroup_neck,
 	hitgroup_gear = 10
 };
 
@@ -57,9 +124,8 @@ enum hitboxes {
 	hitbox_neck,
 	hitbox_pelvis,
 	hitbox_stomach,
-	hitbox_thorax,
-	hitbox_lower_chest,
 	hitbox_chest,
+	hitbox_lower_chest,
 	hitbox_upper_chest,
 	hitbox_right_thigh,
 	hitbox_left_thigh,
@@ -88,7 +154,7 @@ struct studio_bone_t {
 
 	vec3_t pos;
 	quaternion quat;
-	rad_euler rotation;
+	radian_euler rotation;
 
 	vec3_t pos_scale;
 	vec3_t rot_scale;
@@ -124,7 +190,7 @@ struct studio_box_t {
 	vec3_t mins;
 	vec3_t maxs;
 	int name_index;
-	int pad01[ 3 ];
+	vec3_t angle;
 	float radius;
 	int pad02[ 4 ];
 };

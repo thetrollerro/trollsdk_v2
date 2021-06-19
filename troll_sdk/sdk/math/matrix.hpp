@@ -46,10 +46,24 @@ struct matrix_t {
 		init( xAxis, yAxis, zAxis, vecOrigin );
 	}
 
+	inline vec3_t get_origin( )
+	{
+		return vec3_t( mat_val[ 0 ][ 3 ], mat_val[ 1 ][ 3 ], mat_val[ 2 ][ 3 ] );
+	}
+
 	inline void set_origin( vec3_t const& p ) {
 		mat_val[ 0 ][ 3 ] = p.x;
 		mat_val[ 1 ][ 3 ] = p.y;
 		mat_val[ 2 ][ 3 ] = p.z;
+	}
+
+	vec3_t get_x_axis( ) const { return at( 0 ); }
+	vec3_t get_y_axis( ) const { return at( 1 ); }
+	vec3_t get_z_axis( ) const { return at( 2 ); }
+	vec3_t get_origin( ) const { return at( 3 ); }
+
+	vec3_t at( int i ) const {
+		return vec3_t { mat_val[ 0 ][ i ], mat_val[ 1 ][ i ], mat_val[ 2 ][ i ] };
 	}
 
 	inline void invalidate( void ) {

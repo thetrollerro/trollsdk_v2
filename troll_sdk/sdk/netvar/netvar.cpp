@@ -73,6 +73,8 @@ namespace netvars {
 
 	int get_offset( const char* name ) {
 		const auto items = split( name, "->" );
+		if (items.empty())
+			return 0;
 		return m_offsets[ items.front( ) ][ items.back( ) ].m_offset;
 	}
 

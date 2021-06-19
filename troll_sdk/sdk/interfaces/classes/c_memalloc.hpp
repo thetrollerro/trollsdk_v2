@@ -2,7 +2,6 @@
 struct crt_mem_state;
 #define MEMALLOC_VERSION 1
 typedef size_t( *mem_alloc_fail_handler_t )( size_t );
-#define HANDLE( type )				void*
 
 class c_memalloc
 {

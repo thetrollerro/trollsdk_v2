@@ -149,6 +149,14 @@ public:
 	{
 		return ( x * vOther.x + y * vOther.y + z * vOther.z );
 	}
+
+	float dot( const float* fOther ) const
+	{
+		const vec3_t& a = *this;
+
+		return( a.x * fOther[ 0 ] + a.y * fOther[ 1 ] + a.z * fOther[ 2 ] );
+	}
+
 	vec3_t normalize( )
 	{
 		vec3_t vector;
@@ -309,16 +317,6 @@ __forceinline vec3_t operator*( float lhs, const vec3_t& rhs ) {
 __forceinline vec3_t operator/( float lhs, const vec3_t& rhs ) {
 	return rhs / lhs;
 }
-
-__forceinline vec_t dot_product( const vec3_t& a, const vec3_t& b )
-{
-	return ( a.x * b.x + a.y * b.y + a.z * b.z );
-}
-inline vec3_t cross_product( const vec3_t& a, const vec3_t& b )
-{
-	return vec3_t( a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x );
-}
-
 
 class vec2_t {
 public:

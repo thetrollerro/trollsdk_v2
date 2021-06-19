@@ -11,44 +11,36 @@
 namespace utils {
 
 	float server_time( ) {
-		static float m_nTickBase;
-		static c_usercmd* last_cmd;
-		if ( !last_cmd || last_cmd->hasbeenpredicted )
-			m_nTickBase = g_local->m_nTickBase( );
-		else
-			++m_nTickBase;
-
-		last_cmd = g::cmd;
-
-		return ticks2time( m_nTickBase );
+		return g_local->m_nTickBase( ) * i::globalvars->m_interval_per_tick;
 	}
 
 	bool can_shoot( ) {
 		if ( !g_local || !g_local->is_alive( ) )
 			return false;
 
-		if ( i::globalvars->m_cur_time <= g_local->m_flNextAttack( ) )
+		if ( ( g_local->m_nTickBase( ) * i::globalvars->m_interval_per_tick ) <= g_local->m_flNextAttack( ) )
 			return false;
 
-		auto wpn = g_local->get_active_weapon( );
-
-		if ( !wpn )
+		if ( !g::weapon )
 			return false;
+
+		if ( g::weapon->is_nade( ) )
+			return true;
 
 		static float lastFire = 0, nextAttack = 0;
 		static c_base_combat_weapon* old_weapon;
 
-		if ( lastFire != wpn->m_fLastShotTime( ) || wpn != old_weapon ) {
-			lastFire = wpn->m_fLastShotTime( );
-			nextAttack = wpn->m_flNextPrimaryAttack( );
+		if ( lastFire != g::weapon->m_fLastShotTime( ) || g::weapon != old_weapon ) {
+			lastFire = g::weapon->m_fLastShotTime( );
+			nextAttack = g::weapon->m_flNextPrimaryAttack( );
 		}
 
-		if ( wpn->m_iClip1( ) == 0 )
+		if ( g::weapon->m_iClip1( ) == 0 )
 			return false;
 
-		old_weapon = wpn;
+		old_weapon = g::weapon;
 
-		return ( nextAttack <= ( float ) ( g_local->m_nTickBase( ) - ( exploit::tick_base_shift > 0 ? 1 + exploit::tick_base_shift : 0 ) ) * i::globalvars->m_interval_per_tick );
+		return ( nextAttack <= g_local->m_nTickBase( ) * i::globalvars->m_interval_per_tick );
 	}
 
 	typedef void( __cdecl* MsgFn )( char const* pMsg, va_list );
@@ -166,7 +158,7 @@ namespace utils {
 		const auto screen_transform = [ &origin, &screen ] ( ) -> bool {
 			static std::uintptr_t matrix;
 			if ( !matrix ) {
-				matrix = static_cast< std::uintptr_t >( find_sig_ida( "client.dll", "0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9" ) );
+				matrix = static_cast< std::uintptr_t >( find_sig_ida( _( "client.dll" ), _( "0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9" ) ) );
 				matrix += 3;
 				matrix = *reinterpret_cast< std::uintptr_t* >( matrix );
 				matrix += 176;
@@ -203,6 +195,17 @@ namespace utils {
 		}
 
 		return false;
+	}
+
+	bool visible( const vec3_t& start, const vec3_t& end, c_base_player* entity, c_base_player* from )
+	{
+		trace_t trace;
+		trace_filter filter;
+		filter.skip = from;
+		//g_ctx.globals.autowalling = true;
+		i::trace->trace_ray( ray_t( start, end ), mask_shot_hull | contents_hitbox, &filter, &trace );
+		//g_ctx.globals.autowalling = false;
+		return trace.player == entity || trace.fraction == 1.0f;
 	}
 
 }

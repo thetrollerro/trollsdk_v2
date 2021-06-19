@@ -78,6 +78,8 @@ enum item_def_idx : short {
 	weapon_firebomb,
 	weapon_diversion,
 	weapon_frag_grenade,
+	weapon_snowball,
+	weapon_bumpmine,
 	weapon_knife_bayonet = 500,
 	weapon_knife_css = 503,
 	weapon_knife_flip = 505,
@@ -97,16 +99,16 @@ enum item_def_idx : short {
 	weapon_knife_stiletto = 522,
 	weapon_knife_widowmaker,
 	weapon_knife_skeleton = 525,
+	studded_brokenfang_gloves = 4725,
 	glove_studded_bloodhound = 5027,
-	glove_t_side = 5028,
-	glove_ct_side = 5029,
-	glove_sporty = 5030,
-	glove_slick = 5031,
-	glove_leather_wrap = 5032,
-	glove_motorcycle = 5033,
-	glove_specialist = 5034,
-	glove_hydra = 5035,
-	max_itemdefinitionindex
+	glove_t_side,
+	glove_ct_side,
+	glove_sporty,
+	glove_slick,
+	glove_leather_wrap,
+	glove_motorcycle,
+	glove_specialist,
+	glove_hydra,
 };
 
 class weapon_info_t {
@@ -184,35 +186,68 @@ public:
 	}
 
 	bool is_knife( ) {
-		return get_cs_weapon_data( )->weapon_type == weapontype_knife;
+		if ( !this->get_cs_weapon_data( ) )
+			return false;
+
+		return this->get_cs_weapon_data( )->weapon_type == weapontype_knife;
 	}
 
 	bool is_nade( ) {
-		return get_cs_weapon_data( )->weapon_type == weapontype_grenade;
+		if ( !this->get_cs_weapon_data( ) )
+			return false;
+
+		return this->get_cs_weapon_data( )->weapon_type == weapontype_grenade;
 	}
 
 	bool is_zeus( ) {
-		return m_iItemDefinitionIndex( ) == weapon_taser;
+		return this->m_iItemDefinitionIndex( ) == weapon_taser;
 	}
 
 	bool is_pistol( ) {
-		return get_cs_weapon_data( )->weapon_type == weapontype_pistol;
+		if ( !this->get_cs_weapon_data( ) )
+			return false;
+
+		return this->get_cs_weapon_data( )->weapon_type == weapontype_pistol;
 	}
 
 	bool is_rifle( ) {
-		return get_cs_weapon_data( )->weapon_type == weapontype_rifle;
+		if ( !this->get_cs_weapon_data( ) )
+			return false;
+
+		return this->get_cs_weapon_data( )->weapon_type == weapontype_rifle;
 	}
 
 	bool is_sniper( ) {
-		return get_cs_weapon_data( )->weapon_type == weapontype_sniper_rifle;
+		if ( !this->get_cs_weapon_data( ) )
+			return false;
+
+		return this->get_cs_weapon_data( )->weapon_type == weapontype_sniper_rifle;
 	}
 
 	bool is_smg( ) {
-		return get_cs_weapon_data( )->weapon_type == weapontype_submachinegun;
+		if ( !this->get_cs_weapon_data( ) )
+			return false;
+
+		return this->get_cs_weapon_data( )->weapon_type == weapontype_submachinegun;
 	}
 
 	bool is_heavy( ) {
-		return get_cs_weapon_data( )->weapon_type == weapontype_machinegun;
+		if ( !this->get_cs_weapon_data( ) )
+			return false;
+
+		return this->get_cs_weapon_data( )->weapon_type == weapontype_machinegun;
+	}
+
+	bool is_gun( ) {
+		if ( !this )
+			return false;
+
+		int id = this->m_iItemDefinitionIndex( );
+
+		if ( id == weapon_c4 || this->is_knife( ) || this->is_nade( ) )
+			return false;
+
+		return true;
 	}
 
 	void set_model_index( int index ) {
@@ -221,74 +256,17 @@ public:
 	}
 
 	std::string get_name( ) {
+		if ( !this->get_cs_weapon_data( ) )
+			return "invalid";
+
 		return std::string( this->get_cs_weapon_data( )->weapon_name );
 	}
 
 	float fire_rate( ) {
-		if ( !this || this->is_knife( ) || this->is_nade( ) ) return 0.f;
+		if ( !this || this->is_knife( ) || this->is_nade( ) || !this->get_cs_weapon_data( ) ) return 0.f;
 
-		std::string weapon_name = this->get_name( );
+		if ( this->get_cs_weapon_data( ) ) return this->get_cs_weapon_data( )->fire_rate;
 
-		if ( weapon_name == "weapon_glock" )
-			return 0.15f;
-		else if ( weapon_name == "weapon_hkp2000" )
-			return 0.169f;
-		else if ( weapon_name == "weapon_p250" )//the cz and p250 have the same name idky same with other guns
-			return 0.15f;
-		else if ( weapon_name == "weapon_tec9" )
-			return 0.12f;
-		else if ( weapon_name == "weapon_elite" )
-			return 0.12f;
-		else if ( weapon_name == "weapon_fiveseven" )
-			return 0.15f;
-		else if ( weapon_name == "weapon_deagle" )
-			return 0.224f;
-		else if ( weapon_name == "weapon_nova" )
-			return 0.882f;
-		else if ( weapon_name == "weapon_sawedoff" )
-			return 0.845f;
-		else if ( weapon_name == "weapon_mag7" )
-			return 0.845f;
-		else if ( weapon_name == "weapon_xm1014" )
-			return 0.35f;
-		else if ( weapon_name == "weapon_mac10" )
-			return 0.075f;
-		else if ( weapon_name == "weapon_ump45" )
-			return 0.089f;
-		else if ( weapon_name == "weapon_mp9" )
-			return 0.070f;
-		else if ( weapon_name == "weapon_bizon" )
-			return 0.08f;
-		else if ( weapon_name == "weapon_mp7" )
-			return 0.08f;
-		else if ( weapon_name == "weapon_p90" )
-			return 0.070f;
-		else if ( weapon_name == "weapon_galilar" )
-			return 0.089f;
-		else if ( weapon_name == "weapon_ak47" )
-			return 0.1f;
-		else if ( weapon_name == "weapon_sg556" )
-			return 0.089f;
-		else if ( weapon_name == "weapon_m4a1" )
-			return 0.089f;
-		else if ( weapon_name == "weapon_aug" )
-			return 0.089f;
-		else if ( weapon_name == "weapon_m249" )
-			return 0.08f;
-		else if ( weapon_name == "weapon_negev" )
-			return 0.0008f;
-		else if ( weapon_name == "weapon_ssg08" )
-			return 1.25f;
-		else if ( weapon_name == "weapon_awp" )
-			return 1.463f;
-		else if ( weapon_name == "weapon_g3sg1" )
-			return 0.25f;
-		else if ( weapon_name == "weapon_scar20" )
-			return 0.25f;
-		else if ( weapon_name == "weapon_mp5sd" )
-			return 0.08f;
-		else
-			return .0f;
 	}
 
 	std::string weapon_name( ) {
@@ -298,198 +276,201 @@ public:
 		int weap_id = this->m_iItemDefinitionIndex( );
 		switch ( weap_id ) {
 		case weapon_deagle:
-			return "Deagle";
+			return "deagle";
 			break;
 		case weapon_elite:
-			return "Duals";
+			return "duals";
 			break;
 		case weapon_fiveseven:
-			return "Five Seven";
+			return "five seven";
 			break;
 		case weapon_glock:
-			return "Glock";
+			return "glock";
 			break;
 		case weapon_ak47:
-			return "AK-47";
+			return "ak-47";
 			break;
 		case weapon_aug:
-			return "Aug";
+			return "aug";
 			break;
 		case weapon_awp:
-			return "Awp";
+			return "awp";
 			break;
 		case weapon_famas:
-			return "Famas";
+			return "famas";
 			break;
 		case weapon_g3sg1:
-			return "G3SG1";
+			return "g3sg1";
 			break;
 		case weapon_galilar:
-			return "Galil-AR";
+			return "galil-ar";
 			break;
 		case weapon_m249:
-			return "M249";
+			return "m249";
 			break;
 		case weapon_m4a1_silencer:
-			return "M4A1-S";
+			return "m4a1-s";
 			break;
 		case weapon_m4a1:
-			return "M4A4";
+			return "m4a4";
 			break;
 		case weapon_mac10:
-			return "MAC-10";
+			return "mac-10";
 			break;
 		case weapon_p90:
-			return "P90";
+			return "p90";
 			break;
 		case weapon_mp5sd:
-			return "MP5";
+			return "mp5";
 			break;
 		case weapon_ump45:
-			return "UMP-45";
+			return "ump-45";
 			break;
 		case weapon_xm1014:
-			return "XM1014";
+			return "xm1014";
 			break;
 		case weapon_bizon:
-			return "Bizon";
+			return "bizon";
 			break;
 		case weapon_mag7:
-			return "MAG7";
+			return "mag7";
 			break;
 		case weapon_negev:
-			return "Negev";
+			return "negev";
 			break;
 		case weapon_sawedoff:
-			return "Sawed-off";
+			return "sawed-off";
 			break;
 		case weapon_tec9:
-			return "Tec-9";
+			return "tec-9";
 			break;
 		case weapon_taser:
-			return "Taser";
+			return "taser";
 			break;
 		case weapon_hkp2000:
-			return "P2000";
+			return "p2000";
 			break;
 		case weapon_mp7:
-			return "MP7";
+			return "mp7";
 			break;
 		case weapon_mp9:
-			return "MP9";
+			return "mp9";
 			break;
 		case weapon_nova:
-			return "Nova";
+			return "nova";
 			break;
 		case weapon_p250:
-			return "P250";
+			return "p250";
 			break;
 		case weapon_shield:
-			return "Shield";
+			return "shield";
 			break;
 		case weapon_scar20:
-			return "Scar20";
+			return "scar20";
 			break;
 		case weapon_sg553:
-			return "SG553";
+			return "sg553";
 			break;
 		case weapon_ssg08:
-			return "SSG-08";
+			return "ssg-08";
 			break;
 		case weapon_flashbang:
-			return "Flashbang";
+			return "flashbang";
 			break;
 		case weapon_hegrenade:
-			return "HE grenade";
+			return "he grenade";
 			break;
 		case weapon_smokegrenade:
-			return "Smoke grenade";
+			return "smoke grenade";
 			break;
 		case weapon_molotov:
-			return "Molotov";
+			return "molotov";
 			break;
 		case weapon_decoy:
-			return "Decoy";
+			return "decoy";
 			break;
 		case weapon_incgrenade:
-			return "Incendiary";
+			return "incendiary";
 			break;
 		case weapon_c4:
-			return "C4";
+			return "c4";
 			break;
 		case weapon_healthshot:
-			return "Health Shot";
+			return "health shot";
 			break;
 		case weapon_usp_silencer:
-			return "USP-S";
+			return "usp-s";
 			break;
 		case weapon_cz75a:
-			return "CZ75-A";
+			return "cz75-a";
 			break;
 		case weapon_revolver:
-			return "Revolver";
+			return "revolver";
 			break;
 		case weapon_knife_bayonet:
-			return "Bayonet";
+			return "bayonet";
 			break;
 		case weapon_knife_css:
-			return "Classic Knife";
+			return "classic knife";
 			break;
 		case weapon_knife_flip:
-			return "Flip Knife";
+			return "flip knife";
 			break;
 		case weapon_knife_gut:
-			return "Gut Knife";
+			return "gut knife";
 			break;
 		case weapon_knife_karambit:
-			return "Karambit";
+			return "karambit";
 			break;
 		case weapon_knife_m9_bayonet:
-			return "M9 Bayonet";
+			return "m9 bayonet";
 			break;
 		case weapon_knife_tactical:
-			return "Huntsman Knife";
+			return "huntsman knife";
 			break;
 		case weapon_knife_falchion:
-			return "Falchion Knife";
+			return "falchion knife";
 			break;
 		case weapon_knife_survival_bowie:
-			return "Bowie Knife";
+			return "bowie knife";
 			break;
 		case weapon_knife_butterfly:
-			return "Butterfly Knife";
+			return "butterfly knife";
 			break;
 		case weapon_knife_push:
-			return "Shadow Daggers";
+			return "shadow daggers";
 			break;
 		case weapon_knife_cord:
-			return "Paracord Knife";
+			return "paracord knife";
 			break;
 		case weapon_knife_canis:
-			return "Survival Knife";
+			return "survival knife";
 			break;
 		case weapon_knife_ursus:
-			return "Ursus Knife";
+			return "ursus knife";
 			break;
 		case weapon_knife_gypsy_jackknife:
-			return "Navaja Knife";
+			return "navaja knife";
 			break;
 		case weapon_knife_outdoor:
-			return "Nomad Knife";
+			return "nomad knife";
 			break;
 		case weapon_knife_stiletto:
-			return "Stiletto Knife";
+			return "stiletto knife";
 			break;
 		case weapon_knife_widowmaker:
-			return "Talon Knife";
+			return "talon knife";
 			break;
 		case weapon_knife_skeleton:
-			return "Skeleton Knife";
+			return "skeleton knife";
 			break;
 		default:
-			return "Knife";
+			return "knife";
 		}
 	}
+
+	vec3_t calculate_spread( int seed, float inaccuracy, float spread, bool revolver2 = false );
+
 
 	/* DT_BaseCombatWeapon */
 	NETVAR( "DT_BaseCombatWeapon->m_iViewModelIndex", m_iViewModelIndex, int );
@@ -512,20 +493,22 @@ public:
 	// m_iWeaponOrigin         
 	// m_iWeaponModule         
 	// LocalActiveWeaponData       
+	NETVAR( "DT_BaseCombatWeapon->m_Activity", m_Activity, int );
 	NETVAR( "DT_BaseCombatWeapon->m_flNextPrimaryAttack", m_flNextPrimaryAttack, float );
 	NETVAR( "DT_BaseCombatWeapon->m_flNextSecondaryAttack", m_flNextSecondaryAttack, float );
 	// m_nNextThinkTick        
 	// m_flTimeWeaponIdle      
 
+
 	/* DT_WeaponCSBase */
 	// m_weaponMode
 	NETVAR( "DT_WeaponCSBase->m_fAccuracyPenalty", m_fAccuracyPenalty, float );
 	NETVAR( "DT_WeaponCSBase->m_fLastShotTime", m_fLastShotTime, float );
-	// m_flRecoilIndex
-	// m_flRecoilIndex
+	NETVAR( "DT_WeaponCSBase->m_flRecoilIndex", m_flRecoilIndex, float );
 	// m_hPrevOwner
 	// m_bBurstMode
 	NETVAR( "DT_BaseCombatWeapon->m_flPostponeFireReadyTime", m_flPostponeFireReadyTime, float );
+	NETVAR( "DT_BaseCombatWeapon->m_bInReload", m_bInReload, bool );
 	// m_bReloadVisuallyComplete
 	// m_bSilencerOn
 	// m_flDoneSwitchingSilencer
@@ -538,6 +521,8 @@ public:
 
 	/* DT_BaseCSGrenade */
 	NETVAR( "DT_BaseCSGrenade->m_fThrowTime", m_fThrowTime, float );
+	NETVAR( "DT_BaseCSGrenade->m_bPinPulled", m_bPinPulled, bool );
+
 };
 
 class c_gloves : public c_base_combat_weapon {

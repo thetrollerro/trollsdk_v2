@@ -7,7 +7,7 @@ public:
 	NETVAR( "DT_BaseAttributableItem->m_OriginalOwnerXuidLow", m_OriginalOwnerXuidLow, int );
 	NETVAR( "DT_BaseAttributableItem->m_OriginalOwnerXuidHigh", m_OriginalOwnerXuidHigh, int );
 	NETVAR( "DT_BaseAttributableItem->m_nFallbackPaintKit", m_nFallbackPaintKit, int );
-	// m_nFallbackSeed                             
+	NETVAR( "DT_BaseAttributableItem->m_nFallbackSeed", m_nFallbackSeed, int );
 	NETVAR( "DT_BaseAttributableItem->m_flFallbackWear", m_flFallbackWear, float );
 	// m_nFallbackStatTrak                         
 	// m_AttributeManager                          

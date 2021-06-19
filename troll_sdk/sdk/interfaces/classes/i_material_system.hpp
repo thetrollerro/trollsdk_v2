@@ -301,8 +301,6 @@ public:
 	virtual i_material_var* find_var( const char* varName, bool* found, bool complain = true ) = 0;
 	virtual void increment_reference_count( void ) = 0;
 	virtual void decrement_reference_count( void ) = 0;
-	inline void add_ref( ) { increment_reference_count( ); }
-	inline void release( ) { decrement_reference_count( ); }
 	virtual int get_enumeration_id( void ) const = 0;
 	virtual void get_low_res_color_sample( float s, float t, float* color ) const = 0;
 	virtual void recompute_state_snapshots( ) = 0;
@@ -350,8 +348,33 @@ public:
 
 class i_material_system {
 public:
+	i_material* create_material( const char* name, void* key_values ) {
+		using o_fn = i_material * ( __thiscall* )( void*, const char*, void* );
+		return utils::call_virtual< o_fn >( this, 83 )( this, name, key_values );
+	}
+
 	i_material* find_material( const char* name, const char* group = nullptr ) {
 		using o_fn = i_material * ( __thiscall* )( void*, const char*, const char* );
 		return utils::call_virtual< o_fn >( this, 84 )( this, name, group );
+	}
+
+	materialhandle_t first_material( ) {
+		using o_fn = materialhandle_t( __thiscall* )( i_material_system* );
+		return utils::call_virtual< o_fn >( this, 86 )( this );
+	}
+
+	materialhandle_t next_material( materialhandle_t handle ) {
+		using o_fn = materialhandle_t( __thiscall* )( i_material_system*, materialhandle_t );
+		return utils::call_virtual< o_fn >( this, 87 )( this, handle );
+	}
+
+	materialhandle_t invalid_material_handle( ) {
+		using o_fn = materialhandle_t( __thiscall* )( i_material_system* );
+		return utils::call_virtual< o_fn >( this, 88 )( this );
+	}
+
+	i_material* get_material( materialhandle_t handle ) {
+		using o_fn = i_material *( __thiscall* )( i_material_system*, materialhandle_t );
+		return utils::call_virtual< o_fn >( this, 89 )( this, handle );
 	}
 };

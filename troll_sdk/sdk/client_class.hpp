@@ -331,6 +331,7 @@ enum class_id : int {
 	class_id_weapon_ump45,
 	class_id_weapon_usp,
 	class_id_weapon_xm1014,
+	class_id_weapon_zone_repulsor,
 	class_id_world,
 	class_id_world_vgui_text,
 	class_id_dust_trail,

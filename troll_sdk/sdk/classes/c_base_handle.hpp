@@ -193,7 +193,7 @@ c_handle<T>::c_handle( int iEntry, int iSerialNumber )
 
 
 template<class T>
-c_handle<T>::c_handle( const c_base_handle& handle )
+c_handle<T>::c_handle( const c_base_handle &handle )
 	: c_base_handle( handle )
 {
 }

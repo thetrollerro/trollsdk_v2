@@ -10,26 +10,28 @@ class bf_read;
 
 class i_game_event {
 public:
-	virtual ~i_game_event( ) {};
+	virtual					~i_game_event( ) {};
 	virtual const char* get_name( ) const = 0;
 
-	virtual bool is_reliable( ) const = 0;
-	virtual bool is_local( ) const = 0;
-	virtual bool is_empty( const char* key_name = nullptr ) = 0;
+	virtual bool			is_reliable( ) const = 0;
+	virtual bool			is_local( ) const = 0;
+	virtual bool			is_empty( const char* keyname = nullptr ) = 0;
 
-	virtual bool get_bool( const char* key_name = nullptr, bool default_value = false ) = 0;
-	virtual int get_int( const char* key_name = nullptr, int default_value = 0 ) = 0;
-	virtual unsigned long long get_uint_64( char const* key_name = nullptr, unsigned long long default_value = 0 ) = 0;
-	virtual float get_float( const char* key_name = nullptr, float default_value = 0.0f ) = 0;
-	virtual const char* get_string( const char* key_name = nullptr, const char* default_value = "" ) = 0;
-	virtual const wchar_t* get_wstring( char const* key_name = nullptr, const wchar_t* default_value = L"" ) = 0;
+	virtual bool			get_bool( const char* keyname = nullptr, bool default_value = false ) = 0;
+	virtual int				get_int( const char* keyname = nullptr, int default_value = 0 ) = 0;
+	virtual uint64_t		get_uint64( const char* keyname = nullptr, uint64_t default_value = 0 ) = 0;
+	virtual float			get_float( const char* keyname = nullptr, float default_value = 0.0f ) = 0;
+	virtual const char* get_string( const char* keyname = nullptr, const char* default_value = "" ) = 0;
+	virtual const wchar_t* get_wstring( const char* keyname = nullptr, const wchar_t* default_value = L"" ) = 0;
+	virtual const void* get_ptr( const char* keyname = nullptr, const void* default_values = nullptr ) = 0;
 
-	virtual void set_bool( const char* key_name, bool value ) = 0;
-	virtual void set_int( const char* key_name, int value ) = 0;
-	virtual void set_uint_64( const char* key_name, unsigned long long value ) = 0;
-	virtual void set_float( const char* key_name, float value ) = 0;
-	virtual void set_string( const char* key_name, const char* value ) = 0;
-	virtual void set_wstring( const char* key_name, const wchar_t* value ) = 0;
+	virtual void			set_bool( const char* keyname, bool value ) = 0;
+	virtual void			set_int( const char* keyname, int value ) = 0;
+	virtual void			set_uint64( const char* keyname, uint64_t value ) = 0;
+	virtual void			set_float( const char* keyname, float value ) = 0;
+	virtual void			set_string( const char* keyname, const char* value ) = 0;
+	virtual void			set_wstring( const char* keyname, const wchar_t* value ) = 0;
+	virtual void			set_ptr( const char* keyname, const void* value ) = 0;
 };
 
 class i_game_event_listener {

@@ -18,4 +18,6 @@ public:
 	void* m_save_data;
 	bool  m_client;
 	bool  m_remote_client;
+	int	m_time_stamp_networking_base;
+	int	m_time_stamp_randomize_window;
 };

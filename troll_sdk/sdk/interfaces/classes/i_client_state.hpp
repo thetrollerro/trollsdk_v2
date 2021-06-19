@@ -3,15 +3,6 @@
 #include "i_trace.hpp"
 #include "../../client_class.hpp"
 
-class c_clock_drift_mgr
-{
-public:
-    float clock_offsets[ 17 ];   //0x0000
-    uint32_t cur_clock_offsets; //0x0044
-    uint32_t server_tick;     //0x0048
-    uint32_t client_tick;     //0x004C
-}; //Size: 0x0050
-
 class i_net_channel;
 class i_client_state {
 public:
@@ -28,11 +19,15 @@ public:
     float m_next_cmd_time; //0x0114
     int m_server_count; //0x0118
     int m_current_seqeunce; //0x011C
-    char _0x0120[ 4 ];
-    void* m_clock_drift_mgr; //0x0124 
-    char _0x0128[ 68 ];
-    int m_server_tick; //0x016C 
-    int m_client_tick; //0x0170 
+    char _0x0120[ 8 ];
+
+    struct {
+        float        clock_offsets[ 16 ];
+        int            cur_clock_offset;
+        int            m_server_tick;
+        int            m_client_tick;
+    } m_clock_drift_mgr; //0x0124 
+
     int m_delta_tick; //0x0174
     bool m_paused; //0x0178
     std::byte pad4[ 0x7 ]; //0x0179

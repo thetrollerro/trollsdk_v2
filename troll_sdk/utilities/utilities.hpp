@@ -10,11 +10,13 @@
 #include <chrono>
 #include "../sdk/datamap.hpp"
 #include "../sdk/math/vector.hpp"
+#include "security/xorstr.hpp"
 #pragma comment(lib, "psapi.lib")
 
 #define in_range(x,a,b)   (x >= a && x <= b)
 #define get_bits( x )    (in_range((x&(~0x20)),'A','F') ? ((x&(~0x20)) - 'A' + 0xa) : (in_range(x,'0','9') ? x - '0' : 0))
 #define get_byte( x )    (get_bits(x[0]) << 4 | get_bits(x[1]))
+class c_base_player;
 
 namespace utils {
 	template<typename FuncType>
@@ -31,4 +33,5 @@ namespace utils {
 	unsigned int find_in_data_map( datamap_t* m_map, const char* name );
 	void __cdecl dbg_print( char const* msg, ... );
 	bool world_to_screen( const vec3_t& origin, vec3_t& screen );
+	bool visible(const vec3_t& start, const vec3_t& end, c_base_player* entity, c_base_player* from);
 }

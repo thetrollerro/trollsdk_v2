@@ -1,6 +1,4 @@
 #pragma once
-#include <cstdint>
-#include "../../../utilities/utilities.hpp"
 
 class c_convar {
 public:
@@ -61,10 +59,17 @@ public:
 	void* change_callback_fn;
 };
 
+class color;
 class i_cvar {
 public:
 	c_convar* find_var( const char* convar_name ) {
 		using find_var_fn = c_convar * ( __thiscall* )( void*, const char* );
 		return utils::call_virtual<find_var_fn>( this, 16 )( this, convar_name );
+	}
+
+	template< typename... arguments >
+	void console_color_print_f( const uint32_t& _color, const char* format, arguments ... args ) {
+		using o_fn = void( __cdecl* )( void*, const uint32_t&, const char* ... );
+		return utils::call_virtual<o_fn>( this, 25 )( this, _color, format, args... );
 	}
 };

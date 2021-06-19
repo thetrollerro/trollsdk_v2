@@ -10,7 +10,7 @@ namespace menu {
 
 	void render( );
 	void keybinds( );
-	inline int keybinds_x, keybinds_y ;
+	inline int keybinds_x, keybinds_y;
 
 	void legitbot_tab( );
 	void ragebot_tab( );

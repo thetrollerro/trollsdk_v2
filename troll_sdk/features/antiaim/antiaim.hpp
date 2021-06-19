@@ -1,9 +1,8 @@
 #pragma once
 
 namespace antiaim {
-	/* delas */
 	inline float m_max_delta;
-	
+
 	/* lby */
 	void predict_lby( );
 	inline float m_lby_update_time;

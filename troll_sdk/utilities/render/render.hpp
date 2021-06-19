@@ -63,7 +63,8 @@ namespace render {
 	void outline( int x, int y, int width, int height, std::uint32_t color );
 	void line( int x, int y, int x2, int y2, std::uint32_t color );
 	void text( int x, int y, std::uint32_t color, void* font, const std::string& text );
-	void circle( int x, int y, int radius, int segments, std::uint32_t color );
+	void circle( int x, int y, int radius, std::uint32_t color );
+	void empty_circle( int x, int y, int radius, std::uint32_t color );
 	void texture( unsigned char* data, int x, int y, int width, int height, float scale );
 	void clip_rect( int x, int y, int width, int height );
 	bool key_pressed( const std::uint32_t key );

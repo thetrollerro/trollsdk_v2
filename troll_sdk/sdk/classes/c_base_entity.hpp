@@ -38,6 +38,21 @@ public:
 		return *( matrix_t* ) ( ( uintptr_t ) this + _m_rgflCoordinateFrame );
 	}
 
+	/* DT_EnvTonemapController */
+	NETVAR( "DT_EnvTonemapController->m_bUseCustomAutoExposureMin", m_bUseCustomAutoExposureMin, bool );
+	NETVAR( "DT_EnvTonemapController->m_bUseCustomAutoExposureMax", m_bUseCustomAutoExposureMax, bool );
+	NETVAR( "DT_EnvTonemapController->m_bUseCustomBloomScale", m_bUseCustomBloomScale, bool );
+	NETVAR( "DT_EnvTonemapController->m_flCustomAutoExposureMin", m_flCustomAutoExposureMin, float );
+	NETVAR( "DT_EnvTonemapController->m_flCustomAutoExposureMax", m_flCustomAutoExposureMax, float );
+	NETVAR( "DT_EnvTonemapController->m_flCustomBloomScale", m_flCustomBloomScale, float );
+	NETVAR( "DT_EnvTonemapController->m_flCustomBloomScaleMinimum", m_flCustomBloomScaleMinimum, float );
+	NETVAR( "DT_EnvTonemapController->m_flBloomExponent", m_flBloomExponent, float );
+	NETVAR( "DT_EnvTonemapController->m_flBloomSaturation", m_flBloomSaturation, float );
+	NETVAR( "DT_EnvTonemapController->m_flTonemapPercentTarget", m_flTonemapPercentTarget, float );
+	NETVAR( "DT_EnvTonemapController->m_flTonemapPercentBrightPixels", m_flTonemapPercentBrightPixels, float );
+	NETVAR( "DT_EnvTonemapController->m_flTonemapMinAvgLum", m_flTonemapMinAvgLum, float );
+	NETVAR( "DT_EnvTonemapController->m_flTonemapRate", m_flTonemapRate, float );
+
 	/* DT_BaseEntity */
 	// m_cellbits
 	// m_cellX

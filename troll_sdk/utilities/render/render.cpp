@@ -7,13 +7,6 @@ namespace render {
 
 	void start( IDirect3DDevice9* dev ) {
 		device = dev;
-
-		/* just in-case */
-		if ( device != dev ) {
-			initialized = false;
-			device = dev;
-		}
-
 		initialized = true;
 	}
 
@@ -40,9 +33,9 @@ namespace render {
 		}
 
 		create_font( ( void** ) &fonts::def, "Tahoma", 32, true );
-		create_font( ( void** ) &fonts::watermark, "Tahoma", 16, false );
-		create_font( ( void** ) &fonts::esp_def, "Smallest Pixel-7", 10, FW_NORMAL );
-		create_font( ( void** ) &fonts::esp_sec, "Tahoma", 10, false );
+     	create_font( ( void** ) &fonts::watermark, "Verdana", 16, false );
+		create_font( ( void** ) &fonts::esp_def, "Small Fonts", 10, false );
+		create_font( ( void** ) &fonts::esp_sec, "Verdana", 12, false );
 		create_font( ( void** ) &fonts::keystrokes, "Verdana", 20, FW_BOLD );
 	}
 

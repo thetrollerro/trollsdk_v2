@@ -3,11 +3,11 @@
 #include "../../sdk/classes/c_base_player.hpp"
 
 namespace animations {
-	/* bone bulld */
-	bool generate_matrix( c_base_player* pl, matrix_t* out, float seed );
-	bool build_matrix( c_base_player* pl, matrix_t* out, float seed );
+	/* bone build */
+	bool generate_matrix( c_base_player* pl, matrix_t* out, int mask );
+	bool build_matrix( c_base_player* pl, matrix_t* matrix, int mask );
 	bool copy_matrix( c_base_player* pl, matrix_t* out );
 
-	/* other */
+	/* fresh tick count */
 	bool fresh_tick( );
 }

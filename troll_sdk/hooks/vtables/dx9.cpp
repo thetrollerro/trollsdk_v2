@@ -11,14 +11,20 @@ long __fastcall hooks::dx9::endscene::hook( void* ecx, void* edx, IDirect3DDevic
 	/* endscene gets called twice so we call it once */
 	static auto ret = _ReturnAddress( );
 	if ( ret != _ReturnAddress( ) ) {
-		return o_endscene( ecx, 0, dev );
+		return o_endscene( ecx, edx, dev );
 	}
 
 	/* backup */
 	IDirect3DStateBlock9* stateBlock = nullptr;
 	IDirect3DVertexDeclaration9* vertDec = nullptr;
 	dev->GetVertexDeclaration( &vertDec );
-	dev->CreateStateBlock( D3DSBT_PIXELSTATE, &stateBlock );
+
+	// if we dont have a valid pixel state, return. this will fix issues with player models being shiny
+	if ( dev->CreateStateBlock( D3DSBT_PIXELSTATE, &stateBlock ) < 0 ) {
+		return o_endscene( ecx, edx, dev );
+	}
+
+	stateBlock->Capture( );
 
 	/* menu */
 	menu::init( );
@@ -28,13 +34,13 @@ long __fastcall hooks::dx9::endscene::hook( void* ecx, void* edx, IDirect3DDevic
 	stateBlock->Release( );
 	dev->SetVertexDeclaration( vertDec );
 
-	return o_endscene( ecx, 0, dev );
+	return o_endscene( ecx, edx, dev );
 }
 
 long __fastcall hooks::dx9::present::hook( void* ecx, void* edx, IDirect3DDevice9* dev, RECT* source_rect, RECT* dust_rect, HWND dest_window_override, RGNDATA* dirty_region ) {
 	/* here our esp will be streamproof so ya call it here if we wan t streamproof :D */
 
-	return o_present( ecx, 0, dev, source_rect, dust_rect, dest_window_override, dirty_region );
+	return o_present( ecx, edx, dev, source_rect, dust_rect, dest_window_override, dirty_region );
 }
 
 long __fastcall hooks::dx9::reset::hook( void* ecx, void* edx, IDirect3DDevice9* dev, D3DPRESENT_PARAMETERS* params ) {
@@ -42,12 +48,12 @@ long __fastcall hooks::dx9::reset::hook( void* ecx, void* edx, IDirect3DDevice9*
 	render::destroy_fonts( );
 
 	if ( !menu::d3d_init )
-		return o_reset( ecx, 0, dev, params );
+		return o_reset( ecx, edx, dev, params );
 
 	/* invalidate dev objects */
 	ImGui_ImplDX9_InvalidateDeviceObjects( );
 
-	auto hr = o_reset( ecx, 0, dev, params );
+	auto hr = o_reset( ecx, edx, dev, params );
 	if ( SUCCEEDED( hr ) ) {
 		/* recreate imgui */
 		ImGui_ImplDX9_CreateDeviceObjects( );
@@ -61,7 +67,6 @@ long __fastcall hooks::dx9::reset::hook( void* ecx, void* edx, IDirect3DDevice9*
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
 long __stdcall hooks::dx9::wndproc::hook( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
-
 	if ( msg == WM_KEYUP && wparam == VK_INSERT )
 		menu::opened = !menu::opened;
 

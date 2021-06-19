@@ -121,7 +121,7 @@ public:
 	virtual void          apply_changes ( ) = 0;
 	virtual bool          is_within ( int x, int y ) = 0;
 	virtual bool          has_focus ( ) = 0;
-	virtual bool          supports_feature ( int /*surfacefeature_t*/ feature ) = 0;
+	virtual bool          supports_feature ( int /*SurfaceFeature_t*/ feature ) = 0;
 	virtual void          restrict_paint_to_panel ( vgui::vpanel panel, bool allow_nonmodal_surface = false ) = 0;
 	virtual void          set_modal_panel ( vgui::vpanel ) = 0;
 	virtual vgui::vpanel  get_modal_panel ( ) = 0;
