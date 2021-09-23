@@ -5,12 +5,12 @@ namespace engine_prediction {
 	void update_button_state( c_base_player* pl, int buttons ) {
 		/* https://github.com/perilouswithadollarsign/cstrike15_src/blob/29e4c1fda9698d5cebcdaf1a0de4b829fa149bf8/game/shared/baseplayer_shared.cpp#L961 */
 
-		int buttons_changed = buttons ^ *( int* ) ( std::uintptr_t( pl ) + 0x31F8 );
+		int buttons_changed = buttons ^ *( int* ) ( std::uintptr_t( pl ) + 0x3208 );
 
-		*( int* ) ( std::uintptr_t( pl ) + 0x31EC ) = *( int* ) ( std::uintptr_t( pl ) + 0x31F8 );
-		*( int* ) ( std::uintptr_t( pl ) + 0x31F8 ) = buttons;
-		/* m_afButtonPressed */ *( int* ) ( std::uintptr_t( pl ) + 0x31F0 ) = buttons & buttons_changed;
-		/* m_afButtonReleased */ *( int* ) ( std::uintptr_t( pl ) + 0x31F4 ) = buttons_changed & ~buttons;
+		*( int* ) ( std::uintptr_t( pl ) + 0x320C ) = *( int* ) ( std::uintptr_t( pl ) + 0x3208 );
+		*( int* ) ( std::uintptr_t( pl ) + 0x3208 ) = buttons;
+		/* m_afButtonPressed */ *( int* ) ( std::uintptr_t( pl ) + 0x3200 ) = buttons & buttons_changed;
+		/* m_afButtonReleased */ *( int* ) ( std::uintptr_t( pl ) + 0x3204 ) = buttons_changed & ~buttons;
 	}
 
 	void predict( c_usercmd* cmd, c_base_player* player ) {
@@ -27,7 +27,7 @@ namespace engine_prediction {
 		}
 		*reinterpret_cast< int* >( stored_vars.prediction_seed ) = cmd ? cmd->random_seed : -1;
 		*reinterpret_cast< int* >( stored_vars.prediction_player ) = std::uintptr_t( player );
-		*reinterpret_cast< c_usercmd** >( std::uintptr_t( player ) + 0x3338 ) = cmd; /* 0x3334 */
+		*reinterpret_cast< c_usercmd** >( std::uintptr_t( player ) + 0x3348 ) = cmd; /* 0x3334 */
 		*reinterpret_cast< c_usercmd** >( std::uintptr_t( player ) + 0x3288 ) = cmd;
 
 		stored_vars.tickbase = player->m_nTickBase( );
@@ -51,10 +51,10 @@ namespace engine_prediction {
 		i::prediction->m_is_first_time_predicted = false;
 
 		if ( cmd->impulse )
-			*reinterpret_cast< std::uint32_t* >( std::uintptr_t( player ) + 0x31FC ) = cmd->impulse;
+			*reinterpret_cast< std::uint32_t* >( std::uintptr_t( player ) + 0x320C ) = cmd->impulse;
 
-		cmd->buttons |= *( std::uint32_t* ) ( std::uintptr_t( player ) + 0x3334 ); /* m_afButtonForced */
-		cmd->buttons &= ~*( std::uint32_t* ) ( std::uintptr_t( player ) + 0x3330 ); /* m_afButtonDisabled */
+		//cmd->buttons |= *( std::uint32_t* ) ( std::uintptr_t( player ) + 0x3334 ); /* m_afButtonForced */
+		//cmd->buttons &= ~*( std::uint32_t* ) ( std::uintptr_t( player ) + 0x3330 ); /* m_afButtonDisabled */
 
 		update_button_state( player, cmd->buttons );
 
@@ -86,7 +86,7 @@ namespace engine_prediction {
 			return;
 		}
 
-		*reinterpret_cast< std::uint32_t* >( std::uintptr_t( player ) + 0x3338 ) = 0;
+		*reinterpret_cast< std::uint32_t* >( std::uintptr_t( player ) + 0x3348 ) = 0;
 		if ( stored_vars.prediction_player && stored_vars.prediction_seed ) {
 			*reinterpret_cast< int* >( stored_vars.prediction_seed ) = 0xffffffff;
 			*reinterpret_cast< int* >( stored_vars.prediction_player ) = 0;

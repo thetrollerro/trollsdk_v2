@@ -113,38 +113,68 @@ enum item_def_idx : short {
 
 class weapon_info_t {
 public:
-	uint8_t pad0[ 0x14 ];
-	uint32_t max_clip;
-	uint8_t pad1[ 0xC ];
-	uint32_t max_reserved_ammo;
-	uint8_t pad2[ 0x60 ];
-	char* hud_name;
-	char* weapon_name;
-	uint8_t pad3[ 0x38 ];
-	uint32_t weapon_type;
-	uint8_t pad4[ 0x4 ];
-	uint32_t price;
-	uint32_t reward;
-	uint8_t pad5[ 0x4 ];
-	float_t fire_rate;
-	uint8_t pad6[ 0xC ];
-	uint8_t full_auto;
-	uint8_t pad7[ 0x3 ];
-	uint32_t dmg;
-	float_t armor_ratio;
-	uint32_t bullets;
-	float_t penetration;
-	uint8_t pad8[ 0x8 ];
-	float_t range;
-	float_t range_modifier;
-	uint8_t pad9[ 0x10 ];
-	uint8_t has_silencer;
-	uint8_t pad10[ 0xF ];
-	float_t max_speed;
-	float_t max_speed_alt;
-	uint8_t pad11[ 0x4C ];
-	uint32_t recoil_seed;
-	uint8_t pad12[ 0x20 ];
+	char pad_base[ 4 ];				// 0x0000
+	char* console_name;				// 0x0004
+	char pad0[ 12 ];					// 0x0008
+	int max_clip1;					// 0x0014
+	int max_clip2;					// 0x0018
+	int default_clip1;				// 0x001C
+	int default_clip2;				// 0x0020
+	int primary_max_reserve_ammo;		// 0x0024
+	int secondary_max_reserve_ammo;	// 0x0028
+	const char* worldmodel;		// 0x002C
+	const char* viewmodel;		// 0x0030
+	const char* dropped_model;		// 0x0034
+	char pad1[ 0x50 ];				// 0x0038
+	const char* hud_name;			// 0x0088
+	const char* weapon_name;		// 0x008C
+	char pad2[ 0x2 ];					// 0x0090
+	bool is_melee_weapon;			// 0x0092
+	char pad3[ 0x9 ];					// 0x0093
+	float weapon_weight;			// 0x009C
+	char pad4[ 0x4 ];					// 0x00A0
+	int slot;						// 0x00A4
+	int position;					// 0x00A8
+	char pad5[ 0x1C ];				// 0x00AC
+	int weapon_type;			// 0x00C8
+	char pad6[ 0x4 ];					// 0x00CC
+	int weapon_price;				// 0x00D0
+	int kill_award;					// 0x00D4
+	const char* animation_prefix;	// 0x00D8
+	float cycle_time;				// 0x00DC
+	float cycle_time_alt;			// 0x00E0
+	char pad8[ 0x8 ];					// 0x00E4
+	bool full_auto;					// 0x00EC
+	char pad9[ 0x3 ];					// 0x00ED
+	int damage;					// 0x00F0
+	float armor_ratio;				// 0x00F4
+	int bullets;					// 0x00F8
+	float penetration;			// 0x00FC
+	char pad10[ 0xC ];				// 0x0100
+	float range;					// 0x010C
+	float range_modifier;			// 0x0110
+	float throw_velocity;			// 0x0114
+	char pad11[ 0xC ];				// 0x0118
+	bool has_silencer;				// 0x0124
+	char pad12[ 0xF ];				// 0x0125
+	float max_speed[ 2 ];			// 0x0134
+	char pad13[ 0x4 ];				// 0x013C
+	float spread[ 2 ];				// 0x0140
+	float inaccuracy_crouch[ 2 ];	// 0x0148
+	float inaccuracy_stand[ 2 ];		// 0x0150
+	char pad14[ 0x8 ];				// 0x0158
+	float inaccuracy_jump[ 2 ];		// 0x0160
+	float inaccuracy_land[ 2 ];		// 0x0168
+	float inaccuracy_ladder[ 2 ];	// 0x0170
+	float inaccuracy_fire[ 2 ];		// 0x0178
+	float inaccuracy_move[ 2 ];		// 0x0180
+	float inaccuracy_reload;		// 0x0188
+	int recoil_seed;				// 0x018c
+	float recoil_angle[ 2 ];			// 0x0190
+	float recoil_angle_variance[ 2 ];	// 0x0198
+	float recoil_magnitude[ 2 ];		// 0x01A0
+	float recoild_magnitude_variance[ 2 ]; // 0x01A8
+	int spread_seed;				// 0x01B0
 };
 
 class c_base_view_model : public c_base_entity {
@@ -167,22 +197,22 @@ public:
 	/* other */
 	float get_inaccuracy( ) {
 		using o_fn = float( __thiscall* )( void* );
-		return utils::call_virtual<o_fn>( this, 482 )( this );
+		return utils::call_virtual<o_fn>( this, 483 )( this );
 	}
 
 	float get_spread( ) {
 		using o_fn = float( __thiscall* )( void* );
-		return utils::call_virtual<o_fn>( this, 452 )( this );
+		return utils::call_virtual<o_fn>( this, 453 )( this );
 	}
 
 	void update_accuracy_penalty( ) {
 		using o_fn = void( __thiscall* )( void* );
-		return utils::call_virtual<o_fn>( this, 483 )( this );
+		return utils::call_virtual<o_fn>( this, 484 )( this );
 	}
 
 	weapon_info_t* get_cs_weapon_data( ) {
 		using o_fn = weapon_info_t * ( __thiscall* )( void* );
-		return utils::call_virtual< o_fn >( this, 460 )( this );
+		return utils::call_virtual< o_fn >( this, 461 )( this );
 	}
 
 	bool is_knife( ) {
@@ -260,13 +290,6 @@ public:
 			return "invalid";
 
 		return std::string( this->get_cs_weapon_data( )->weapon_name );
-	}
-
-	float fire_rate( ) {
-		if ( !this || this->is_knife( ) || this->is_nade( ) || !this->get_cs_weapon_data( ) ) return 0.f;
-
-		if ( this->get_cs_weapon_data( ) ) return this->get_cs_weapon_data( )->fire_rate;
-
 	}
 
 	std::string weapon_name( ) {

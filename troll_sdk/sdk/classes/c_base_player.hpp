@@ -1081,51 +1081,6 @@ enum entity_flags {
 };
 
 /* other structs */
-class c_bone_acessor {
-public:
-	int get_readable( ) {
-		return m_readable;
-	}
-
-	void set_readable( int flags ) {
-		m_readable = flags;
-	}
-
-	int get_writeable( ) {
-		return m_writeable;
-	}
-
-	void set_writeable( int flags ) {
-		m_writeable = flags;
-	}
-
-	const matrix_t& get_bone( int bone ) const {
-		return m_bones[ bone ];
-	}
-
-	matrix_t& get_bone_for_write( int bone ) {
-		return m_bones[ bone ];
-	}
-
-	matrix_t* get_bone_arr_for_write( ) const {
-		return m_bones;
-	};
-
-	void set_bone_arr_for_write( matrix_t* bone ) {
-		m_bones = bone;
-	}
-
-	void write( matrix_t* bone ) {
-		bone = m_bones;
-	}
-
-private:
-	const void* m_animating;
-	matrix_t* m_bones;
-	int m_readable;
-	int m_writeable;
-};
-
 struct animstate_pose_param_cache_t {
 	std::uint8_t pad_0x0[ 0x4 ]; //0x0
 	std::uint32_t m_idx; //0x4 
@@ -1261,41 +1216,6 @@ enum animlayer_stages
 
 inline c_base_player* g_local;
 
-class ik_context
-{
-public:
-	void init( studio_hdr_t* hdr, vec3_t& angles, vec3_t& origin, float curtime, int framecount, int boneMask ) {
-		static const auto ik_init_address = utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 EC 08 8B 45 08 56 57 8B F9 8D 8F" ) );
-		reinterpret_cast< void( __thiscall* )( ik_context*, studio_hdr_t*, vec3_t&, vec3_t&, float, int, int ) >( ik_init_address )( this, hdr, angles, origin, curtime, framecount, boneMask );
-	}
-
-	void update_targets( vec3_t* pos, quaternion* q, matrix_t* bone_array, byte* computed ) {
-		static const auto update_targets_address = utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F0 81 EC ? ? ? ? 33 D2" ) );
-		reinterpret_cast< void( __thiscall* )( ik_context*, vec3_t*, quaternion*, matrix_t*, byte* ) >( update_targets_address )( this, pos, q, bone_array, computed );
-	}
-
-	void solve_dependencies( vec3_t* pos, quaternion* q, matrix_t* bone_array, byte* computed ) {
-		static const auto solve_dependencies_address = utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F0 81 EC ? ? ? ? 8B 81" ) );
-		reinterpret_cast< void( __thiscall* )( ik_context*, vec3_t*, quaternion*, matrix_t*, byte* ) >( solve_dependencies_address )( this, pos, q, bone_array, computed );
-	}
-
-	void clear_targets( )
-	{
-		auto i = 0;
-		auto count = *reinterpret_cast < int* > ( ( uintptr_t ) this + 0xFF0 );
-
-		if ( count > 0 ) {
-			auto target = reinterpret_cast < int* > ( ( uintptr_t ) this + 0xD0 );
-
-			do {
-				*target = -9999;
-				target += 85;
-				++i;
-			} while ( i < count );
-		}
-	}
-};
-
 class c_base_player : public c_base_entity {
 public:
 	static __forceinline c_base_player* get_player_by_index( int index ) {
@@ -1304,7 +1224,7 @@ public:
 
 	/* offsets / indexes */
 	float m_flSpawnTime( ) {
-		return *( float* ) ( ( uintptr_t ) this + 0xA370 );
+		return *( float* ) ( ( uintptr_t ) this + 0x103C0 );
 	}
 
 	int& m_iEFlags( ) {
@@ -1328,28 +1248,8 @@ public:
 		return *( vec3_t* ) ( ( uintptr_t ) this + 0x94 );
 	}
 
-	c_bone_acessor* get_bone_acessor( ) {
-		return ( c_bone_acessor* ) ( ( uintptr_t ) this + 0x290C );
-	}
-
 	bool& m_JiggleBones( ) {
-		return *( bool* ) ( ( uintptr_t ) this + 0x292C );
-	}
-
-	c_usercmd& m_PlayerCommand( ) {
-		return *( c_usercmd* ) ( ( uintptr_t ) this + 0x326C );
-	}
-
-	c_usercmd*& m_pCurrentCommand( ) {
-		return *( c_usercmd** ) ( ( uintptr_t ) this + 0x3314 );
-	}
-
-	int animlayer_count( )
-	{
-		if ( !this ) //-V704
-			return 15;
-
-		return *( int* ) ( ( DWORD ) this + 0x298C );
+		return *( bool* ) ( ( uintptr_t ) this + 0x2930 );
 	}
 
 	std::uint32_t& bone_count( ) {
@@ -1358,11 +1258,11 @@ public:
 	}
 
 	animlayer_t* get_animoverlays( ) {
-		return *( animlayer_t** ) ( ( DWORD ) this + 0x2980 );
+		return *( animlayer_t** ) ( ( DWORD ) this + 0x2990 );
 	}
 
 	animstate_t* get_animstate( ) {
-		return *reinterpret_cast< animstate_t** >( reinterpret_cast< void* >( uintptr_t( this ) + 0x3914 ) );
+		return *reinterpret_cast< animstate_t** >( reinterpret_cast< void* >( uintptr_t( this ) + 0x9960 ) );
 	}
 
 	bool& should_use_new_animstate( ) {
@@ -1432,7 +1332,7 @@ public:
 		  CVProfile::ExitScope(v0);
 		*/
 		typedef void( __thiscall* o_fn )( void* );
-		return utils::call_virtual<o_fn>( this, 223 )( this );
+		return utils::call_virtual<o_fn>( this, 224 )( this );
 	}
 
 	void modify_eye_pos( animstate_t* anim, vec3_t* pos ) {
@@ -1509,22 +1409,8 @@ public:
 		return *( std::array<int, 5>* )( ( uintptr_t ) this + 0xB970 );
 	}
 
-	void update_ik_locks( float curtime ) {
-		using o_fn = void( __thiscall* )( void*, float );
-		utils::call_virtual<o_fn>( this, 191 )( this, curtime );
-	}
-
-	void calculate_ik_locks( float curtime ) {
-		using o_fn = void( __thiscall* )( void*, float );
-		utils::call_virtual<o_fn>( this, 192 )( this, curtime );
-	}
-
 	studio_hdr_t* get_model_ptr( ) {
-		return *( studio_hdr_t** ) ( ( uintptr_t ) this + 0x294C );
-	}
-
-	ik_context* get_ik_context( ) {
-		return *( ik_context** ) ( ( uintptr_t ) this + 9836 + 0x4 );
+		return *( studio_hdr_t** ) ( ( uintptr_t ) this + 0x2950 );
 	}
 
 	/* other */
@@ -1606,8 +1492,11 @@ public:
 
 		vec3_t vmin, vmax;
 
-		math::vector_transform( m_hitbox->maxs, matrix ? matrix[ m_hitbox->bone ] : this->get_bone_acessor( )->get_bone( m_hitbox->bone ), vmax );
-		math::vector_transform( m_hitbox->mins, matrix ? matrix[ m_hitbox->bone ] : this->get_bone_acessor( )->get_bone( m_hitbox->bone ), vmin );
+		matrix_t temp_matrix[ 128 ];
+		setup_bones( temp_matrix, 128, 256, m_flSimulationTime( ) );
+
+		math::vector_transform( m_hitbox->maxs, matrix ? matrix[ m_hitbox->bone ] : temp_matrix[ m_hitbox->bone ], vmax );
+		math::vector_transform( m_hitbox->mins, matrix ? matrix[ m_hitbox->bone ] : temp_matrix[ m_hitbox->bone ], vmin );
 
 		auto pos = ( vmin + vmax ) * 0.5f;
 

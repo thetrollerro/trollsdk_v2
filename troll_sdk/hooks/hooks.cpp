@@ -19,7 +19,7 @@ namespace hooks {
 		static auto modify_eye_position_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F8 83 EC 5C 53 8B D9 56 57 83" ) );
 		static auto insert_into_tree_target = ( void* ) ( utils::find_sig_ida( _( "client.dll" ), _( "E8? ? ? ? 80 7D FF 00 74 44" ) ) + 0x1 );
 		static auto list_leaves_in_box_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "55 8B EC 83 EC 18 8B 4D 0C" ) ); // 6
-		static auto create_move_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 EC 08 FF 15 ? ? ? ? 84 C0" ) ); // 22
+		static auto create_move_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 8B 4D 04 83 EC 08 8B C1" ) ); // 22
 		static auto frame_stage_notify_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 8B 0D ? ? ? ? 8B 01 8B 80 74 01 00 00 FF D0 A2" ) );// 37
 		static auto do_post_screen_effects_target = ( void* ) get_virtual( i::clientmode, 44 ); // 44
 		static auto get_viewmodel_fov_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 8B 0D ? ? ? ? 83 EC 08 57" ) );
@@ -27,7 +27,7 @@ namespace hooks {
 		static auto endscene_target = ( void* ) get_virtual( i::dx9, 42 ); // 42
 		static auto present_target = ( void* ) get_virtual( i::dx9, 17 ); // 17
 		static auto reset_target = ( void* ) get_virtual( i::dx9, 16 ); // 16
-		static auto cl_move_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "55 8B EC 81 EC ? ? ? ? 53 56 57 8B 3D ? ? ? ? 8A" ) );
+		static auto cl_move_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "55 8B EC 81 EC 64 01 00 00 53 56 8A F9" ) );
 		static auto fire_game_event_target = ( void* ) get_virtual( i::engine, 59 ); // 59
 		static auto get_viewangles_target = ( void* ) get_virtual( i::engine, 18 ); // 18
 		static auto is_connected_target = ( void* ) get_virtual( i::engine, 27 ); // 27
@@ -37,14 +37,15 @@ namespace hooks {
 		static auto emit_sound_1_target = ( void* ) get_virtual( i::engine_sound, 5 );
 		static auto sv_pure_loose_file_allowed_target = ( void* ) get_virtual( i::file_system, 128 );
 		static auto check_for_sequence_change_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 51 53 8B 5D 08 56 8B F1 57 85" ) );
-		static auto should_skip_animframe_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "57 8B F9 8B 07 8B 80 ? ? ? ? FF D0 84 C0 75 02 5F C3" ) );
+		static auto should_skip_animframe_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "57 8B F9 8B 07 8B 80 ? ? ? ? FF D0 84 C0 75 02" ) );
 		static auto sv_cheats_get_bool_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "8B 51 1C 3B D1 75 06 8B 41 30 33 C1 C3 8B 02 8B CA FF 60 34 CC CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 83 E4 F8 0F 54 05" ) );
+		static auto process_movement_target = ( void* ) get_virtual( i::game_movement, 1 );
 		static auto find_material_target = ( void* ) utils::find_sig_ida( _( "materialsystem.dll" ), _( "55 8B EC 6A FF 68 ? ? ? ? 64 A1 ? ? ? ? 50 64 89 25 ? ? ? ? 83 EC 24 53" ) );
-		static auto draw_model_exec_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "55 8B EC 83 E4 F8 81 EC ? ? ? ? 53 56 8B 75 10" ) ); // 21
+		static auto draw_model_exec_target = ( void* ) get_virtual( i::modelrender, 21 ); // 21
 		static auto process_packet_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "55 8B EC 83 E4 C0 81 EC ? ? ? ? 53 56" ) );
 		static auto send_net_message_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "55 8B EC 83 EC 08 56 8B F1 8B 86 ? ? ? ? 85 C0" ) );
 		static auto paint_traverse_target = ( void* ) get_virtual( i::panel, 41 ); // 41
-		static auto build_transformations_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F0 81 EC ? ? ? ? 56 57 8B F9 8B 0D ? ? ? ? 89 7C 24 1C" ) );
+		static auto build_transformations_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F0 81 EC ? ? ? ? 56 57 8B F9 8B 0D ? ? ? ? 89 7C 24 28 8B" ) );
 		static auto calc_view_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F8 83 EC 24 53 56 57 FF 75 18" ) );
 		static auto do_extra_bones_processing_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F8 81 EC FC 00 00 00 53 56 8B F1 57" ) ); // 197
 		static auto get_eye_ang_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "56 8B F1 85 F6 74 32" ) ); // its a nervar lmao

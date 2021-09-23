@@ -25,7 +25,7 @@ public:
 	/* other */
 	bool is_player( ) {
 		using o_fn = bool( __thiscall* )( c_base_entity* );
-		return utils::call_virtual<o_fn>( this, 157 )( this );
+		return utils::call_virtual<o_fn>( this, 158 )( this );
 	}
 
 	bool is_weapon( ) {
