@@ -16,7 +16,7 @@ namespace hooks {
 
 		/* get targets */
 		static auto do_procedual_foot_plant_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F0 83 EC 78 56 8B F1 57 8B 56" ) );
-		static auto modify_eye_position_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F8 83 EC 5C 53 8B D9 56 57 83" ) );
+		static auto modify_eye_position_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F8 83 EC 70 56 57 8B F9 89 7C 24 14 83 7F 60" ) );
 		static auto insert_into_tree_target = ( void* ) ( utils::find_sig_ida( _( "client.dll" ), _( "E8? ? ? ? 80 7D FF 00 74 44" ) ) + 0x1 );
 		static auto list_leaves_in_box_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "55 8B EC 83 EC 18 8B 4D 0C" ) ); // 6
 		static auto create_move_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 8B 4D 04 83 EC 08 8B C1" ) ); // 22
