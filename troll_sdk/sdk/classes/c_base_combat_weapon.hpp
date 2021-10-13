@@ -111,70 +111,81 @@ enum item_def_idx : short {
 	glove_hydra,
 };
 
-class weapon_info_t {
+class weapon_info_t
+{
 public:
-	char pad_base[ 4 ];				// 0x0000
-	char* console_name;				// 0x0004
-	char pad0[ 12 ];					// 0x0008
-	int max_clip1;					// 0x0014
-	int max_clip2;					// 0x0018
-	int default_clip1;				// 0x001C
-	int default_clip2;				// 0x0020
-	int primary_max_reserve_ammo;		// 0x0024
-	int secondary_max_reserve_ammo;	// 0x0028
-	const char* worldmodel;		// 0x002C
-	const char* viewmodel;		// 0x0030
-	const char* dropped_model;		// 0x0034
-	char pad1[ 0x50 ];				// 0x0038
-	const char* hud_name;			// 0x0088
-	const char* weapon_name;		// 0x008C
-	char pad2[ 0x2 ];					// 0x0090
-	bool is_melee_weapon;			// 0x0092
-	char pad3[ 0x9 ];					// 0x0093
-	float weapon_weight;			// 0x009C
-	char pad4[ 0x4 ];					// 0x00A0
-	int slot;						// 0x00A4
-	int position;					// 0x00A8
-	char pad5[ 0x1C ];				// 0x00AC
-	int weapon_type;			// 0x00C8
-	char pad6[ 0x4 ];					// 0x00CC
-	int weapon_price;				// 0x00D0
-	int kill_award;					// 0x00D4
-	const char* animation_prefix;	// 0x00D8
-	float cycle_time;				// 0x00DC
-	float cycle_time_alt;			// 0x00E0
-	char pad8[ 0x8 ];					// 0x00E4
-	bool full_auto;					// 0x00EC
-	char pad9[ 0x3 ];					// 0x00ED
-	int damage;					// 0x00F0
-	float armor_ratio;				// 0x00F4
-	int bullets;					// 0x00F8
-	float penetration;			// 0x00FC
-	char pad10[ 0xC ];				// 0x0100
-	float range;					// 0x010C
-	float range_modifier;			// 0x0110
-	float throw_velocity;			// 0x0114
-	char pad11[ 0xC ];				// 0x0118
-	bool has_silencer;				// 0x0124
-	char pad12[ 0xF ];				// 0x0125
-	float max_speed[ 2 ];			// 0x0134
-	char pad13[ 0x4 ];				// 0x013C
-	float spread[ 2 ];				// 0x0140
-	float inaccuracy_crouch[ 2 ];	// 0x0148
-	float inaccuracy_stand[ 2 ];		// 0x0150
-	char pad14[ 0x8 ];				// 0x0158
-	float inaccuracy_jump[ 2 ];		// 0x0160
-	float inaccuracy_land[ 2 ];		// 0x0168
-	float inaccuracy_ladder[ 2 ];	// 0x0170
-	float inaccuracy_fire[ 2 ];		// 0x0178
-	float inaccuracy_move[ 2 ];		// 0x0180
-	float inaccuracy_reload;		// 0x0188
-	int recoil_seed;				// 0x018c
-	float recoil_angle[ 2 ];			// 0x0190
-	float recoil_angle_variance[ 2 ];	// 0x0198
-	float recoil_magnitude[ 2 ];		// 0x01A0
-	float recoild_magnitude_variance[ 2 ]; // 0x01A8
-	int spread_seed;				// 0x01B0
+	char pad_0000[4]; //0x0000
+	char* console_name; //0x0004
+	char pad_0008[12]; //0x0008
+	int max_clip1; //0x0014
+	char pad_0018[12]; //0x0018
+	int max_clip2; //0x0024
+	char pad_0028[4]; //0x0028
+	char* worldmodel; //0x002C
+	char* viewmodel; //0x0030
+	char* dropped_model; //0x0034
+	char pad_0038[4]; //0x0038
+	char* N00000984; //0x003C
+	char pad_0040[56]; //0x0040
+	char* empty_sound; //0x0078
+	char pad_007C[4]; //0x007C
+	char* bullet_type; //0x0080
+	char pad_0084[4]; //0x0084
+	char* hud_name; //0x0088
+	char* weapon_name; //0x008C
+	char pad_0090[60]; //0x0090
+	int weapon_type; //0x00CC
+	int weapon_price; //0x00D0
+	int kill_award; //0x00D4
+	char* animation_prefix; //0x00D8
+	float cycle_time; //0x00DC
+	float cycle_time_alt; //0x00E0
+	float time_to_idle; //0x00E4
+	float idle_interval; //0x00E8
+	bool full_auto; //0x00EC
+	char pad_00ED[3]; //0x00ED
+	int damage; //0x00F0
+	char headshotmultyplrier[4];
+	float armor_ratio; //0x00F4
+	int bullets; //0x00F8
+	float penetration; //0x00FC
+	float flinch_velocity_modifier_large; //0x0100
+	float flinch_velocity_modifier_small; //0x0104
+	float range; //0x0108
+	float range_modifier; //0x010C
+	char pad_0110[28]; //0x0110
+	int crosshair_mindistance; //0x012C
+	float max_speed[2]; //0x0130
+	char pad_0138[4]; //0x0138
+	float spread[2]; //0x013C
+	float inaccuracy_crouch[2]; //0x0144
+	float inaccuracy_stand[2]; //0x014C
+	float inaccuracy_jump[2]; //0x0158
+	float inaccuracy_land[2]; //0x0160
+	float inaccuracy_ladder[2]; //0x0168
+	float inaccuracy_fire[2]; //0x0170
+	float inaccuracy_move[2]; //0x0178
+	float inaccuracy_reload; //0x0180
+	int recoil_seed; //0x0184
+	float recoil_angle[2]; //0x0188
+	float recoil_angle_variance[2]; //0x0190
+	float recoil_magnitude[2]; //0x0198
+	float recoild_magnitude_variance[2]; //0x01A0
+	float recovery_time_crouch; //0x01A8
+	float recovery_time_stand; //0x01AC
+	float recovery_time_crouch_final; //0x01B0
+	float recovery_time_stand_final; //0x01B4
+	int recovery_transitition_start_bullet; //0x01B8
+	int recovery_transitition_end_bullet; //0x01BC
+	bool unzoom_after_shot; //0x01C0
+	char pad_01C1[31]; //0x01C1
+	char* weapon_class; //0x01E0
+	char pad_01E4[56]; //0x01E4
+	float inaccuracy_pitch_shift; //0x021C
+	float inaccuracy_sound_threshold; //0x0220
+	float bot_audible_range; //0x0224
+	char pad_0228[12]; //0x0228
+	bool has_burst_mode; //0x0234
 };
 
 class c_base_view_model : public c_base_entity {
