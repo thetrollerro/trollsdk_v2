@@ -106,3 +106,12 @@ public:
 	// m_bSpottedByMask
 
 };
+
+class c_cs_bomb : public c_base_entity {
+public:
+	NETVAR( "DT_PlantedC4->m_flDefuseCountDown", m_flDefuseCountDown, float );
+	NETVAR( "DT_PlantedC4->m_hBombDefuser", m_hBombDefuser, int );
+	NETVAR( "DT_PlantedC4->m_flC4Blow", m_flC4Blow, float );
+	NETVAR( "DT_PlantedC4->m_bBombDefused", m_bBombDefused, bool );
+	NETVAR( "DT_PlantedC4->m_flTimerLength", m_flTimerLength, float );
+};
