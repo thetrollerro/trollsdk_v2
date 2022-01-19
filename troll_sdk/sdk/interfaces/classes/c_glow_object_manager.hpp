@@ -9,29 +9,29 @@ class glow_object_definition_t
 public:
     glow_object_definition_t( ) { memset( this, 0, sizeof( *this ) ); }
 
-    class i_client_entity* entity;    //0x0000
+    int32_t next_free_slot;
+    class i_client_entity* entity;
     union
     {
-        vec3_t glow_color;           //0x0004
+        vec3_t glow_color;
         struct
         {
-            float  red;           //0x0004
-            float  green;         //0x0008
-            float  blue;          //0x000C
+            float  red;
+            float  green;
+            float  blue;
         };
     };
-    float   alpha;                 //0x0010
-    uint8_t pad_0014[ 4 ];               //0x0014
-    float   some_float;             //0x0018
-    uint8_t pad_001C[ 4 ];               //0x001C
-    float   another_float;          //0x0020
-    bool    render_when_occluded;     //0x0024
-    bool    render_when_unoccluded;   //0x0025
-    bool    full_bloom_render;        //0x0026
-    uint8_t pad_0027[ 5 ];               //0x0027
-    int32_t glow_style;              //0x002C
-    int32_t split_screen_slot;        //0x0030
-    int32_t next_free_slot;           //0x0034
+    float   alpha;
+    uint8_t pad_0014[ 4 ];
+    float   some_float;
+    uint8_t pad_001C[ 4 ];
+    float   another_float;
+    bool    render_when_occluded;
+    bool    render_when_unoccluded;
+    bool    full_bloom_render;
+    uint8_t pad_0027[ 5 ];
+    int32_t glow_style;
+    int32_t split_screen_slot;
 
     bool is_unused( ) const { return next_free_slot != entry_in_use; }
 

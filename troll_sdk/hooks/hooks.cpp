@@ -23,7 +23,7 @@ namespace hooks {
 		static auto frame_stage_notify_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 8B 0D ? ? ? ? 8B 01 8B 80 74 01 00 00 FF D0 A2" ) );// 37
 		static auto do_post_screen_effects_target = ( void* ) get_virtual( i::clientmode, 44 ); // 44
 		static auto get_viewmodel_fov_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 8B 0D ? ? ? ? 83 EC 08 57" ) );
-		static auto override_view_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F8 83 EC 58 56 57 8B 3D ? ? ? ? 85 FF" ) ); // 18
+		static auto override_view_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F8 8B 4D 04 83 EC 58" ) ); // 18
 		static auto endscene_target = ( void* ) get_virtual( i::dx9, 42 ); // 42
 		static auto present_target = ( void* ) get_virtual( i::dx9, 17 ); // 17
 		static auto reset_target = ( void* ) get_virtual( i::dx9, 16 ); // 16
