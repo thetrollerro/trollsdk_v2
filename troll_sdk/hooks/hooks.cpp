@@ -19,7 +19,7 @@ namespace hooks {
 		static auto modify_eye_position_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F8 83 EC 70 56 57 8B F9 89 7C 24 14 83 7F 60" ) );
 		static auto insert_into_tree_target = ( void* ) ( utils::find_sig_ida( _( "client.dll" ), _( "E8? ? ? ? 80 7D FF 00 74 44" ) ) + 0x1 );
 		static auto list_leaves_in_box_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "55 8B EC 83 EC 18 8B 4D 0C" ) ); // 6
-		static auto create_move_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 8B 4D 04 83 EC 08 8B C1" ) ); // 22
+		static auto create_move_target = ( void* ) get_virtual( i::clientdll, 22 ); // 22
 		static auto frame_stage_notify_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 8B 0D ? ? ? ? 8B 01 8B 80 74 01 00 00 FF D0 A2" ) );// 37
 		static auto do_post_screen_effects_target = ( void* ) get_virtual( i::clientmode, 44 ); // 44
 		static auto get_viewmodel_fov_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 8B 0D ? ? ? ? 83 EC 08 57" ) );
@@ -43,7 +43,7 @@ namespace hooks {
 		static auto find_material_target = ( void* ) utils::find_sig_ida( _( "materialsystem.dll" ), _( "55 8B EC 6A FF 68 ? ? ? ? 64 A1 ? ? ? ? 50 64 89 25 ? ? ? ? 83 EC 24 53" ) );
 		static auto draw_model_exec_target = ( void* ) get_virtual( i::modelrender, 21 ); // 21
 		static auto process_packet_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "55 8B EC 83 E4 C0 81 EC ? ? ? ? 53 56" ) );
-		static auto send_net_message_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "55 8B EC 83 EC 08 56 8B F1 8B 86 ? ? ? ? 85 C0" ) );
+		static auto send_net_message_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "55 8B EC 83 EC 08 56 8B F1 8B F1 8B 4D 04" ) );
 		static auto paint_traverse_target = ( void* ) get_virtual( i::panel, 41 ); // 41
 		static auto build_transformations_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F0 81 EC ? ? ? ? 56 57 8B F9 8B 0D ? ? ? ? 89 7C 24 28 8B" ) );
 		static auto calc_view_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 83 E4 F8 83 EC 24 53 56 57 FF 75 18" ) );
