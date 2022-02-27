@@ -1231,10 +1231,6 @@ public:
 		return *( int* ) ( ( uintptr_t ) this + 0xE8 );
 	}
 
-	matrix_t* m_BoneCache( ) {
-		return *( matrix_t** ) ( ( uintptr_t ) this + 0x2910 );
-	}
-
 	int& m_nFinalPredictedTick( ) {
 		return *( int* ) ( ( DWORD ) this + 0x3434 );
 	}
@@ -1300,8 +1296,9 @@ public:
 		return utils::call_virtual<o_fn>( this, 11 )( this );
 	}
 
-	matrix_t**& m_iBoneCache( ) {
-		return *( matrix_t*** ) ( ( uintptr_t ) this + 0x2910 );
+	CUtlVector <matrix_t>& m_BoneCache( ) {
+		static auto m_CachedBoneData = *( DWORD* ) ( utils::find_sig_ida( _( "client.dll" ), _( "FF B7 ?? ?? ?? ?? 52" ) ) + 0x2 ) + 0x4;
+		return *( CUtlVector <matrix_t>* )( uintptr_t( this ) + m_CachedBoneData );
 	}
 
 	void update_clientside_animation( ) {
@@ -1584,7 +1581,7 @@ public:
 		if ( check_team && !this->is_enemy( ) )
 			return false;
 
-		if (this->m_bGunGameImmunity() || (this->m_fFlags() & fl_frozen))
+		if ( this->m_bGunGameImmunity( ) || ( this->m_fFlags( ) & fl_frozen ) )
 			return false;
 
 		return true;
@@ -1774,7 +1771,7 @@ public:
 	// m_szArmsModel                               
 	// m_hCarriedHostage                           
 	// m_hCarriedHostageProp                       
-	NETVAR("DT_CSPlayer->m_bIsRescuing", m_bIsRescuing, bool);
+	NETVAR( "DT_CSPlayer->m_bIsRescuing", m_bIsRescuing, bool );
 	// m_flGroundAccelLinearFracLastTime           
 	// m_bCanMoveDuringFreezePeriod                
 	// m_isCurrentGunGameLeader                    
