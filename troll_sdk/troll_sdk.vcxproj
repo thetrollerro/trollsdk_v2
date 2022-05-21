@@ -202,6 +202,7 @@
     <ClCompile Include="hooks\vtables\engine_sound.cpp" />
     <ClCompile Include="hooks\vtables\file_system.cpp" />
     <ClCompile Include="hooks\vtables\game.cpp" />
+    <ClCompile Include="hooks\vtables\key_values.cpp" />
     <ClCompile Include="hooks\vtables\material_system.cpp" />
     <ClCompile Include="hooks\vtables\modelrender.cpp" />
     <ClCompile Include="hooks\vtables\net_channel.cpp" />
@@ -270,6 +271,7 @@
     <ClInclude Include="sdk\interfaces\classes\c_prediction.hpp" />
     <ClInclude Include="sdk\interfaces\classes\iv_model_render.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_cvar.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_key_values.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_localize.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_material_system.hpp" />
     <ClInclude Include="sdk\interfaces\classes\iv_model_info.hpp" />

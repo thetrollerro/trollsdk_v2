@@ -13,7 +13,7 @@ public:
 	bool trackir_available;
 	bool mouse_initialized;
 	bool mouse_active;
-	char pad_0x08[ 0x9E ];
+	char pad_0x08[ 0x9A ];
 	bool camera_in_thirdperson;
 	char pad_00C3[ 0x2 ];
 	vec3_t camera_offset;

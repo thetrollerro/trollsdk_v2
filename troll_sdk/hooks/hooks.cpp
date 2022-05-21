@@ -39,7 +39,7 @@ namespace hooks {
 		static auto check_for_sequence_change_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "55 8B EC 51 53 8B 5D 08 56 8B F1 57 85" ) );
 		static auto should_skip_animframe_target = ( void* ) utils::find_sig_ida( _( "client.dll" ), _( "57 8B F9 8B 07 8B 80 ? ? ? ? FF D0 84 C0 75 02" ) );
 		static auto sv_cheats_get_bool_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "8B 51 1C 3B D1 75 06 8B 41 30 33 C1 C3 8B 02 8B CA FF 60 34 CC CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 83 E4 F8 0F 54 05" ) );
-		static auto process_movement_target = ( void* ) get_virtual( i::game_movement, 1 );
+		static auto alloc_key_values_memory_target = ( void* ) get_virtual( i::key_values, 1 );
 		static auto find_material_target = ( void* ) utils::find_sig_ida( _( "materialsystem.dll" ), _( "55 8B EC 6A FF 68 ? ? ? ? 64 A1 ? ? ? ? 50 64 89 25 ? ? ? ? 83 EC 24 53" ) );
 		static auto draw_model_exec_target = ( void* ) get_virtual( i::modelrender, 21 ); // 21
 		static auto process_packet_target = ( void* ) utils::find_sig_ida( _( "engine.dll" ), _( "55 8B EC 83 E4 C0 81 EC ? ? ? ? 53 56" ) );

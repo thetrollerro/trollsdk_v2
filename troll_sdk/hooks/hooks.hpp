@@ -154,6 +154,13 @@ namespace hooks {
 		}
 	}
 
+	namespace key_values {
+		namespace alloc_key_values_memory {
+			void* __fastcall hook( void* ecx, void* edx, int size );
+			using fn = void* ( __fastcall* )( void*, void*, int );
+		}
+	}
+
 	namespace material_system {
 		namespace find_material {
 			i_material* __fastcall hook( void* ecx, void* edx, const char* mat_name, const char* group_name, bool complain, const char* complain_prefix );
@@ -295,6 +302,7 @@ inline hooks::file_system::sv_pure_loose_file_allowed::fn o_sv_pure_loose_file_a
 inline hooks::game::check_for_sequence_change::fn o_check_for_sequence_change = nullptr;
 inline hooks::game::should_skip_animframe::fn o_should_skip_animframe = nullptr;
 inline hooks::game::sv_cheats_get_bool::fn o_sv_cheats_get_bool = nullptr;
+inline hooks::key_values::alloc_key_values_memory::fn o_alloc_key_values_memory = nullptr;
 inline hooks::material_system::find_material::fn o_find_material = nullptr;
 inline hooks::modelrender::draw_model_exec::fn o_draw_model_exec = nullptr;
 inline hooks::net_channel::process_packet::fn o_process_packet = nullptr;

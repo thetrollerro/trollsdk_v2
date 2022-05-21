@@ -45,6 +45,7 @@
     <ClCompile Include="hooks\vtables\engine_sound.cpp" />
     <ClCompile Include="hooks\vtables\animstate.cpp" />
     <ClCompile Include="sdk\classes\c_base_combat_weapon.cpp" />
+    <ClCompile Include="hooks\vtables\key_values.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sdk\sdk.hpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="utilities\security\xorstr.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_panel.hpp" />
     <ClInclude Include="sdk\interfaces\classes\i_engine_sound.hpp" />
+    <ClInclude Include="sdk\interfaces\classes\i_key_values.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sdk\interfaces\classes\c_game_movement.hpp" />

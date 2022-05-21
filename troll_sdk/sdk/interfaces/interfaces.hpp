@@ -21,6 +21,7 @@
 #include "classes/i_cvar.hpp"
 #include "classes/i_engine_sound.hpp"
 #include "classes/i_game_event_manager.hpp"
+#include "classes/i_key_values.hpp"
 #include "classes/i_localize.hpp"
 #include "classes/i_material_system.hpp"
 #include "classes/i_panel.hpp"
@@ -99,6 +100,7 @@ namespace i {
 	inline i_cvar* cvar;
 	inline i_engine_sound* engine_sound;
 	inline i_game_event_manager* event_manager;
+	inline i_key_values* key_values;
 	inline i_localize* localize;
 	inline i_material_system* material_system;
 	inline i_panel* panel;

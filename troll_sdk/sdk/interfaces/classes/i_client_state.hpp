@@ -52,5 +52,6 @@ public:
     int m_sound_sequence; //0x4D34
     std::byte pad8[ 0x50 ]; //0x4D38
     vec3_t m_viewangles; //0x4D88
-    std::byte pad9[ 0xD0 ]; //0x4D9A
+    std::byte pad9[ 204 ]; //0x4D9A
+    event_t* events;
 };

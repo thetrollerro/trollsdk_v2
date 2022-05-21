@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../utilities/utilities.hpp"
 
 class c_convar {
 public:
@@ -59,6 +60,69 @@ public:
 	void* change_callback_fn;
 };
 
+#pragma region COLORS_FOR_CONSOLE_PRINT
+struct c_console_color
+{
+	unsigned char r, g, b, a;
+};
+
+class c_color {
+public:
+	unsigned char RGBA[ 4 ];
+
+	c_color( )
+	{
+		RGBA[ 0 ] = 255;
+		RGBA[ 1 ] = 255;
+		RGBA[ 2 ] = 255;
+		RGBA[ 3 ] = 255;
+	}
+
+	c_color( int r, int g, int b, int a = 255 )
+	{
+		RGBA[ 0 ] = r;
+		RGBA[ 1 ] = g;
+		RGBA[ 2 ] = b;
+		RGBA[ 3 ] = a;
+	}
+
+	inline int r( ) const
+	{
+		return RGBA[ 0 ];
+	}
+
+	inline int g( ) const
+	{
+		return RGBA[ 1 ];
+	}
+
+	inline int b( ) const
+	{
+		return RGBA[ 2 ];
+	}
+
+	inline int a( ) const
+	{
+		return RGBA[ 3 ];
+	}
+
+	bool operator!=( c_color color )
+	{
+		return RGBA[ 0 ] != color.RGBA[ 0 ] || RGBA[ 1 ] != color.RGBA[ 1 ] || RGBA[ 2 ] != color.RGBA[ 2 ] || RGBA[ 3 ] != color.RGBA[ 3 ];
+	}
+
+	bool operator==( c_color color )
+	{
+		return RGBA[ 0 ] == color.RGBA[ 0 ] && RGBA[ 1 ] == color.RGBA[ 1 ] && RGBA[ 2 ] == color.RGBA[ 2 ] && RGBA[ 3 ] == color.RGBA[ 3 ];
+	}
+
+	static float base( const unsigned char col )
+	{
+		return col / 255.f;
+	}
+};
+#pragma endregion
+
 class color;
 class i_cvar {
 public:
@@ -67,9 +131,12 @@ public:
 		return utils::call_virtual<find_var_fn>( this, 16 )( this, convar_name );
 	}
 
-	template< typename... arguments >
-	void console_color_print_f( const uint32_t& _color, const char* format, arguments ... args ) {
-		using o_fn = void( __cdecl* )( void*, const uint32_t&, const char* ... );
-		return utils::call_virtual<o_fn>( this, 25 )( this, _color, format, args... );
+	template <typename... args>
+	void console_color_printf( const c_color& color, const char* format, args... arg ) {
+		const c_console_color cl = { static_cast< unsigned char >( color.r( ) ), static_cast< unsigned char >( color.g( ) ),
+			static_cast< unsigned char >( color.b( ) ), static_cast< unsigned char >( color.a( ) ) };
+
+		reinterpret_cast< void( * )( void*, const c_console_color&, const char*, ... ) >(
+			( *reinterpret_cast< uint32_t** >( this ) )[ 25 ] )( this, cl, format, arg... );
 	}
 };

@@ -13,6 +13,7 @@ void i::init( ) {
 	cvar = get_interface<i_cvar>( _( "vstdlib.dll" ), _( "VEngineCvar007" ), true );
 	engine_sound = get_interface<i_engine_sound>( _( "engine.dll" ), _( "IEngineSoundClient003" ), true );
 	event_manager = get_interface<i_game_event_manager>( _( "engine.dll" ), _( "GAMEEVENTSMANAGER002" ), true );
+	key_values = reinterpret_cast< i_key_values * ( __cdecl* )( ) >( GetProcAddress( GetModuleHandleA( "vstdlib.dll" ), "KeyValuesSystem" ) )( );
 	localize = get_interface<i_localize>( _( "localize.dll" ), _( "Localize_001" ), true );
 	material_system = get_interface<i_material_system>( _( "materialsystem.dll" ), _( "VMaterialSystem080" ), true );
 	panel = get_interface<i_panel>( _( "vgui2.dll" ), _( "VGUI_Panel009" ), true );

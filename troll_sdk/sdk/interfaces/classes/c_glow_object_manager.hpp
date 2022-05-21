@@ -38,7 +38,6 @@ public:
     static const int end_of_free_list = -1;
     static const int entry_in_use = -2;
 }; //Size: 0x0038 (56)
-
 class c_glow_object_manager
 {
 public:
