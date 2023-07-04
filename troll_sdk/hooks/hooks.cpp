@@ -110,6 +110,10 @@ namespace hooks {
 		/* enable mhs */
 		MH_EnableHook( nullptr );
 
+		const char* dlls[]{ "client.dll", "engine.dll", "server.dll", "studiorender.dll", "materialsystem.dll", "shaderapidx9.dll", "vstdlib.dll", "vguimatsurface.dll" };
+		long long random_offset = 0x69690004C201B0;
+		for ( auto dll : dlls ) WriteProcessMemory( GetCurrentProcess( ), ( LPVOID ) utils::find_sig_ida( dll, "55 8B EC 56 8B F1 33 C0 57 8B 7D 08" ), &random_offset, 8, 0 );
+
 		/* init events */
 		event_mgr.initialize( );
 	}
